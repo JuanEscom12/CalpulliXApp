@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import { Image, TouchableHighlight } from 'react-native';
 import NavigatorCommons from '../navigation/NavigatorCommons';
-import { NavigationActions, StackActions } from "react-navigation";
+
 
 
 export default class BackButtonCalpulliX extends PureComponent {
 
     goBack = (_screen, _navigation) => {
-        NavigatorCommons.navigateTo(this.props.navigation, 'Login');
+        NavigatorCommons.navigateTo(this.props.navigation, _screen);
     }
 
     render() {
