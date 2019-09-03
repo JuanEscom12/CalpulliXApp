@@ -61,12 +61,12 @@ export default class AccordionCalpulliX extends PureComponent {
     );
   };
 
-  renderContent(section, _, isActive, renderDetailButton, _onPress) {
+  renderContent(section, _, isActive, _renderDetailButton, _onPress, _titleButton) {
     if (isActive) {
       idValue = section.id;
     }
     
-    if (renderDetailButton) {
+    if (_renderDetailButton) {
       return (
         <Animatable.View
           duration={50}
@@ -78,7 +78,7 @@ export default class AccordionCalpulliX extends PureComponent {
             {section.content}
           </Animatable.Text>
           <ButtonCalpulliX
-            title={'Ver Detalle'}
+            title={_titleButton}
             id={'buttonDetail'}
             arrayColors={['#05AAAB', '#048585', '#048585']}
             onPress={_onPress}
@@ -110,6 +110,7 @@ export default class AccordionCalpulliX extends PureComponent {
     const {
         content,
         renderDetailButton,
+        titleButton,
     } = this.props
     
     return (
@@ -122,7 +123,8 @@ export default class AccordionCalpulliX extends PureComponent {
               expandMultiple={false}
               renderHeader={this.renderHeader}
               renderContent={(section, _, isActive) => 
-                this.renderContent(section, _, isActive, renderDetailButton, this.openDetail)}
+                this.renderContent(section, _, isActive, 
+                  renderDetailButton, this.openDetail, titleButton)}
               duration={50}
               onChange={this.setSections} />
           </View>
