@@ -1,4 +1,4 @@
-const host = 'http://10.62.197.99:8080';
+const host = 'http://192.168.100.111:8080';
 
 const callApi = async (_path, _request) => {
     const response = await fetch(host + _path, {

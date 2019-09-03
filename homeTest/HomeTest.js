@@ -69,7 +69,7 @@ export default class HomeTest extends Component {
               path={'/calpullix/login'}
               screen={'ForgotUserPassword'}
               navigation={this.props.navigation} 
-              renderDetailButton={false} />
+              renderDetailButton={true} />
           </View>
           <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
             <Row data={tableHead} style={styles.head} textStyle={styles.text} />

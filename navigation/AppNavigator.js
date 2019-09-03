@@ -4,7 +4,7 @@ import HomeTest from '../homeTest/HomeTest';
 import SideMenu from '../menu/SideMenu';
 
 
-import { DrawerNavigator, createAppContainer, createStackNavigator, createDrawerNavigator } from "react-navigation";
+import { createAppContainer, createDrawerNavigator } from "react-navigation";
 
 const AppNavigator = createDrawerNavigator({
   Login: {
@@ -23,7 +23,7 @@ const AppNavigator = createDrawerNavigator({
     screen: HomeTest,
   },
 }, {
-  initialRouteName: 'Home',
+  initialRouteName: 'Login',
   contentComponent: SideMenu,
   drawerWidth: 300
 }
