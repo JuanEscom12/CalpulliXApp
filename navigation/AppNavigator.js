@@ -23,11 +23,10 @@ const AppNavigator = createDrawerNavigator({
     screen: HomeTest,
   },
 }, {
-  initialRouteName: 'Home',
+  initialRouteName: 'Login',
   contentComponent: SideMenu,
   drawerWidth: 300
 }
-
 );
 
 const AppContainerNavigation = createAppContainer(AppNavigator);

@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View
-} from 'react-native';
+import { View } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import AccordionCalpulliX from '../common/AccordionCalpulliX';

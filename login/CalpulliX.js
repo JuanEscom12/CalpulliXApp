@@ -10,7 +10,7 @@ import ApiCaller from '../api/ApiCaller';
 import NavigatorCommons from '../navigation/NavigatorCommons';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import styles from './style'
-
+import stylesCommon from '../common/style'
 
 var user = '';
 var pass = '';
@@ -77,7 +77,7 @@ export default class CalpulliX extends PureComponent {
           <TopLogin />
           <Text
             id='errorMEssage'
-            style={styles.errorMessage}>{this.state.errorMessage}</Text>
+            style={stylesCommon.errorMessage}>{this.state.errorMessage}</Text>
           <MiddleLogin doLogin={(e) => this.doLogin(e)}
             hanlderInput={this.hanlderInput}
             marginTop={30}

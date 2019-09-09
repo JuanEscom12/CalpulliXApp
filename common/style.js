@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     content: {
-
         backgroundColor: '#EDEDED',
         borderColor: '#F49315',
         width: '90%',
@@ -47,6 +46,22 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 'auto',
         borderRadius: 5,
+    },
+    textInputCalpulliX: {
+        height: 45, 
+        width: '75%', 
+        marginLeft: 'auto', 
+        marginRight: 'auto', 
+        marginTop: 6,
+        borderWidth: 1, 
+        borderRadius: 5
+    },
+    errorMessage: {
+        color: '#f03000', 
+        textAlign: 'center',
+        marginLeft: 'auto', 
+        marginRight: 'auto', 
+        marginTop: 20
     },
     active: {
         backgroundColor: '#F3F9FA',

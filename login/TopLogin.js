@@ -11,7 +11,11 @@ export default class TopLogin extends PureComponent {
                 <Image
                     style={{
                         height: 84, marginLeft: 'auto', marginRight: 'auto',
-                        marginTop: 40, width: '90%'
+                        marginTop: 40, width: '95%',
+                        transform: [
+                            { scaleX: 0.8 },
+                            { scaleY: 1 }
+                          ]
                     }}
                     source={require('./logo_CalpulliX.png')} />
             </View>

@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 import {
-    View, Image, Text, TextInput
+    View, Image, Text, TextInput, StyleSheet
 } from 'react-native';
 import ButtonCalpulliX from '../common/ButtonCalpulliX';
 import NavigatorCommons from '../navigation/NavigatorCommons';
+import stylesCommon from '../common/style'
+
 
 export default class MiddleLogin extends PureComponent {
 
@@ -18,7 +20,6 @@ export default class MiddleLogin extends PureComponent {
             userText: "",
             passText: "",
         };
-
     }
 
     handleOnFocus = () => {
@@ -89,16 +90,19 @@ export default class MiddleLogin extends PureComponent {
 
                 <TextInput
                     id='inputUser'
-                    style={{
-                        height: 45, width: '75%', marginLeft: 'auto', marginRight: 'auto', marginTop: 6,
-                        borderColor: this.state.borderColorTextInput, borderWidth: 1, borderRadius: 5,
-                        backgroundColor: this.state.backgroundColorUserInput
-                    }}
-                    onChangeText={(text) => this.handleChangeUserText(text)}
+                    style=
+                    {[
+                        stylesCommon.textInputCalpulliX,
+                        {
+                            borderColor: this.state.borderColorTextInput,
+                            backgroundColor: this.state.backgroundColorUserInput
+                        }
+                    ]}
                     value={this.state.userText}
+                    onChangeText={(text) => this.handleChangeUserText(text)}
                     onFocus={() => this.handleOnFocus()}
                     onBlur={() => this.handleOnBlur()}
-                    placeholder='        Ingresa tu nombre de usuario'
+                    placeholder='        Ingresa el nombre de tu usuario'
                     placeholderTextColor='#9E9E9E' />
 
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
@@ -128,11 +132,19 @@ export default class MiddleLogin extends PureComponent {
                 <View style={{ height: 120 }}>
                     <Text
                         style={{
-                            fontSize: 13, marginTop: 30, textAlign: 'center', textDecorationLine: 'underline',
+                            fontSize: 13, marginTop: 25, textAlign: 'center', textDecorationLine: 'underline',
                             color: this.state.colorLink
                         }}
                         onPress={() => this.handleForgotPasswordOrUser()}>
                         Olvidaste tu contraseña
+                  </Text>
+                    <Text
+                        style={{
+                            fontSize: 13, marginTop: 15, textAlign: 'center', textDecorationLine: 'underline',
+                            color: this.state.colorLink
+                        }}
+                        onPress={() => this.handleForgotPasswordOrUser()}>
+                        Registrate
                   </Text>
 
                     <ButtonCalpulliX
@@ -150,5 +162,6 @@ export default class MiddleLogin extends PureComponent {
         );
     }
 }
+
 
 

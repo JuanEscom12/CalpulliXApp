@@ -36,7 +36,7 @@ export default class BackButtonCalpulliX extends PureComponent {
                 underlayColor='#05AB50'>
                 <Image
                     style={{ height: '100%', width: '100%' }}
-                    source={require('./icon_back.png')} />
+                    source={require('./arrow_back.png')} />
             </TouchableHighlight>);
     }
 }
