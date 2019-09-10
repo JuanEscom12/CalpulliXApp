@@ -6,7 +6,7 @@ import NavigatorCommons from '../navigation/NavigatorCommons';
 
 export default class BackButtonCalpulliX extends PureComponent {
 
-    goBack = (_screen, _navigation) => {
+    goBack = (_screen) => {
         NavigatorCommons.navigateTo(this.props.navigation, _screen);
     }
 

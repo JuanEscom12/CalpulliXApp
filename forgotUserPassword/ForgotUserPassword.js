@@ -5,7 +5,7 @@ import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import stylesCommon from '../common/style'
 import ButtonCalpulliX from '../common/ButtonCalpulliX';
 import ApiCaller from '../api/ApiCaller';
-
+import { NavigationEvents } from 'react-navigation';
 
 export default class ForgotUserPassword extends PureComponent {
 
@@ -41,8 +41,8 @@ export default class ForgotUserPassword extends PureComponent {
 
   restartPassword = async (e) => {
     if (this.isValidInput()) {
-      const response = await ApiCaller.callApi('/calpullix/restartpassword', 
-          this.getRestartPasswordRequest())
+      const response = await ApiCaller.callApi('/calpullix/restartpassword',
+        this.getRestartPasswordRequest())
         .catch((error) => {
           console.log(error);
           this.setState({
@@ -63,20 +63,15 @@ export default class ForgotUserPassword extends PureComponent {
     }
   }
 
-  componentWillUnmount() {
-    console.log("************ WILL UNMOUNT ");
+  cleanInput = () => {
     this.setState({
       borderColorTextInput: "#F49315",
       backgroundColorUserInput: '#FDFDFD',
       headText: "Se enviara una contraseña nueva a tu correo.",
-      userText: "",
+      errorMessage: '',
+      userText: '',
     });
   }
-
-  componentDidMount() {
-    console.log("************ DID MOUNT ");
-  }
-
 
   isValidInput() {
     if (this.state.userText === '') {
@@ -98,11 +93,18 @@ export default class ForgotUserPassword extends PureComponent {
     return request;
   }
 
+
+
   render() {
     return (
       <BackgroundScrollCalpulliX addHeight={0}>
+        <NavigationEvents
+          onWillFocus={() => {
+            this.cleanInput();
+          }} />
         <HeaderCalpulliXBack
-          navigation={this.props.navigation} />
+          navigation={this.props.navigation}
+          cleanFunction={this.cleanInputs} />
         <View style={{ marginTop: 70, marginBottom: 15 }}>
           <Text
             id='errorMEssageForgotPassword'

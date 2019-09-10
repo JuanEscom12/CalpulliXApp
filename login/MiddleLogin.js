@@ -5,7 +5,7 @@ import {
 import ButtonCalpulliX from '../common/ButtonCalpulliX';
 import NavigatorCommons from '../navigation/NavigatorCommons';
 import stylesCommon from '../common/style'
-
+import { NavigationEvents } from 'react-navigation';
 
 export default class MiddleLogin extends PureComponent {
 
@@ -72,6 +72,18 @@ export default class MiddleLogin extends PureComponent {
         this.props.hanlderInput(this.state);
     }
 
+    cleanInput = () => {
+        this.setState({
+            borderColorTextInput: "#F49315",
+            borderColorTextInputPass: "#F49315",
+            backgroundColorUserInput: 'transparent',
+            backgroundColorPassInput: 'transparent',
+            colorLink: '#000000',
+            userText: "",
+            passText: "",            
+        })
+    }
+    
     render() {
         const {
             doLogin,
@@ -79,6 +91,10 @@ export default class MiddleLogin extends PureComponent {
         } = this.props
         return (
             <View style={{ width: '100%', height: 330, marginTop: 20 }} >
+                <NavigationEvents
+                  onWillFocus={() => {
+                    this.cleanInput();
+                  }}/>
                 <View style={{ flexDirection: 'row' }}>
                     <Image
                         style={{ height: 25, width: 22, marginLeft: '17%' }}

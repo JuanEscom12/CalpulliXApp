@@ -21,7 +21,7 @@ export default class LeftHeaderBack extends PureComponent {
 
   render() {
     const {
-        navigation
+        navigation,
     } = this.props
     return (
       <View style={{ flex: 1, backgroundColor: '#F6A338'}} >

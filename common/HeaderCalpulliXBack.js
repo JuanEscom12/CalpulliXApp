@@ -17,7 +17,8 @@ export default class HeaderCalpulliXBack extends PureComponent {
               backgroundColor: '#F6A338',
               height: 100
             }}>
-            <LeftHeaderBack navigation={navigation}/>
+            <LeftHeaderBack 
+                navigation={navigation}/>
             <CenterHeader />
             <RightHeader />
           </Header>

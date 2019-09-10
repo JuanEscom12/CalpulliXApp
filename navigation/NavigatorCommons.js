@@ -1,4 +1,4 @@
-import { StackActions, NavigationActions } from "react-navigation";
+import { NavigationActions } from "react-navigation";
 
 const navigateTo = (_navigation, _keyNavigation) => {
   const navigateAction = NavigationActions.navigate({
