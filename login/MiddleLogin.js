@@ -57,6 +57,15 @@ export default class MiddleLogin extends PureComponent {
         NavigatorCommons.navigateTo(this.props.navigation, 'ForgotUserPassword', 0);
         this.props.cleanInput();
     }
+    
+    handleRegisterAccount = () => {
+        this.setState({
+            colorLink: '#9E9E9E'
+        })
+        NavigatorCommons.navigateTo(this.props.navigation, 'RegisterAccount', 0);
+        this.props.cleanInput();
+    }
+    
 
     handleChangeUserText = (text) => {
         this.setState({
@@ -127,7 +136,7 @@ export default class MiddleLogin extends PureComponent {
                         source={require('./key-solid.png')} />
                     <Text style={{ marginLeft: '5%', fontSize: 15 }}>
                         Contraseña
-              </Text>
+                    </Text>
                 </View>
 
                 <TextInput
@@ -159,7 +168,7 @@ export default class MiddleLogin extends PureComponent {
                             fontSize: 13, marginTop: 15, textAlign: 'center', textDecorationLine: 'underline',
                             color: this.state.colorLink
                         }}
-                        onPress={() => this.handleForgotPasswordOrUser()}>
+                        onPress={() => this.handleRegisterAccount()}>
                         Registrate
                   </Text>
 

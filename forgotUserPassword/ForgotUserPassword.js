@@ -103,11 +103,10 @@ export default class ForgotUserPassword extends PureComponent {
             this.cleanInput();
           }} />
         <HeaderCalpulliXBack
-          navigation={this.props.navigation}
-          cleanFunction={this.cleanInputs} />
+          navigation={this.props.navigation} />
         <View style={{ marginTop: 70, marginBottom: 15 }}>
           <Text
-            id='errorMEssageForgotPassword'
+            id='errorMessageForgotPassword'
             style={stylesCommon.errorMessage}>{this.state.errorMessage}</Text>
           <Text style={{ fontSize: 13, textAlign: 'center', marginTop: 15 }}>
             {this.state.headText}

@@ -1,6 +1,7 @@
 import ForgotUserPassword from '../forgotUserPassword/ForgotUserPassword';
 import CalpulliX from '../login/CalpulliX';
 import HomeTest from '../homeTest/HomeTest';
+import RegisterAccount from '../registerAccount/RegisterAccount';
 import SideMenu from '../menu/SideMenu';
 
 
@@ -19,11 +20,18 @@ const AppNavigator = createDrawerNavigator({
       header: null
     }
   },
+  RegisterAccount: {
+    screen: RegisterAccount,
+    navigationOptions: {
+      header: null
+    }
+  },
   Home: {
     screen: HomeTest,
   },
-}, {
-  initialRouteName: 'Login',
+}, 
+{
+  initialRouteName: 'RegisterAccount',
   contentComponent: SideMenu,
   drawerWidth: 300
 }
