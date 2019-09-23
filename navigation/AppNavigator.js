@@ -3,7 +3,8 @@ import CalpulliX from '../login/CalpulliX';
 import HomeTest from '../homeTest/HomeTest';
 import RegisterAccount from '../registerAccount/RegisterAccount';
 import SideMenu from '../menu/SideMenu';
-
+import BranchOffices from '../branchOffices/Offices';
+import Products from '../productClasification/Products';
 
 import { createAppContainer, createDrawerNavigator } from "react-navigation";
 
@@ -28,6 +29,12 @@ const AppNavigator = createDrawerNavigator({
   },
   Home: {
     screen: HomeTest,
+  },
+  Offices:{
+    screen: BranchOffices,
+  },
+  ClassifyProducts:{
+    screen:Products,
   },
 }, 
 {
