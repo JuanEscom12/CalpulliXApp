@@ -38,6 +38,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
     },
+    labelText: {
+        fontSize: 13, 
+        textAlign: 'center', 
+    },
     content: {
         backgroundColor: '#EDEDED',
         borderColor: '#F49315',

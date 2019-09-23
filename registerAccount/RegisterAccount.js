@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, TextInput, Text } from 'react-native';
 import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
-import stylesCommon from '../common/style'
+import stylesCommon from '../common/style';
 import ButtonCalpulliX from '../common/ButtonCalpulliX';
 import ApiCaller from '../api/ApiCaller';
 import { NavigationEvents } from 'react-navigation';
@@ -244,7 +244,7 @@ export default class RegisterAccount extends PureComponent {
                     <Text
                         id='errorMessageUserRegister'
                         style={stylesCommon.errorMessage}>{this.state.errorMessage}</Text>
-                    <Text style={{ fontSize: 13, textAlign: 'center', marginTop: 5 }}>
+                    <Text style={[stylesCommon.labelText, {marginTop: 5}]}>
                         {this.state.headText}
                     </Text>
                     <TextInput

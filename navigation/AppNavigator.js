@@ -3,7 +3,7 @@ import CalpulliX from '../login/CalpulliX';
 import HomeTest from '../homeTest/HomeTest';
 import RegisterAccount from '../registerAccount/RegisterAccount';
 import SideMenu from '../menu/SideMenu';
-
+import ProductList from '../products/ProductList';
 
 import { createAppContainer, createDrawerNavigator } from "react-navigation";
 
@@ -26,12 +26,18 @@ const AppNavigator = createDrawerNavigator({
       header: null
     }
   },
+  ProductList: {
+    screen: ProductList,
+    navigationOptions: {
+      header: null
+    }
+  },
   Home: {
     screen: HomeTest,
   },
 }, 
 {
-  initialRouteName: 'RegisterAccount',
+  initialRouteName: 'ProductList',
   contentComponent: SideMenu,
   drawerWidth: 300
 }
