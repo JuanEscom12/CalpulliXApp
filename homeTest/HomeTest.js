@@ -67,7 +67,8 @@ export default class HomeTest extends Component {
               screen={'ForgotUserPassword'}
               navigation={this.props.navigation} 
               renderDetailButton={true}
-              titleButton={'Ver Detalle'} />
+              titleButton={'Ver Detalle'}
+              marginTop={15} />
           </View>
           <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
             <Row data={tableHead} style={styles.head} textStyle={styles.text} />

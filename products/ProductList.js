@@ -5,8 +5,10 @@ import { NavigationEvents } from 'react-navigation';
 import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
 import stylesCommon from '../common/style';
 import { CustomPicker } from 'react-native-custom-picker'
-import ButtonCalpulliX from '../common/ButtonCalpulliX';
+import  ButtonCalpulliX  from '../common/ButtonCalpulliX';
+import  PickerCalpulliX  from '../common/PickerCalpulliX';
 import AccordionCalpulliX from '../common/AccordionCalpulliX';
+
 
 const BACON_IPSUM =
   '\n   Row 1                                                       100$ \n' +
@@ -42,6 +44,8 @@ const CONTENT = [
   },
 ];
 
+var functionClearPicker;
+
 export default class ProductList extends PureComponent {
 
   constructor(props) {
@@ -62,20 +66,25 @@ export default class ProductList extends PureComponent {
       branches: branches,
       branchId: null,
       errorMessage: '',
-      productList: null,
+      productList: [],
     }
   }
 
   
+
   renderField(settings) {
     const { selectedItem, defaultText, getLabel, clear } = settings
+    functionClearPicker = clear;
     return (
       <View style={styles.container}>
         <View>
           {!selectedItem && <Text style={[styles.text, { color: 'grey' }]}>{defaultText}</Text>}
           {selectedItem && (
             <View style={styles.innerContainer}>
-              <TouchableOpacity style={styles.clearButton} onPress={clear}>
+              <TouchableOpacity 
+                id='clearProductList' 
+                style={styles.clearButton} 
+                onPress={clear}>
                 <Text style={{ color: '#fff' }}>Clear</Text>
               </TouchableOpacity>
               <Text style={[styles.text]}>
@@ -103,9 +112,10 @@ export default class ProductList extends PureComponent {
     if (this.isValidInput()) {
       // Consult API getProductList.
       this.setState({
+        errorMessage: '',
         productList: CONTENT,
       });
-      // Update View.
+      // Update Accordion.
     } else {
       this.setState({
         errorMessage: 'El campo sucursal es requerido.',
@@ -118,15 +128,23 @@ export default class ProductList extends PureComponent {
   }
 
   cleanInput = () => {
-  
+    functionClearPicker();
     this.setState({
       branchId: null,
       errorMessage: '',
-      productList: null,
+      productList: [],
     });
-
   }
 
+  updateState = (value) => {
+    this.setState({
+      branchId: value
+    })
+  }
+
+  setFunctionClearPicker = (_clear) => {
+    functionClearPicker = _clear;
+  }
 
   render() {
 
@@ -149,18 +167,14 @@ export default class ProductList extends PureComponent {
           </Text>
           <Text style={[stylesCommon.labelText, { marginTop: 10, marginRight: '70%', fontSize: 15 }]}>
             Sucursales
-                    </Text>
-          <CustomPicker
+          </Text>
+
+          <PickerCalpulliX
+            data={this.state.branches}
+            updateState={this.updateState}
             placeholder={'Selecciona la sucursal'}
-            options={this.state.branches}
-            getLabel={item => item.name}
-            fieldTemplate={this.renderField}
-            optionTemplate={this.renderOption}
-            onValueChange={value => {
-              this.setState({
-                branchId: value
-              })
-            }} />
+            labelFunction={item => item.name}
+            functionClearPicker={this.setFunctionClearPicker} />
 
           <ButtonCalpulliX
             title={'Buscar'}
@@ -177,7 +191,8 @@ export default class ProductList extends PureComponent {
               screen={'ProductDetail'}
               navigation={this.props.navigation} 
               renderDetailButton={true}
-              titleButton={'Ver Detalle'} />
+              titleButton={'Ver Detalle'} 
+              margintTop={25}/>
 
         </View>
       </BackgroundScrollCalpulliX>
