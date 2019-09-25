@@ -46,7 +46,7 @@ const AppNavigator = createDrawerNavigator({
   },
 }, 
 {
-  initialRouteName: 'Offices',
+  initialRouteName: 'ProductList',
   contentComponent: SideMenu,
   drawerWidth: 300
 }
