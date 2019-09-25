@@ -243,7 +243,7 @@ export default class Offices extends PureComponent{
                                marginBottom: 20,
 
                     }} />
-                    <Text style={[stylesCommon.headerText]} style={{fontSize:25,marginLeft:'5%',color:'#F49315'}}>Resultados</Text>
+                    <Text style={[stylesCommon.headerText]} style={{fontSize:20,marginLeft:'5%',color:'#F49315'}}>Resultados</Text>
                     <ResultOffices
                         labelNames = {
                             {"balance":"Balance","latitude":"Latitud","longitude":"Longitud","totalLosses":"Pérdidas Totales","totalSales":"Ventas Totales"}}
