@@ -21,10 +21,13 @@ export default class LeftHeaderBack extends PureComponent {
 
   render() {
     const {
-        navigation,
+      navigation,
+      screen,
+      backButton,
     } = this.props
-    return (
-      <View style={{ flex: 1, backgroundColor: '#F6A338'}} >
+    var button;
+    if (backButton) {
+      button =
         <BackButtonCalpulliX
           id={'buttonBackCommonHeader'}
           height={22}
@@ -32,8 +35,14 @@ export default class LeftHeaderBack extends PureComponent {
           marginTop={20}
           marginLeft='10%'
           marginRight='auto'
-          screen='Login' 
-          navigation={navigation}/>
+          screen={ screen }
+          navigation={navigation} />
+    } else {
+      button = <View />
+    }
+    return (
+      <View style={{ flex: 1, backgroundColor: '#F6A338' }} >
+        {button}
       </View>
     );
   }

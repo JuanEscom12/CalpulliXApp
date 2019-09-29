@@ -103,7 +103,8 @@ export default class ForgotUserPassword extends PureComponent {
             this.cleanInput();
           }} />
         <HeaderCalpulliXBack
-          navigation={this.props.navigation} />
+          navigation={this.props.navigation} 
+          screen={'Login'}  />
         <View style={{ marginTop: 70, marginBottom: 15 }}>
           <Text
             id='errorMessageForgotPassword'
@@ -135,7 +136,8 @@ export default class ForgotUserPassword extends PureComponent {
             onPress={this.restartPassword}
             width={'45%'}
             height={45}
-            marginTop={40} />
+            marginTop={40}
+             />
         </View>
       </BackgroundScrollCalpulliX>
     );

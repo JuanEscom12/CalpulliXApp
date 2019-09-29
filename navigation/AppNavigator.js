@@ -5,6 +5,7 @@ import RegisterAccount from '../registerAccount/RegisterAccount';
 import SideMenu from '../menu/SideMenu';
 
 import ProductList from '../products/ProductList';
+import ProductDetail from '../products/ProductDetail';
 import BranchOffices from '../branchOffices/Offices';
 import Products from '../productClasification/Products';
 
@@ -44,9 +45,15 @@ const AppNavigator = createDrawerNavigator({
   ClassifyProducts:{
     screen:Products,
   },
+  ProductDetail : {
+    screen: ProductDetail,
+    navigationOptions: {
+      header: null
+    }
+  },
 }, 
 {
-  initialRouteName: 'ProductList',
+  initialRouteName: 'ProductDetail',
   contentComponent: SideMenu,
   drawerWidth: 300
 }

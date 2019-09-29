@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         fontSize: 16,
         fontWeight: '500',
+        color: '#FFF'
     },
     labelText: {
         fontSize: 13, 
@@ -44,12 +45,33 @@ const styles = StyleSheet.create({
     },
     content: {
         backgroundColor: '#EDEDED',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         borderColor: '#F49315',
         width: '90%',
         borderWidth: 0.5,
+        borderRadius: 5,
+    },
+    contentLight: {
+        backgroundColor: '#F3F9FA',
         marginLeft: 'auto',
         marginRight: 'auto',
+        borderColor: '#F49315',
+        width: '90%',
+        borderWidth: 0.5,
         borderRadius: 5,
+    },
+    contentText: {
+        backgroundColor: '#EDEDED',
+        width: '100%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    },
+    contentTextLight: {
+        backgroundColor: '#F3F9FA',
+        width: '100%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
     textInputCalpulliX: {
         height: 45, 
@@ -67,22 +89,23 @@ const styles = StyleSheet.create({
         marginRight: 'auto', 
         marginTop: 20
     },
-    active: {
-        backgroundColor: '#F3F9FA',
 
+    active: {
+        backgroundColor: '#F6A338',
+        
     },
     inactive: {
-        backgroundColor: '#F3F9FA',
+        backgroundColor: '#F0AB53',
+        
     },
+
+
     activeText: {
         backgroundColor: '#EDEDED',
         borderColor: '#EDEDED',
     },
     inactiveText: {
         backgroundColor: '#F3F9FA',
-    },
-    selectors: {
-
     },
     selector: {
         backgroundColor: '#F5FCFF',

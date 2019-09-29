@@ -239,7 +239,9 @@ export default class RegisterAccount extends PureComponent {
                         this.cleanInput();
                     }} />
                 <HeaderCalpulliXBack
-                    navigation={this.props.navigation} />
+                    navigation={this.props.navigation}
+                    backButton={true}
+                    screen={'Login'} />
                 <View style={{ marginTop: 5}}>
                     <Text
                         id='errorMessageUserRegister'

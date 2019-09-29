@@ -4,53 +4,63 @@ import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import { NavigationEvents } from 'react-navigation';
 import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
 import stylesCommon from '../common/style';
-import { CustomPicker } from 'react-native-custom-picker'
 import  ButtonCalpulliX  from '../common/ButtonCalpulliX';
 import  PickerCalpulliX  from '../common/PickerCalpulliX';
 import AccordionCalpulliX from '../common/AccordionCalpulliX';
 
 
-const BACON_IPSUM =
-  '\n   Row 1                                                       100$ \n' +
-  '\n   Row 2                                                       100$ \n' +
-  '\n   Row 3                                                       100$ \n' +
-  '\n   Row 4                                                       100$ \n' +
-  '\n   Row 5                                                       100$ \n' +
-  '\n   Row 6                                                       100$ \n' +
-  '\n   Row 7                                                       100$ \n' +
-  '\n   Row 8                                                       100$ \n' +
-  '\n   Row 9                                                       100$ \n';
-
-const CONTENT = [
+const apiResponse = [
   {
-    id: 'Item                    1',
-    content: BACON_IPSUM,
+    id: 'Item  1',
+    name: 'Articulo XXXX',
+    description: 'Row ',
+    brand: 'Marca ',
+    status: 'Estatus ',
+    branchId: 'Id sucursal '
   },
   {
-    id: 'Item                    2',
-    content: BACON_IPSUM,
+    id: 'Item  1',
+    name: 'Articulo ',
+    description: 'Row \n',
+    brand: 'Marca \n',
+    status: 'Estatus \n',
+    branchId: 'Id sucursal \n'
   },
   {
-    id: 'Item                    3',
-    content: BACON_IPSUM,
+    id: 'Item  1',
+    name: 'Articulo ',
+    description: 'Row \n',
+    brand: 'Marca \n',
+    status: 'Estatus \n',
+    branchId: 'Id sucursal \n'
   },
   {
-    id: 'Item                    4',
-    content: BACON_IPSUM,
+    id: 'Item  1',
+    name: 'Articulo ',
+    description: 'Row \n',
+    brand: 'Marca \n',
+    status: 'Estatus \n',
+    branchId: 'Id sucursal \n'
   },
   {
-    id: 'Item                    5',
-    content: BACON_IPSUM,
+    id: 'Item  1',
+    name: 'Articulo ',
+    description: 'Row \n',
+    brand: 'Marca \n',
+    status: 'Estatus \n',
+    branchId: 'Id sucursal \n'
   },
 ];
 
 var functionClearPicker;
 
+const labels = ['Id', 'Descripcion', 'Marca', 'Status', 'Id de la sucursal'];
+
 export default class ProductList extends PureComponent {
 
   constructor(props) {
     super(props);
-    // Call api Sucursal.
+    // Call api getBranchList.
     const branches = [
       {
         color: '#2660A4',
@@ -69,15 +79,24 @@ export default class ProductList extends PureComponent {
       productList: [],
     }
   }
-
   getItems = async (e) => {
     if (this.isValidInput()) {
       // Consult API getProductList.
+      var fields = [];
+      var item = [];
+      for (let i = 0; i < apiResponse.length; i++) {
+        item.push(apiResponse[i].id);
+        item.push(apiResponse[i].name);
+        item.push(apiResponse[i].description);
+        item.push(apiResponse[i].brand);
+        item.push(apiResponse[i].status);
+        item.push(apiResponse[i].branchId);
+        fields.push(item);
+      }
       this.setState({
         errorMessage: '',
-        productList: CONTENT,
+        productList: fields,
       });
-      // Update Accordion.
     } else {
       this.setState({
         errorMessage: 'El campo sucursal es requerido.',
@@ -109,9 +128,8 @@ export default class ProductList extends PureComponent {
   }
 
   render() {
-
     return (
-      <BackgroundScrollCalpulliX addHeight={0}>
+      <BackgroundScrollCalpulliX addHeight={50}>
 
         <NavigationEvents
           onWillFocus={() => {
@@ -119,7 +137,8 @@ export default class ProductList extends PureComponent {
           }} />
 
         <HeaderCalpulliXBack
-          navigation={this.props.navigation} />
+          navigation={this.props.navigation}
+          backButton={false} />
 
         <View style={{ marginTop: 5 }}>
 
@@ -145,7 +164,8 @@ export default class ProductList extends PureComponent {
             onPress={this.getItems}
             width={'40%'}
             height={45}
-            marginTop={30} />
+            marginTop={30}
+             />
 
            <AccordionCalpulliX 
               content={this.state.productList}
@@ -154,7 +174,8 @@ export default class ProductList extends PureComponent {
               navigation={this.props.navigation} 
               renderDetailButton={true}
               titleButton={'Ver Detalle'} 
-              margintTop={25}/>
+              margintTop={25}
+              labels={labels}/>
 
         </View>
       </BackgroundScrollCalpulliX>

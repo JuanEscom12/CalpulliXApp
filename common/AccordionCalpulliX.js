@@ -5,6 +5,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
@@ -27,7 +28,8 @@ export default class AccordionCalpulliX extends PureComponent {
       .catch((error) => {
         console.log(error);
       });
-    NavigatorCommons.navigateTo(this.props.navigation, this.props.screen);
+    NavigatorCommons.navigateTo(this.props.navigation, this.props.screen, 
+      { 'responseApi': response} );
   }
 
   setSections = sections => {
@@ -43,40 +45,61 @@ export default class AccordionCalpulliX extends PureComponent {
   } 
 
   renderHeader = (section, _, isActive) => {
+    var image;
+    if (isActive) {
+      image = <Image
+          style={{
+            height: 25, width: 26, marginLeft: '77%', transform: [
+              { scaleX: 0.5 },
+              { scaleY: 0.5 }
+            ]
+          }}
+          source={require('./down_arrow.png')} />
+    } else {
+      image = <Image
+          style={{
+            height: 25, width: 26, marginLeft: '77%', transform: [
+              { scaleX: 0.5 },
+              { scaleY: 0.5 }
+            ]
+          }}
+          source={require('./up_arrow.png')} />
+    }
     return (
       <Animatable.View
         duration={400}
         style={[styles.header, isActive ? styles.active : styles.inactive]}
         transition="backgroundColor" >
-        <Text style={styles.headerText}>{section.id}</Text>
-        <Image
-          style={{
-            height: 25, width: 26, marginLeft: '80%', transform: [
-              { scaleX: 0.5 },
-              { scaleY: 0.5 }
-            ]
-          }}
-          source={require('./right-arrow.png')} />
+        <Text style={styles.headerText}>{section[0]}</Text>
+        { image }
       </Animatable.View>
     );
   };
 
-  renderContent(section, _, isActive, _renderDetailButton, _onPress, _titleButton) {
+
+  renderContent(section, _, isActive, _renderDetailButton, _onPress, _titleButton, _labels) {
     if (isActive) {
-      idValue = section.id;
+      idValue = section[0];
     }
-    
+    var text = [];
+    for (let i = 0; i < _labels.length; i++) {
+      text.push(
+        <Animatable.Text
+         id={section[0] + '' + i}
+         animation={isActive ? 'bounceIn' : undefined}
+        style={[ i%2 === 0 ? styles.contentText: styles.contentTextLight]}>
+        { '\n     ' + _labels[i] + '\n     ' + section[i + 1] + '\n' }
+      </Animatable.Text>
+      );
+    }
+
     if (_renderDetailButton) {
       return (
         <Animatable.View
           duration={50}
-          style={[styles.content, isActive ? styles.active : styles.inactive]}
+          style={[ _labels.length%2 === 0 ? styles.content  : styles.contentLight ]}
           transition="backgroundColor" >
-          <Animatable.Text
-            animation={isActive ? 'bounceIn' : undefined}
-            style={[styles.content, isActive ? styles.activeText : styles.inactiveText]}>
-            {section.content}
-          </Animatable.Text>
+          { text }
           <ButtonCalpulliX
             title={_titleButton}
             id={'buttonDetail'}
@@ -92,13 +115,9 @@ export default class AccordionCalpulliX extends PureComponent {
       return (
         <Animatable.View
           duration={50}
-          style={[styles.content, isActive ? styles.active : styles.inactive]}
+          style={[ _labels.length%2 === 0 ? styles.content  : styles.contentLight ]}
           transition="backgroundColor" >
-          <Animatable.Text
-            animation={isActive ? 'bounceIn' : undefined}
-            style={[styles.content, isActive ? styles.activeText : styles.inactiveText]}>
-            {section.content}
-          </Animatable.Text>
+          { text }
         </Animatable.View>
       );
     }
@@ -112,6 +131,7 @@ export default class AccordionCalpulliX extends PureComponent {
         renderDetailButton,
         titleButton,
         margintTop,
+        labels,
     } = this.props
     
     return (
@@ -125,7 +145,7 @@ export default class AccordionCalpulliX extends PureComponent {
               renderHeader={this.renderHeader}
               renderContent={(section, _, isActive) => 
                 this.renderContent(section, _, isActive, 
-                  renderDetailButton, this.openDetail, titleButton)}
+                  renderDetailButton, this.openDetail, titleButton, labels)}
               duration={50}
               onChange={this.setSections} />
           </View>
