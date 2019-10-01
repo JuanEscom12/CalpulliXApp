@@ -4,6 +4,10 @@ import HeaderCalpulliX from "../common/HeaderCalpulliX";
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import stylesCommon from '../common/style';
 import ButtonCalpulliX from '../common/ButtonCalpulliX';
+import  PickerCalpulliX  from '../common/PickerCalpulliX';
+
+
+var functionClearPicker;
 
 export default class OfficesForm extends Component{
 
@@ -19,15 +23,85 @@ export default class OfficesForm extends Component{
     }
 
     generateMonths = () =>{
-        return ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+        return [
+            {
+                color:'#2660A4',
+                name:'Enero',
+                value:1
+            },
+            {
+                color:'#FF6B35',
+                name:'Febrero',
+                value:2
+            },
+            {
+                color:'#2660A4',
+                name:'Marzo',
+                value:3
+            },
+            {
+                color:'#FF6B35',
+                name:'Abril',
+                value:4
+            },
+            {
+                color:'#2660A4',
+                name:'Mayo',
+                value:5
+            },
+            {
+                color:'#FF6B35',
+                name:'Junio',
+                value:5
+            },
+            {
+                color:'#2660A4',
+                name:'Julio',
+                value:6
+            },
+            {
+                color:'#FF6B35',
+                name:'Julio',
+                value:7
+            },
+            {
+                color:'#2660A4',
+                name:'Agosto',
+                value:8
+            },
+            {
+                color:'#FF6B35',
+                name:'Septiembre',
+                value:9
+            },
+            {
+                color:'#2660A4',
+                name:'Octubre',
+                value:10
+            },
+            {
+                color:'#FF6B35',
+                name:'Noviembre',
+                value:11
+            },
+            {
+                color:'#2660A4',
+                name:'Diciembre',
+                value:12
+            },
+        ];
     }
 
     generateYears = () =>{
-        var currentYear = new Date().getFullYear();
-        var arrayYears = [];
+        let currentYear = new Date().getFullYear();
+        let arrayYears = [];
         const initialYear = 1970;
         for(var i = initialYear; i <= currentYear; i++ ){
-            arrayYears.push(i);
+            arrayYears.push({
+                color: (initialYear % 2 == 0 ? '#FF6B35' :'#2660A4'),
+                name:""+i,
+                value:i-initialYear+1,
+            });
         }
         return arrayYears;
     }
@@ -53,29 +127,25 @@ export default class OfficesForm extends Component{
         this.props.handlerSearchInput(this.state);
     }
 
-    handleSelectedYearChanged = (item,index) =>{
+    handleSelectedYearChanged = (value) =>{
         this.setState({
-            yearText:item
+            yearText:value
         });
         this.props.handlerSearchInput(this.state);
     }
 
-    handleSelectedMonthChanged = (item,index) => {
+    handleSelectedMonthChanged = (value) => {
         this.setState({
-            monthText:item
+            monthText:value
         });
         this.props.handlerSearchInput(this.state);
     }
 
+    setFunctionClearPicker = (_clear) => {
+        functionClearPicker = _clear;
+      }
 
     render(){
-        let yearItems = this.generateYears().map( (year,index) => {
-            return <Picker.Item key={index} value={index} label={year.toString()} />
-        });
-
-        let monthItems = this.generateMonths().map( (month,index)=>{
-            return <Picker.Item  key={index} value = {index} label = {month.toString()} />
-        });
 
         const {
             doSearch,
@@ -88,44 +158,32 @@ export default class OfficesForm extends Component{
                         <Text style={{marginLeft:'5%', fontSize:15}}>
                             Año
                         </Text>
-                        <Text style={{marginLeft:'40%',fontSize:15}}>
+                        <Text style={{marginLeft:'45%',fontSize:15}}>
                             Mes
                         </Text>
                     </View>
                     <View style={{ flexDirection: 'row'}}>
                         <View
-                        style = {{marginLeft:'5%',width:'43.75%',height:'10%'}}
-                        >
-                            <Picker 
-                                id='pickerYear'
-                                selectedValue = {this.state.yearText}
-                                onValueChange = {(item,index)=>
-                                    this.handleSelectedYearChanged(item,index)
-                                }
-                            >
-                                {yearItems}
-                            </Picker>
+                        style = {{marginLeft:'2.5%',width:'44%',height:'10%'}} >
+                            <PickerCalpulliX
+                                data={this.generateYears()}
+                                updateState={(item) =>this.handleSelectedYearChanged(item)}
+                                placeholder={'Año'}
+                                labelFunction={item => item.name}
+                                functionClearPicker={this.setFunctionClearPicker} />
                         </View>
                         <View
-                            style = {{marginLeft:'2.5%',width:'43.75%',height:'10%'}}
-                        >
-                            <Picker 
-                                id = 'pickerMonth'
-                                selectedValue = {this.state.monthText}
-                                
-                                onValueChange = {(item,index)=>
-                                    this.handleSelectedMonthChanged(item,index)
-                                }
-
-          
-                                
-                            >
-                                {monthItems}
-                            </Picker>
+                            style = {{marginLeft:'6%',width:'44%',height:'10%'}} >
+                            <PickerCalpulliX
+                                data={this.generateMonths()}
+                                updateState={this.handleSelectedMonthChanged}
+                                placeholder={'Mes'}
+                                labelFunction={item => item.name}
+                                functionClearPicker={this.setFunctionClearPicker} />
                         </View>
                     </View>
                     <View >
-                        <View style={{flexDirection:'row'}}>
+                        <View style={{flexDirection:'row',marginTop:'5%'}}>
                             <Text style={{marginLeft:'5%',fontSize:15}} >
                                 Nombre de sucursal
                             </Text>

@@ -1,11 +1,12 @@
 import React , { PureComponent } from 'react';
-import { View,Text} from "react-native";
-import ClassifyButton from './ClassifyButton'
+import { View,Text, StyleSheet} from "react-native";
+import ClassifyButton from '../common/ClassifyButton'
 import UnclasifiedProducts from './UnclasifiedProducts';
 import stylesCommon from '../common/style';
 import HeaderCalpulliX from "../common/HeaderCalpulliX";
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
-
+import Paginator from 'react-native-paginator';
+import PaginatorStyles from '../common/paginatorStyle';
 
 /* Quitar al solucionar bug TypeError: Network request failed*/
 
@@ -70,13 +71,17 @@ const dummyProductsList = {
     ]
 };
 
+
+
 export default class Products extends PureComponent{
 
 
     constructor(props){
         super(props);
         this.state = {
-            page:0,
+            itemsPerPage:5,
+            itemCount:30,
+            page:1,
             errorMessage:'',
             productsList:[]
         };
@@ -107,14 +112,32 @@ export default class Products extends PureComponent{
             });
         });
         if(sucessfullCall){
-                this.setState({ productsList: response.productsClassify});
+                this.setState({ productsList: response.productsClassify,itemCount: response.itemCount});
         }*/
         this.setState({
             productsList:dummyProductsList.productsClassify,
         });
     }
 
-    doProductClassification = async(e) => {
+    getNewProducts = async (e) => {
+        /*var sucessfullCall = true;
+        const response = await ApiCaller.callApi('/calpullix/products/classify',this.getProductsClassifyRequest()).catch( (error) => {
+            console.log(error);
+            sucessfullCall = false;
+            this.setState({
+                errorMessage:'Ocurrió un error al comunicarse con el servidor, intenta más rarde'
+            });
+        });
+        if(sucessfullCall){
+                this.setState({ productsList: response.productsClassify});
+        }*/
+
+        this.setState({
+            productsList: dummyProductsList.productsClassify,
+        });
+    }
+
+    doProductClassification = async() => {
         /*var sucessfullCall = true;
         const response = await ApiCaller.callApi('/calpullix/update/products/classify',this.getProductsClassifyRequest()).catch( (error) => {
             console.log(error);
@@ -131,15 +154,17 @@ export default class Products extends PureComponent{
         });
     }
 
-    handlerNextPage = (_State) => {
+    handlerPageChange = (pageNumber) => {
         this.setState({
-            page:_State.page,
+            page:pageNumber,
         });
+        this.getNewProducts(null);
     }
 
 
     render(){
-        const {productsList,page} = this.state; 
+        const {productsList,page,errorMessage,itemCount,itemsPerPage} = this.state; 
+        const { navigation } = this.props;
         return(
             <BackgroundScrollCalpulliX addHeight = {500}>
                 <View >
@@ -148,24 +173,34 @@ export default class Products extends PureComponent{
                         id='errorMessage'
                         style ={stylesCommon.errorMessage}
                     >
-                        {this.state.errorMessage}
+                        {errorMessage}
                     </Text>
                     <ClassifyButton
-                        doProductClassification={(e)=>{this.doProductClassification(e)}}
+                        doProductClassification={(e)=>{this.doProductClassification()}}
                         marginTop = {25}
                     />
-                    <Text style={[stylesCommon.headerText]} style={{fontSize:25,marginLeft:'5%',marginTop:'5%',color:'#F49315'}}>Productos sin clasificar</Text>
+                    <Text style={[stylesCommon.headerText]} style={{fontSize:25, marginLeft:'5%',marginTop: 30, color:'#F49315'}}>Productos sin clasificar</Text>
                     <UnclasifiedProducts
-                        labelNames = {{"name":"Nombre","description":"Descripción","brand":"Marca","size":"Tamaño","color":"Color","material":"Material","price":"Precio"}}
+                        navigation={navigation}
+                        labelNames = {{"name":"Nombre","description":"Descripción","brand":"Marca","size":"Tamaño",
+                        "color":"Color","material":"Material","price":"Precio"}}
                         productsList = {productsList}
                         page = {page}
                         handlerNextPage = {this.handlerNextPage}
                         
                     />
+                    <Paginator
+                        totalItems={itemCount}
+                        onChange={pageNumber => this.handlerPageChange(pageNumber)}
+                        activePage={page}
+                        disabled={false}
+                        itemsPerPage={itemsPerPage}
+                        buttonStyles={[PaginatorStyles.paginatorButton]}
+                        buttonActiveStyles={[PaginatorStyles.paginatorActiveButton]}
+                        />
                 </View>
             </BackgroundScrollCalpulliX>
 
         );
     }
-
 }

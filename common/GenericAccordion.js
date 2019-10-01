@@ -56,12 +56,14 @@ export default class GenericAccordion extends PureComponent {
     collapsed: true,
   };
 
+  
+
   openDetail = async () => {
-    console.log(':: ID VALUE: ' + idValue);
+    /*console.log(':: ID VALUE: ' + idValue);
     const response = await ApiCaller.callApi(this.props.path, this.getDetailRequest())
       .catch((error) => {
         console.log(error);
-      });
+      });*/
     NavigatorCommons.navigateTo(this.props.navigation, this.props.screen);
   }
 

@@ -8,7 +8,8 @@ import ProductList from '../products/ProductList';
 import ProductDetail from '../products/ProductDetail';
 import BranchOffices from '../branchOffices/Offices';
 import Products from '../productClasification/Products';
-
+import Users from '../userClassification/Users';
+import Promotions from '../userPromotions/Promotions';
 import { createAppContainer, createDrawerNavigator } from "react-navigation";
 
 const AppNavigator = createDrawerNavigator({
@@ -36,6 +37,12 @@ const AppNavigator = createDrawerNavigator({
       header: null
     }
   },
+  ProductDetail : {
+    screen: ProductDetail,
+    navigationOptions: {
+      header: null
+    }
+  },
   Home: {
     screen: HomeTest,
   },
@@ -45,15 +52,15 @@ const AppNavigator = createDrawerNavigator({
   ClassifyProducts:{
     screen:Products,
   },
-  ProductDetail : {
-    screen: ProductDetail,
-    navigationOptions: {
-      header: null
-    }
+  ClassifyUsers:{
+    screen:Users,
+  },
+  ClientPromotions:{
+    screen:Promotions,
   },
 }, 
 {
-  initialRouteName: 'ProductDetail',
+  initialRouteName: 'ClassifyProducts',
   contentComponent: SideMenu,
   drawerWidth: 300
 }
