@@ -201,8 +201,19 @@ export default class Users extends PureComponent {
                         activePage={page}
                         disabled={false}
                         itemsPerPage={itemsPerPage}
-                        buttonStyles={[PaginatorStyles.Button]}
-                        buttonActiveStyles={[PaginatorStyles.ActiveButton]} />
+                        buttonStyles = {
+                            {
+                               backgroundColor:'#F3F9FA',
+                               color:'#156869',
+                               borderColor:'#156869',
+                               
+                           }
+                       }
+                       buttonActiveStyles = {{
+                           backgroundColor:'#05AAAB',
+                           color:'#F3F9FA',
+                           borderColor:'#05AAAB'
+                       }} />
                 </View>
             </BackgroundScrollCalpulliX>
         );
