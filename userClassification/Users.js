@@ -1,5 +1,5 @@
-import React , { PureComponent } from 'react';
-import { View,Text} from "react-native";
+import React, { PureComponent } from 'react';
+import { View, Text , StyleSheet } from "react-native";
 import ClassifyButton from '../common/ClassifyButton'
 import UnclasifiedUsers from './UnclassifiedUsers';
 import stylesCommon from '../common/style';
@@ -75,36 +75,36 @@ const dummyUsersList = {
 };
 
 
-export default class Users extends PureComponent{
+export default class Users extends PureComponent {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            itemsPerPage:5,
-            itemCount:30,
-            page:1,
-            errorMessage:'',
-            usersList:[]
+            itemsPerPage: 5,
+            itemCount: 30,
+            page: 1,
+            errorMessage: '',
+            usersList: []
         };
 
         this.doUserClassification = this.doUserClassification.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getInitialUsers(null);
     }
 
-    getUsersClassifyRequest(){
+    getUsersClassifyRequest() {
         const request = {
             page: this.state.page,
-            usersToClassify: this.state.usersList.map((user) => {return user.id;}),
+            usersToClassify: this.state.usersList.map((user) => { return user.id; }),
         };
 
         return request;
     }
 
 
-    getInitialUsers = async(e) => {
+    getInitialUsers = async (e) => {
         /*var sucessfullCall = true;
         const response = await ApiCaller.callApi('/calpullix/clients',this.getUsersClassifyRequest()).catch( (error) => {
             console.log(error);
@@ -117,11 +117,11 @@ export default class Users extends PureComponent{
                 this.setState({ usersList: response.clients});
         }*/
         this.setState({
-            usersList:dummyUsersList.clients,
+            usersList: dummyUsersList.clients,
         });
     }
 
-    getNewUsers = async(e) =>{
+    getNewUsers = async (e) => {
         /*var sucessfullCall = true;
         const response = await ApiCaller.callApi('/calpullix/clients',this.getUsersClassifyRequest()).catch( (error) => {
             console.log(error);
@@ -134,12 +134,12 @@ export default class Users extends PureComponent{
                 this.setState({ usersList: response.clients,itemCount:response.itemCount});
         }*/
         this.setState({
-            usersList:[],
+            usersList: dummyUsersList.clients,
         });
-        setTimeout(() => {this.setState({productsList:dummyUsersList.clients})},500);
+        //setTimeout(() => {this.setState({productsList:dummyUsersList.clients})},500);
     }
 
-    doUserClassification = async(e) =>{
+    doUserClassification = async (e) => {
         /*var sucessfullCall = true;
         const response = await ApiCaller.callApi('/calpullix/update/clients/classify',this.getUsersClassifyRequest()).catch( (error) => {
             console.log(error);
@@ -152,43 +152,48 @@ export default class Users extends PureComponent{
                 this.setState({ usersList: response.clients});
         }*/
         this.setState({
-            usersList:dummyUsersList.clients,
+            usersList: dummyUsersList.clients,
         });
     }
 
 
     handlerPageChange = (pageNumber) => {
         this.setState({
-            page:pageNumber,
+            page: pageNumber,
         });
         this.getNewUsers(null);
     }
 
 
-    render(){
-        const {page,errorMessage,itemCount,itemsPerPage,usersList} = this.state; 
-        return(
-            <BackgroundScrollCalpulliX addHeight = {500}>
+    render() {
+        const { page, errorMessage, itemCount, itemsPerPage, usersList } = this.state;
+        return (
+            <BackgroundScrollCalpulliX addHeight={500}>
                 <View >
-                    <HeaderCalpulliX/>
+                    <HeaderCalpulliX />
                     <Text
                         id='errorMessage'
-                        style ={stylesCommon.errorMessage}
+                        style={stylesCommon.errorMessage}
                     >
                         {errorMessage}
                     </Text>
                     <ClassifyButton
-                        doProductClassification={(e)=>{this.doUserClassification(e)}}
-                        marginTop = {25}
-                        style= {{marginBottom:'5%'}}
+                        doProductClassification={(e) => { this.doUserClassification(e) }}
+                        marginTop={25}
+                        style={{ marginBottom: '5%' }}
                     />
+                    {usersList.length != 0 &&
+                        <Text style={[stylesCommon.headerText]} style={{ fontSize: 25, marginLeft: '5%', marginTop: 30, color: '#F49315' }}>Usuarios sin clasificar</Text>
+                    }
                     <UnclasifiedUsers
-                        navigation = {this.props.navigation}
-                        labelNames = {{"name":"Nombre","age":"Edad","gender":"Sexo","job":"Ocupación",
-                        "postalCode":"Código Postal","contact":"Contacto","sales":"Ventas","classification":"Clasificación"}}
-                        usersList = {usersList}
-                        page = {page}
-                        handlerNextPage = {this.handlerNextPage}
+                        navigation={this.props.navigation}
+                        labelNames={{
+                            "name": "Nombre", "age": "Edad", "gender": "Sexo", "job": "Ocupación",
+                            "postalCode": "Código Postal", "contact": "Contacto", "sales": "Ventas", "classification": "Clasificación"
+                        }}
+                        usersList={usersList}
+                        page={page}
+                        handlerNextPage={this.handlerNextPage}
                     />
                     <Paginator
                         totalItems={itemCount}
@@ -196,8 +201,8 @@ export default class Users extends PureComponent{
                         activePage={page}
                         disabled={false}
                         itemsPerPage={itemsPerPage}
-                        buttonStyles={[PaginatorStyles.paginatorButton]}
-                        buttonActiveStyles={[PaginatorStyles.paginatorActiveButton]} />
+                        buttonStyles={[PaginatorStyles.Button]}
+                        buttonActiveStyles={[PaginatorStyles.ActiveButton]} />
                 </View>
             </BackgroundScrollCalpulliX>
         );

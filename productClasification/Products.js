@@ -22,7 +22,8 @@ const dummyProductsList = {
             "size": 199.1200000000000045474735088646411895751953125,
             "color": "Amarillo",
             "material": "Material",
-            "price": 125
+            "price": 125,
+            "classification":2,
         },
         {
             "id": 1,
@@ -79,6 +80,7 @@ export default class Products extends PureComponent{
     constructor(props){
         super(props);
         this.state = {
+            showClassifyButton:true,
             itemsPerPage:5,
             itemCount:30,
             page:1,
@@ -120,7 +122,8 @@ export default class Products extends PureComponent{
     }
 
     getNewProducts = async (e) => {
-        /*var sucessfullCall = true;
+        let validResponse = true;
+        /*let sucessfullCall = true;
         const response = await ApiCaller.callApi('/calpullix/products/classify',this.getProductsClassifyRequest()).catch( (error) => {
             console.log(error);
             sucessfullCall = false;
@@ -129,16 +132,19 @@ export default class Products extends PureComponent{
             });
         });
         if(sucessfullCall){
+                validResponse = response.isValid;
                 this.setState({ productsList: response.productsClassify});
         }*/
 
         this.setState({
             productsList: dummyProductsList.productsClassify,
+            showClassifyButton:validResponse,
         });
     }
 
     doProductClassification = async() => {
-        /*var sucessfullCall = true;
+        let validResponse = false;
+        /*let sucessfullCall = true;
         const response = await ApiCaller.callApi('/calpullix/update/products/classify',this.getProductsClassifyRequest()).catch( (error) => {
             console.log(error);
             sucessfullCall = false;
@@ -147,11 +153,15 @@ export default class Products extends PureComponent{
             });
         });
         if(sucessfullCall){
+                validResponse = response.isValid;
                 this.setState({ productsList: response.productsClassify});
         }*/
+
         this.setState({
             productsList:dummyProductsList.productsClassify,
+            showClassifyButton:validResponse,
         });
+
     }
 
     handlerPageChange = (pageNumber) => {
@@ -163,7 +173,7 @@ export default class Products extends PureComponent{
 
 
     render(){
-        const {productsList,page,errorMessage,itemCount,itemsPerPage} = this.state; 
+        const {productsList,page,errorMessage,itemCount,itemsPerPage,showClassifyButton} = this.state; 
         const { navigation } = this.props;
         return(
             <BackgroundScrollCalpulliX addHeight = {500}>
@@ -175,15 +185,19 @@ export default class Products extends PureComponent{
                     >
                         {errorMessage}
                     </Text>
-                    <ClassifyButton
-                        doProductClassification={(e)=>{this.doProductClassification()}}
+                    {showClassifyButton &&
+                        <ClassifyButton
+                            doProductClassification={(e)=>{this.doProductClassification()}}
                         marginTop = {25}
-                    />
-                    <Text style={[stylesCommon.headerText]} style={{fontSize:25, marginLeft:'5%',marginTop: 30, color:'#F49315'}}>Productos sin clasificar</Text>
+                         />
+                    }
+                    {productsList.length != 0 &&
+                        <Text style={[stylesCommon.headerText]} style={{fontSize:25, marginLeft:'5%',marginTop: 30, color:'#F49315'}}>Productos sin clasificar</Text>
+                    }
                     <UnclasifiedProducts
                         navigation={navigation}
                         labelNames = {{"name":"Nombre","description":"Descripción","brand":"Marca","size":"Tamaño",
-                        "color":"Color","material":"Material","price":"Precio"}}
+                        "color":"Color","material":"Material","price":"Precio","classification":"Clasificación"}}
                         productsList = {productsList}
                         page = {page}
                         handlerNextPage = {this.handlerNextPage}
@@ -195,8 +209,21 @@ export default class Products extends PureComponent{
                         activePage={page}
                         disabled={false}
                         itemsPerPage={itemsPerPage}
-                        buttonStyles={[PaginatorStyles.paginatorButton]}
-                        buttonActiveStyles={[PaginatorStyles.paginatorActiveButton]}
+                        //buttonStyles={PaginatorStyles.Button}
+                        //buttonActiveStyles={PaginatorStyles.ActiveButton}
+                        buttonStyles = {
+                             {
+                                backgroundColor:'#F3F9FA',
+                                color:'#156869',
+                                borderColor:'#156869',
+                                
+                            }
+                        }
+                        buttonActiveStyles = {{
+                            backgroundColor:'#05AAAB',
+                            color:'#F3F9FA',
+                            borderColor:'#05AAAB'
+                        }}
                         />
                 </View>
             </BackgroundScrollCalpulliX>

@@ -17,7 +17,7 @@ export default class OfferedPromotions extends Component{
                 <View>
                     <GenericAccordion
                         labelNames = {this.props.labelNames}
-                        filteredProperties={["id","content,accepted"]}
+                        filteredProperties={["id","content","accepted"]}
                         headerLabel = {'ID de promoción'}
                         content={this.props.promosList}
                         path={'/calpullix/login'}
