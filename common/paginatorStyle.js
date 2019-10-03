@@ -15,4 +15,11 @@ const PaginatorStyles = StyleSheet.create({
     }
 });
 
-export default PaginatorStyles;
+const Button = StyleSheet.flatten(PaginatorStyles.paginatorButton);
+const ActiveButton = StyleSheet.flatten(PaginatorStyles.paginatorActiveButton);
+
+export default{
+      Button ,
+      ActiveButton
+
+}
