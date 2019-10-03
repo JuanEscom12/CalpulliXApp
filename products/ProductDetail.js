@@ -36,7 +36,10 @@ export default class ProductDetail extends PureComponent {
         }
     }
 
+
     render() {
+        // get apiResponse from context.
+        // transform to array values.
         var content = [];
         for (let index = 0; index < labels.length; index++) {
             if ((index + 1) % 2 === 0) {
@@ -66,6 +69,7 @@ export default class ProductDetail extends PureComponent {
                     navigation={this.props.navigation}
                     backButton={true}
                     screen={'ProductList'} />
+                    
                 <View style={{
                     borderColor: '#F49315', borderWidth: 0.5, width: '90%',
                     marginLeft: 'auto', marginRight: 'auto', marginTop: 30

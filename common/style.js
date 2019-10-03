@@ -39,6 +39,12 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: '#FFF'
     },
+    headerTextInactive: {
+        textAlign: 'left',
+        fontSize: 16,
+        fontWeight: '500',
+        color: '#000',
+    },
     labelText: {
         fontSize: 13, 
         textAlign: 'center', 
@@ -91,15 +97,12 @@ const styles = StyleSheet.create({
     },
 
     active: {
-        backgroundColor: '#F6A338',
-        
-    },
-    inactive: {
         backgroundColor: '#F0AB53',
         
     },
-
-
+    inactive: {
+        backgroundColor: '#F3F9FA',
+    },
     activeText: {
         backgroundColor: '#EDEDED',
         borderColor: '#EDEDED',

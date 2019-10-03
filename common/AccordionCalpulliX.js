@@ -70,7 +70,7 @@ export default class AccordionCalpulliX extends PureComponent {
         duration={400}
         style={[styles.header, isActive ? styles.active : styles.inactive]}
         transition="backgroundColor" >
-        <Text style={styles.headerText}>{section[0]}</Text>
+        <Text style={isActive ? styles.headerText : styles.headerTextInactive}>{section[0]}</Text>
         { image }
       </Animatable.View>
     );

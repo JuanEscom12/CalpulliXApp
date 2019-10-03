@@ -63,12 +63,10 @@ export default class ProductList extends PureComponent {
     // Call api getBranchList.
     const branches = [
       {
-        color: '#2660A4',
         name: 'Sucursal Margaritas',
         value: 1
       },
       {
-        color: '#FF6B35',
         name: 'Sucursal Guadalajara',
         value: 2
       }]
@@ -129,7 +127,7 @@ export default class ProductList extends PureComponent {
 
   render() {
     return (
-      <BackgroundScrollCalpulliX addHeight={50}>
+      <BackgroundScrollCalpulliX addHeight={300}>
 
         <NavigationEvents
           onWillFocus={() => {
@@ -164,8 +162,7 @@ export default class ProductList extends PureComponent {
             onPress={this.getItems}
             width={'40%'}
             height={45}
-            marginTop={30}
-             />
+            marginTop={30} />
 
            <AccordionCalpulliX 
               content={this.state.productList}
