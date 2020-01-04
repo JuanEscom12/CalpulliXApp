@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Alert, Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import { NavigationEvents } from 'react-navigation';
 import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
@@ -7,94 +7,43 @@ import stylesCommon from '../common/style';
 import  ButtonCalpulliX  from '../common/ButtonCalpulliX';
 import  PickerCalpulliX  from '../common/PickerCalpulliX';
 import AccordionCalpulliX from '../common/AccordionCalpulliX';
+import ApiCaller from '../api/ApiCaller';
 
-
-const apiResponse = [
-  {
-    id: 'Item  1',
-    name: 'Articulo XXXX',
-    description: 'Row ',
-    brand: 'Marca ',
-    status: 'Estatus ',
-    branchId: 'Id sucursal '
-  },
-  {
-    id: 'Item  1',
-    name: 'Articulo ',
-    description: 'Row \n',
-    brand: 'Marca \n',
-    status: 'Estatus \n',
-    branchId: 'Id sucursal \n'
-  },
-  {
-    id: 'Item  1',
-    name: 'Articulo ',
-    description: 'Row \n',
-    brand: 'Marca \n',
-    status: 'Estatus \n',
-    branchId: 'Id sucursal \n'
-  },
-  {
-    id: 'Item  1',
-    name: 'Articulo ',
-    description: 'Row \n',
-    brand: 'Marca \n',
-    status: 'Estatus \n',
-    branchId: 'Id sucursal \n'
-  },
-  {
-    id: 'Item  1',
-    name: 'Articulo ',
-    description: 'Row \n',
-    brand: 'Marca \n',
-    status: 'Estatus \n',
-    branchId: 'Id sucursal \n'
-  },
-];
 
 var functionClearPicker;
-
 const labels = ['Id', 'Descripcion', 'Marca', 'Status', 'Id de la sucursal'];
 
 export default class ProductList extends PureComponent {
 
   constructor(props) {
     super(props);
-    // Call api getBranchList.
-    const branches = [
-      {
-        name: 'Sucursal Margaritas',
-        value: 1
-      },
-      {
-        name: 'Sucursal Guadalajara',
-        value: 2
-      }]
     this.state = {
-      branches: branches,
+      branches:  [],
       branchId: null,
       errorMessage: '',
+      productListApi: [],
       productList: [],
-    }
+    };  
+    this.getBranchList();
   }
-  getItems = async (e) => {
-    if (this.isValidInput()) {
-      // Consult API getProductList.
-      var fields = [];
-      var item = [];
-      for (let i = 0; i < apiResponse.length; i++) {
-        item.push(apiResponse[i].id);
-        item.push(apiResponse[i].name);
-        item.push(apiResponse[i].description);
-        item.push(apiResponse[i].brand);
-        item.push(apiResponse[i].status);
-        item.push(apiResponse[i].branchId);
-        fields.push(item);
-      }
-      this.setState({
-        errorMessage: '',
-        productList: fields,
+
+  getBranchList  = async () => {
+    const result = await ApiCaller.callApi('/calpullix/branch/list', null, '9091', 'GET')
+      .catch((error) => {
+        console.log(error);
+        this.setState({
+          errorMessage: 'Ocurrio un error, favor de intentar mas tarde',
+        });
       });
+      this.setState({
+        branches:  result.branch,
+      });
+      return result.branch;
+  }
+
+  getItems = () => {
+    if (this.isValidInput()) {
+      this.getProductList();
     } else {
       this.setState({
         errorMessage: 'El campo sucursal es requerido.',
@@ -106,6 +55,46 @@ export default class ProductList extends PureComponent {
     return this.state.branchId !== null;
   }
 
+  getProductList  = async () => {
+    const result = await ApiCaller.callApi('/calpullix/product/list', this.getProductListRequest(), '8080', 'POST')
+      .catch((error) => {
+        console.log(error);
+        this.setState({
+          errorMessage: 'Ocurrio un error, favor de intentar mas tarde',
+        });
+      });
+      this.setState({
+        productListApi:  result.productDetail,
+      });
+      this.addItemsList();
+      return result;
+  }
+
+  getProductListRequest() {
+    const request = {
+      "branchId": this.state.branchId.id
+    };
+    return request;
+  }
+
+  addItemsList() {
+    var fields = [];
+    for (let i = 0; i < this.state.productListApi.length; i++) {
+      var item = [];
+      item.push(this.state.productListApi[i].id);
+      item.push(this.state.productListApi[i].name);
+      item.push(this.state.productListApi[i].description);
+      item.push(this.state.productListApi[i].brand);
+      item.push(this.state.productListApi[i].status);
+      item.push(this.state.productListApi[i].branchId);
+      fields.push(item);
+    }
+    this.setState({
+      errorMessage: '',
+      productList: fields,
+    });
+  }
+
   cleanInput = () => {
     functionClearPicker();
     this.setState({
@@ -115,9 +104,9 @@ export default class ProductList extends PureComponent {
     });
   }
 
-  updateState = (value) => {
+  updateState = (_value) => {
     this.setState({
-      branchId: value
+      branchId: _value
     })
   }
 
@@ -128,18 +117,14 @@ export default class ProductList extends PureComponent {
   render() {
     return (
       <BackgroundScrollCalpulliX addHeight={300}>
-
         <NavigationEvents
           onWillFocus={() => {
             this.cleanInput();
           }} />
-
         <HeaderCalpulliXBack
           navigation={this.props.navigation}
           backButton={false} />
-
         <View style={{ marginTop: 5 }}>
-
           <Text
             id='errorMessageListItems'
             style={[stylesCommon.errorMessage, {marginTop: 10}]}>{this.state.errorMessage}
@@ -147,15 +132,12 @@ export default class ProductList extends PureComponent {
           <Text style={[stylesCommon.labelText, { marginTop: 10, marginRight: '70%', fontSize: 15 }]}>
             Sucursales
           </Text>
-
-          <PickerCalpulliX
-            data={this.state.branches}
-            updateState={this.updateState}
-            placeholder={'Selecciona la sucursal'}
-            labelFunction={item => item.name}
-            functionClearPicker={this.setFunctionClearPicker} />
-
-          <ButtonCalpulliX
+        <PickerCalpulliX 
+          data={this.state.branches}
+          updateState={this.updateState}
+          placeholder={'Seleccione la sucursal'}
+          functionClearPicker={this.setFunctionClearPicker} />
+        <ButtonCalpulliX
             title={'Buscar'}
             id={'buttonSearchItems'}
             arrayColors={['#05AAAB', '#048585', '#048585']}
@@ -163,17 +145,18 @@ export default class ProductList extends PureComponent {
             width={'40%'}
             height={45}
             marginTop={30} />
-
            <AccordionCalpulliX 
               content={this.state.productList}
               path={'/calpullix/product/detail'}
+              port={'8080'}
               screen={'ProductDetail'}
               navigation={this.props.navigation} 
               renderDetailButton={true}
               titleButton={'Ver Detalle'} 
               margintTop={25}
-              labels={labels}/>
-
+              labels={labels}
+              labelHeader={'Id del producto  '}
+              marginLeftRowHeader={'55%'}/>
         </View>
       </BackgroundScrollCalpulliX>
     );

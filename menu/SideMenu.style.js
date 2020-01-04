@@ -10,8 +10,17 @@ export default {
       backgroundColor: 'lightgrey'
     },
     sectionHeadingStyle: {
-      paddingVertical: 10,
-      paddingHorizontal: 5
+      borderColor: '#9E9E9E',
+      borderWidth: 0, 
+      borderTopWidth: 0.5,
+      flexDirection: 'row',
+    },
+    sectionHeadingBottomStyle: {
+      borderColor: '#9E9E9E',
+      borderWidth: 0,
+      borderBottomWidth: 0.5, 
+      borderTopWidth: 0.5,
+      flexDirection: 'row',
     },
     footerContainer: {
       padding: 20,

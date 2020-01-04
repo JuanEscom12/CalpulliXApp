@@ -6,6 +6,8 @@ import stylesCommon from '../common/style'
 import ButtonCalpulliX from '../common/ButtonCalpulliX';
 import ApiCaller from '../api/ApiCaller';
 import { NavigationEvents } from 'react-navigation';
+import CONSTANTS from '../common/Constants';
+
 
 export default class ForgotUserPassword extends PureComponent {
 
@@ -42,7 +44,7 @@ export default class ForgotUserPassword extends PureComponent {
   restartPassword = async (e) => {
     if (this.isValidInput()) {
       const response = await ApiCaller.callApi('/calpullix/restartpassword',
-        this.getRestartPasswordRequest())
+        this.getRestartPasswordRequest(), CONSTANTS.PORT_RECOVER_PASSWORD, CONSTANTS.POST_METHOD)
         .catch((error) => {
           console.log(error);
           this.setState({
@@ -104,6 +106,7 @@ export default class ForgotUserPassword extends PureComponent {
           }} />
         <HeaderCalpulliXBack
           navigation={this.props.navigation} 
+          backButton={true}
           screen={'Login'}  />
         <View style={{ marginTop: 70, marginBottom: 15 }}>
           <Text

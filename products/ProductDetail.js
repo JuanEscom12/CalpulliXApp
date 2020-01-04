@@ -3,19 +3,15 @@ import { Alert, Text, View, Image, Switch } from 'react-native';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
 
-
-const labels = ['Fecha de Caducidad', 'Caja con mas productos ', 'Numero de productos', 'Id paquete padre', 'Codigo de barras',
-    'Provedor', 'Precio Original', 'Precio Tienda', 'Porcentaje de ganancia', 'Ganancia neta', 'Tamaño', 'Unidades', 'Categoria',
-    'Material', 'Clasificacion del producto'];
-
-const apiResponse = [
-    ' Value 1', true, ' Value 1', ' Value 1', ' Value 1', ' Value 1', ' Value 1', ' Value 1',
-    ' Value 1', ' Value 1', ' Value 1', ' Value 1', ' Value 1', ' Value 1', ' Value 1', ' Value 1'
-]
+const labels = 
+    {"Fecha de Caducidad": "sellByDate", 'Caja con mas productos ': 'hasMoreProducts', 'Numero de productos': 'numberProducts', 
+    'Id paquete padre': 'parentPackageId', 'Codigo de barras': 'barCode', 'Provedor': 'provider', 'Precio Original': 'originalPrice', 
+    'Precio Tienda': 'priceStore', 'Porcentaje de ganancia': 'percentageProfit', 'Ganancia neta': 'netIncome', 'Tamaño': 'size', 
+    'Unidades': 'units', 'Categoria': 'category', 'Material': 'material', 'Clasificacion del producto': 'productClassification'};
 
 export default class ProductDetail extends PureComponent {
 
-    getContent(_label, _apiResponse, _backGroundColor) {
+    buildContent(_label, _apiResponse, _backGroundColor) {
         if (typeof(_apiResponse) === 'boolean') {   
             return <View style={{ flexDirection: 'row', backgroundColor: _backGroundColor, width: '100%' }} >
                 <Text style={{ marginLeft: '5%', fontSize: 11, width: '50%' }}>{ '\n' + _label  + '\n'}</Text>
@@ -36,22 +32,23 @@ export default class ProductDetail extends PureComponent {
         }
     }
 
-
-    render() {
-        // get apiResponse from context.
-        // transform to array values.
+    getContent(_apiResponse) {
         var content = [];
-        for (let index = 0; index < labels.length; index++) {
+        var index = 0;
+        for (let key in labels) {
             if ((index + 1) % 2 === 0) {
                 content.push(
-                    this.getContent(labels[index], apiResponse[index], '#F3F9FA')
+                    this.buildContent(key, _apiResponse[labels[key]], '#F3F9FA')
                 );
             } else {
                 content.push(
-                    this.getContent(labels[index], apiResponse[index], '#EDEDED')
+                    this.buildContent(key, _apiResponse[labels[key]], '#EDEDED')
                 );
             }
+            index++;
         }
+        const img64 = _apiResponse['pictureResult'];
+        const base64Image = 'data:image/jpg;base64,' + img64;
         content.push(
             <View style={{width: '100%', backgroundColor: '#F3F9FA'}}>
             <Image
@@ -59,21 +56,25 @@ export default class ProductDetail extends PureComponent {
                         height: 200, marginLeft: 'auto', marginRight: 'auto',
                         marginTop: 10, marginBottom: 10, width: '95%',
                     }}
-                    source={require('./item.jpg')} />
+                    source={{uri: base64Image}} />
             </View>
         );
+
+        return content;
+    }
+
+    render() {
+        const apiResponse = this.props.navigation.state.params.responseApi;
+        var content = this.getContent(apiResponse);
         return (
             <BackgroundScrollCalpulliX addHeight={320}>
-
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     backButton={true}
                     screen={'ProductList'} />
-                    
                 <View style={{
                     borderColor: '#F49315', borderWidth: 0.5, width: '90%',
-                    marginLeft: 'auto', marginRight: 'auto', marginTop: 30
-                }}>
+                    marginLeft: 'auto', marginRight: 'auto', marginTop: 30 }}>
                     {content}
                 </View>
             </BackgroundScrollCalpulliX>

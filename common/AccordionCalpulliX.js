@@ -23,8 +23,7 @@ export default class AccordionCalpulliX extends PureComponent {
   };
 
   openDetail = async () => {
-    console.log(':: ID VALUE: ' + idValue);
-    const response = await ApiCaller.callApi(this.props.path, this.getDetailRequest())
+    const response = await ApiCaller.callApi(this.props.path, this.getDetailRequest(), this.props.port, 'POST')
       .catch((error) => {
         console.log(error);
       });
@@ -49,7 +48,7 @@ export default class AccordionCalpulliX extends PureComponent {
     if (isActive) {
       image = <Image
           style={{
-            height: 25, width: 26, marginLeft: '77%', transform: [
+            height: 25, width: 26, marginLeft: this.props.marginLeftRowHeader, transform: [
               { scaleX: 0.5 },
               { scaleY: 0.5 }
             ]
@@ -58,7 +57,7 @@ export default class AccordionCalpulliX extends PureComponent {
     } else {
       image = <Image
           style={{
-            height: 25, width: 26, marginLeft: '77%', transform: [
+            height: 25, width: 26, marginLeft: this.props.marginLeftRowHeader, transform: [
               { scaleX: 0.5 },
               { scaleY: 0.5 }
             ]
@@ -70,7 +69,9 @@ export default class AccordionCalpulliX extends PureComponent {
         duration={400}
         style={[styles.header, isActive ? styles.active : styles.inactive]}
         transition="backgroundColor" >
-        <Text style={isActive ? styles.headerText : styles.headerTextInactive}>{section[0]}</Text>
+        <Text style={isActive ? styles.headerText : styles.headerTextInactive}>
+          {this.props.labelHeader + section[0]}
+        </Text>
         { image }
       </Animatable.View>
     );
@@ -92,7 +93,6 @@ export default class AccordionCalpulliX extends PureComponent {
       </Animatable.Text>
       );
     }
-
     if (_renderDetailButton) {
       return (
         <Animatable.View

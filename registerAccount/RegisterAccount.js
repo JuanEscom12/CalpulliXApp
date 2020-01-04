@@ -6,6 +6,7 @@ import stylesCommon from '../common/style';
 import ButtonCalpulliX from '../common/ButtonCalpulliX';
 import ApiCaller from '../api/ApiCaller';
 import { NavigationEvents } from 'react-navigation';
+import CONSTANTS from '../common/Constants';
 
 export default class RegisterAccount extends PureComponent {
 
@@ -134,14 +135,16 @@ export default class RegisterAccount extends PureComponent {
 
     registerUser = async (e) => {
         if (this.isValidInput()) {
-            const response = await ApiCaller.callApi('/calpullix/registeruser',
-                this.getRegisterUserRequest())
+            const response = await ApiCaller.callApi('/calpullix/register/user',
+                this.getRegisterUserRequest(), 
+                CONSTANTS.PORT_REGISTER_USER, CONSTANTS.POST_METHOD)
                 .catch((error) => {
                     console.log(error);
                     this.setState({
                         errorMessage: 'Ocurrio un error, favor de intentar mas tarde'
                     })
                 });
+            this.cleanInput();
             if (response.isValid) {
                 this.setState({
                     errorMessage: '',
@@ -163,13 +166,13 @@ export default class RegisterAccount extends PureComponent {
                 borderColorUserTextInput: '#F03000',
             });
             result = false;
-        } 
+        }
         if (this.state.nameText === '') {
             this.setState({
                 borderColorNameTextInput: '#F03000',
             });
             result = false;
-        } 
+        }
         if (this.state.lastNameText === '') {
             this.setState({
                 borderColorLastNameTextInput: '#F03000',
@@ -242,11 +245,11 @@ export default class RegisterAccount extends PureComponent {
                     navigation={this.props.navigation}
                     backButton={true}
                     screen={'Login'} />
-                <View style={{ marginTop: 5}}>
+                <View style={{ marginTop: 5 }}>
                     <Text
                         id='errorMessageUserRegister'
                         style={stylesCommon.errorMessage}>{this.state.errorMessage}</Text>
-                    <Text style={[stylesCommon.labelText, {marginTop: 5}]}>
+                    <Text style={[stylesCommon.labelText, { marginTop: 5 }]}>
                         {this.state.headText}
                     </Text>
                     <TextInput

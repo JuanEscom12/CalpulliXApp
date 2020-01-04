@@ -11,6 +11,7 @@ import NavigatorCommons from '../navigation/NavigatorCommons';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import styles from './style'
 import stylesCommon from '../common/style'
+import CONSTANTS from '../common/Constants';
 
 var user = '';
 var pass = '';
@@ -26,7 +27,8 @@ export default class CalpulliX extends PureComponent {
 
   doLogin = async (e) => {
     if (this.isValidInput()) {
-      const response = await ApiCaller.callApi('/calpullix/login', this.getLoginRequest())
+      const response = await ApiCaller.callApi('/calpullix/login', 
+        this.getLoginRequest(), CONSTANTS.PORT_LOGIN, CONSTANTS.POST_METHOD)
         .catch((error) => {
           console.log(error);
           this.setState({
@@ -34,7 +36,7 @@ export default class CalpulliX extends PureComponent {
           })
         });
       if (response.isValid) {
-        NavigatorCommons.navigateTo(this.props.navigation, 'Home');
+        NavigatorCommons.navigateTo(this.props.navigation, 'ProductList');
       }
       this.cleanInput();
     }

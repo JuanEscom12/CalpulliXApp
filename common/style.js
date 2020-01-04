@@ -35,13 +35,13 @@ const styles = StyleSheet.create({
     },
     headerText: {
         textAlign: 'left',
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '500',
         color: '#FFF'
     },
     headerTextInactive: {
         textAlign: 'left',
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '500',
         color: '#000',
     },

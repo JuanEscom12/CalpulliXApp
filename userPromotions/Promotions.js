@@ -119,7 +119,8 @@ export default class Promotions extends PureComponent {
                 <View >
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
-                    backButton={false} />
+                    backButton={true} 
+                    screen={'ClassifyUsers'}/>
                     <Text
                         id='errorMessage'
                         style={stylesCommon.errorMessage}

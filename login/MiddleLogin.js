@@ -54,7 +54,7 @@ export default class MiddleLogin extends PureComponent {
         this.setState({
             colorLink: '#9E9E9E'
         })
-        NavigatorCommons.navigateTo(this.props.navigation, 'ProductList', 0);
+        NavigatorCommons.navigateTo(this.props.navigation, 'ForgotUserPassword', 0);
         this.props.cleanInput();
     }
     

@@ -34,7 +34,8 @@ const dummyProductsList = {
             "size": 199.1200000000000045474735088646411895751953125,
             "color": "Amarillo",
             "material": "Material",
-            "price": 125
+            "price": 125,
+            "classification":2,
         },
         {
             "id": 2,

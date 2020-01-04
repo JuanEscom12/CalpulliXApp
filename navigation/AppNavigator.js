@@ -3,7 +3,6 @@ import CalpulliX from '../login/CalpulliX';
 import HomeTest from '../homeTest/HomeTest';
 import RegisterAccount from '../registerAccount/RegisterAccount';
 import SideMenu from '../menu/SideMenu';
-
 import ProductList from '../products/ProductList';
 import ProductDetail from '../products/ProductDetail';
 import BranchOffices from '../branchOffices/Offices';
@@ -60,7 +59,7 @@ const AppNavigator = createDrawerNavigator({
   },
 }, 
 {
-  initialRouteName: 'ProductList',
+  initialRouteName: 'Login',
   contentComponent: SideMenu,
   drawerWidth: 300
 }

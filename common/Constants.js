@@ -1,0 +1,7 @@
+module.exports = {
+    POST_METHOD: 'POST',
+    PORT_RECOVER_PASSWORD: 9092,
+    PORT_REGISTER_USER: 9093,
+    PORT_LOGIN: 9090,
+
+  };
