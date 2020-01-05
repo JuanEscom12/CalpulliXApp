@@ -9,6 +9,7 @@ import BranchOffices from '../branchOffices/Offices';
 import Products from '../productClasification/Products';
 import Users from '../userClassification/Users';
 import Promotions from '../userPromotions/Promotions';
+import PurchaseOrder from '../purchaseOrder/PurchaseOrder';
 import { createAppContainer, createDrawerNavigator } from "react-navigation";
 
 const AppNavigator = createDrawerNavigator({
@@ -42,24 +43,27 @@ const AppNavigator = createDrawerNavigator({
       header: null
     }
   },
-  Home: {
-    screen: HomeTest,
-  },
   Offices:{
     screen: BranchOffices,
   },
   ClassifyProducts:{
-    screen:Products,
+    screen: Products,
   },
   ClassifyUsers:{
-    screen:Users,
+    screen: Users,
   },
   ClientPromotions:{
-    screen:Promotions,
+    screen: Promotions,
+  },
+  PurchaseOrder: {
+    screen: PurchaseOrder,
+    navigationOptions: {
+      header: null
+    },
   },
 }, 
 {
-  initialRouteName: 'Login',
+  initialRouteName: 'PurchaseOrder',
   contentComponent: SideMenu,
   drawerWidth: 300
 }

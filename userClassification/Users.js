@@ -7,8 +7,10 @@ import HeaderCalpulliX from "../common/HeaderCalpulliX";
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import Paginator from 'react-native-paginator';
 import PaginatorStyles from '../common/paginatorStyle';
+import ApiCaller from '../api/ApiCaller';
+import CONSTANTS from '../common/Constants';
 
-/* Quitar al solucionar bug TypeError: Network request failed*/
+
 const dummyUsersList = {
     "clients": [
         {
@@ -106,7 +108,9 @@ export default class Users extends PureComponent {
 
     getInitialUsers = async (e) => {
         /*var sucessfullCall = true;
-        const response = await ApiCaller.callApi('/calpullix/clients',this.getUsersClassifyRequest()).catch( (error) => {
+        const response = await ApiCaller.callApi('/calpullix/clients',
+        this.getUsersClassifyRequest(), CONSTANTS.PORT_CUSTOMERS, CONSTANTS.POST_METHOD)
+        .catch( (error) => {
             console.log(error);
             sucessfullCall = false;
             this.setState({
@@ -123,7 +127,9 @@ export default class Users extends PureComponent {
 
     getNewUsers = async (e) => {
         /*var sucessfullCall = true;
-        const response = await ApiCaller.callApi('/calpullix/clients',this.getUsersClassifyRequest()).catch( (error) => {
+        const response = await ApiCaller.callApi('/calpullix/clients',
+            this.getUsersClassifyRequest(), , CONSTANTS.PORT_CUSTOMERS, CONSTANTS.POST_METHOD)
+            .catch( (error) => {
             console.log(error);
             sucessfullCall = false;
             this.setState({
@@ -141,7 +147,9 @@ export default class Users extends PureComponent {
 
     doUserClassification = async (e) => {
         /*var sucessfullCall = true;
-        const response = await ApiCaller.callApi('/calpullix/update/clients/classify',this.getUsersClassifyRequest()).catch( (error) => {
+        const response = await ApiCaller.callApi('/calpullix/update/clients/classify',
+        this.getUsersClassifyRequest(), CONSTANTS.PORT_CUSTOMERS, CONSTANTS.POST_METHOD)
+        .catch( (error) => {
             console.log(error);
             sucessfullCall = false;
             this.setState({

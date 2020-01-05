@@ -8,7 +8,7 @@ import  ButtonCalpulliX  from '../common/ButtonCalpulliX';
 import  PickerCalpulliX  from '../common/PickerCalpulliX';
 import AccordionCalpulliX from '../common/AccordionCalpulliX';
 import ApiCaller from '../api/ApiCaller';
-
+import CONSTANTS from '../common/Constants';
 
 var functionClearPicker;
 const labels = ['Id', 'Descripcion', 'Marca', 'Status', 'Id de la sucursal'];
@@ -28,7 +28,8 @@ export default class ProductList extends PureComponent {
   }
 
   getBranchList  = async () => {
-    const result = await ApiCaller.callApi('/calpullix/branch/list', null, '9091', 'GET')
+    const result = await ApiCaller.callApi('/calpullix/branch/list', null, 
+    CONSTANTS.PORT_BRANCH, CONSTANTS.GET_METHOD)
       .catch((error) => {
         console.log(error);
         this.setState({
@@ -56,7 +57,8 @@ export default class ProductList extends PureComponent {
   }
 
   getProductList  = async () => {
-    const result = await ApiCaller.callApi('/calpullix/product/list', this.getProductListRequest(), '8080', 'POST')
+    const result = await ApiCaller.callApi('/calpullix/product/list', 
+    this.getProductListRequest(), CONSTANTS.PORT_PRODUCT_LIST, CONSTANTS.POST_METHOD)
       .catch((error) => {
         console.log(error);
         this.setState({

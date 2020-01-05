@@ -5,9 +5,10 @@ import OfferedPromos from './OfferedPromotions';
 import stylesCommon from '../common/style';
 import HeaderCalpulliXBack from "../common/HeaderCalpulliXBack";
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
+import ApiCaller from '../api/ApiCaller';
+import CONSTANTS from '../common/Constants';
 
 
-/* Quitar al solucionar bug TypeError: Network request failed*/
 const dummyPromosList = {
     "promotions": [
         {
@@ -76,7 +77,9 @@ export default class Promotions extends PureComponent {
 
     getInitialPromos = async (e) => {
         /*var sucessfullCall = true;
-        const response = await ApiCaller.callApi('/calpullix/client/promotions',this.getPromosRequest()).catch( (error) => {
+        const response = await ApiCaller.callApi('/calpullix/client/promotions',
+        this.getPromosRequest(), CONSTANTS.PORT_CUSTOMERS, CONSTANTS.POST_METHOD)
+        .catch( (error) => {
             console.log(error);
             sucessfullCall = false;
             this.setState({
@@ -93,7 +96,9 @@ export default class Promotions extends PureComponent {
 
     doAcceptPromos = async (e) => {
         /*var sucessfullCall = true;
-        const response = await ApiCaller.callApi('/calpullix/update/client/promotions',this.getPromosRequest()).catch( (error) => {
+        const response = await ApiCaller.callApi('/calpullix/update/client/promotions',
+        this.getPromosRequest(), CONSTANTS.PORT_CUSTOMERS, CONSTANTS.POST_METHOD)
+        .catch( (error) => {
             console.log(error);
             sucessfullCall = false;
             this.setState({

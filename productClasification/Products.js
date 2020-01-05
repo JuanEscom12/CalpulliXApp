@@ -7,8 +7,8 @@ import HeaderCalpulliX from "../common/HeaderCalpulliX";
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import Paginator from 'react-native-paginator';
 import PaginatorStyles from '../common/paginatorStyle';
-
-/* Quitar al solucionar bug TypeError: Network request failed*/
+import ApiCaller from '../api/ApiCaller';
+import CONSTANTS from '../common/Constants';
 
 
 const dummyProductsList = {
@@ -107,7 +107,9 @@ export default class Products extends PureComponent{
 
     getInitialProducts = async(e) => {
         /*var sucessfullCall = true;
-        const response = await ApiCaller.callApi('/calpullix/products/classify',this.getProductsClassifyRequest()).catch( (error) => {
+        const response = await ApiCaller.callApi('/calpullix/products/classify',
+        this.getProductsClassifyRequest(), CONSTANTS.PORT_PRODUCTS, CONSTANTS.POST_METHOD)
+        .catch( (error) => {
             console.log(error);
             sucessfullCall = false;
             this.setState({
@@ -125,7 +127,9 @@ export default class Products extends PureComponent{
     getNewProducts = async (e) => {
         let validResponse = true;
         /*let sucessfullCall = true;
-        const response = await ApiCaller.callApi('/calpullix/products/classify',this.getProductsClassifyRequest()).catch( (error) => {
+        const response = await ApiCaller.callApi('/calpullix/products/classify',
+        this.getProductsClassifyRequest(), CONSTANTS.PORT_PRODUCTS, CONSTANTS.POST_METHOD)
+        .catch( (error) => {
             console.log(error);
             sucessfullCall = false;
             this.setState({
@@ -146,7 +150,9 @@ export default class Products extends PureComponent{
     doProductClassification = async() => {
         let validResponse = false;
         /*let sucessfullCall = true;
-        const response = await ApiCaller.callApi('/calpullix/update/products/classify',this.getProductsClassifyRequest()).catch( (error) => {
+        const response = await ApiCaller.callApi('/calpullix/update/products/classify',
+        this.getProductsClassifyRequest(), CONSTANTS.PORT_PRODUCTS, CONSTANTS.POST_METHOD)
+        .catch( (error) => {
             console.log(error);
             sucessfullCall = false;
             this.setState({

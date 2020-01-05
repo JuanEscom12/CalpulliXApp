@@ -11,6 +11,7 @@ import {
     Text
 } from 'react-native';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
+import CONSTANTS from '../common/Constants';
 
 
 /* Quitar al solucionar bug TypeError: Network request failed*/
@@ -113,16 +114,15 @@ export default class Offices extends PureComponent {
         }
     }
 
-
-
     componentDidMount() {
         this.getBestOffices(null);
     }
 
-
     getBestOffices = async (e) => {
         /*var sucessfullCall = true;
-        const response = await ApiCaller.callApiGET('/calpullix/best/branch').catch( (error) => {
+        const response = await ApiCaller.callApiGET('/calpullix/best/branch',
+            null, CONSTANTS.PORT_BRANCH, CONSTANTS.GET_METHOD
+        ).catch( (error) => {
             console.log(error);
             sucessfullCall = false;
             this.setState({
@@ -162,7 +162,9 @@ export default class Offices extends PureComponent {
 
     doSearch = async (e) => {
         if (this.isValidOfficeSearch()) {
-            /* const response = await ApiCaller.callApi('/calpullix/branch', this.getSearchBranchRequest()).catch((error) => {
+            /* const response = await ApiCaller.callApi('/calpullix/branch', 
+                this.getSearchBranchRequest(), CONSTANTS.PORT_BRANCH, CONSTANTS.POST_METHOD)
+                .catch((error) => {
                 console.log(error);
                 this.setState({
                     errorMessage: 'Ocurrio un error, intenta más tarde'
@@ -264,7 +266,7 @@ export default class Offices extends PureComponent {
 
                     <View style={styles.container}>
                         <MapView
-                            provider={PROVIDER_GOOGLE} 
+                            provider={PROVIDER_GOOGLE}
                             style={styles.map}
                             region={{
                                 latitude: 37.78825,
@@ -272,7 +274,7 @@ export default class Offices extends PureComponent {
                                 latitudeDelta: 0.015,
                                 longitudeDelta: 0.0121,
                             }}
-                            region = {this.state.regions}
+                            region={this.state.regions}
                             zoomEnabled={true}
                             minZoomLevel={11} >
                             {branchMarkers}
@@ -288,22 +290,22 @@ export default class Offices extends PureComponent {
 
 const styles = StyleSheet.create({
     container: {
-      justifyContent: 'flex-end',
-      alignItems: 'center',
-      width: '90%',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      height: 400,
-      borderColor: '#F49315',
-      borderWidth: 0.5,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        width: '90%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        height: 400,
+        borderColor: '#F49315',
+        borderWidth: 0.5,
     },
     map: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      width: '100%',
-      height: '100%',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100%',
+        height: '100%',
     },
-  });
+});

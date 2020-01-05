@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Alert, Text, View, Image, Switch } from 'react-native';
+import { Text, View, Image, Switch } from 'react-native';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
 
