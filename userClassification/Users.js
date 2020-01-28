@@ -1,14 +1,13 @@
 import React, { PureComponent } from 'react';
-import { View, Text , StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import ClassifyButton from '../common/ClassifyButton'
 import UnclasifiedUsers from './UnclassifiedUsers';
 import stylesCommon from '../common/style';
-import HeaderCalpulliX from "../common/HeaderCalpulliX";
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import Paginator from 'react-native-paginator';
-import PaginatorStyles from '../common/paginatorStyle';
 import ApiCaller from '../api/ApiCaller';
 import CONSTANTS from '../common/Constants';
+import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
 
 
 const dummyUsersList = {
@@ -178,20 +177,28 @@ export default class Users extends PureComponent {
         return (
             <BackgroundScrollCalpulliX addHeight={500}>
                 <View >
-                    <HeaderCalpulliX />
+                    <HeaderCalpulliXBack 
+                        title={'Clasificación de usuarios'} />
                     <Text
                         id='errorMessage'
-                        style={stylesCommon.errorMessage}
-                    >
-                        {errorMessage}
+                        style={stylesCommon.errorMessage}>
+                       {errorMessage} 
                     </Text>
                     <ClassifyButton
                         doProductClassification={(e) => { this.doUserClassification(e) }}
-                        marginTop={25}
+                        marginTop={10}
+                        width={'40%'}
                         style={{ marginBottom: '5%' }}
                     />
+                    <View style={{
+                        borderWidth: 0.2,
+                        borderColor: 'grey',
+                        marginRight: 10,
+                        marginLeft: 10,
+                        marginTop: 20,
+                    }} />
                     {usersList.length != 0 &&
-                        <Text style={[stylesCommon.headerText]} style={{ fontSize: 25, marginLeft: '5%', marginTop: 30, color: '#F49315' }}>Usuarios sin clasificar</Text>
+                        <Text style={[stylesCommon.headerText]} style={{ fontSize: 20, marginLeft: '5%', marginTop: 30, color: '#F49315' }}>Usuarios sin clasificar</Text>
                     }
                     <UnclasifiedUsers
                         navigation={this.props.navigation}

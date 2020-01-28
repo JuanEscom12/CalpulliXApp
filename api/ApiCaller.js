@@ -1,4 +1,5 @@
-const host = 'http://192.168.100.111:';
+const host = 'http://10.62.159.86:';
+//const host = 'http://10.62.194.81:';
 
 const callApi = async (_path, _request, _port, _method) => {
     console.log(':: REQUEST: ' + JSON.stringify(_request));

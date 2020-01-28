@@ -24,7 +24,7 @@ export default class RegisterAccount extends PureComponent {
             borderColorPhoneTextInput: "#F49315",
             backgroundColorPhoneInput: '#FDFDFD',
             errorMessage: '',
-            headText: "Registrarse",
+            headText: "Regístrate",
             userText: "",
             nameText: "",
             lastNameText: "",
@@ -194,7 +194,7 @@ export default class RegisterAccount extends PureComponent {
         if (!result) {
             this.setState({
                 errorMessage: 'Todos los campos son requeridos.',
-                headText: "Registrarse.",
+                headText: "Regístrate",
             });
         }
         return result;
@@ -225,7 +225,7 @@ export default class RegisterAccount extends PureComponent {
             borderColorPhoneTextInput: "#F49315",
             backgroundColorPhoneInput: '#FDFDFD',
             errorMessage: '',
-            headText: "Registrarse",
+            headText: "Regístrate",
             userText: "",
             nameText: "",
             lastNameText: "",
@@ -244,12 +244,13 @@ export default class RegisterAccount extends PureComponent {
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     backButton={true}
-                    screen={'Login'} />
+                    screen={'Login'}
+                    title={'Registro de usuarios'} />
                 <View style={{ marginTop: 5 }}>
                     <Text
                         id='errorMessageUserRegister'
                         style={stylesCommon.errorMessage}>{this.state.errorMessage}</Text>
-                    <Text style={[stylesCommon.labelText, { marginTop: 5 }]}>
+                    <Text style={[stylesCommon.labelText, { marginTop: 5, fontSize: 15 }]}>
                         {this.state.headText}
                     </Text>
                     <TextInput
@@ -267,7 +268,7 @@ export default class RegisterAccount extends PureComponent {
                         onChangeText={(text) => this.handleChangeUserText(text)}
                         onFocus={() => this.handleUserOnFocus()}
                         onBlur={() => this.handleUserOnBlur()}
-                        placeholder='        Ingresa tu usuario'
+                        placeholder='        Ingresa tu Id'
                         placeholderTextColor='#9E9E9E' />
                     <TextInput
                         id='inputNameRegisterUser'

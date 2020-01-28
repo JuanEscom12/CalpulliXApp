@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import ButtonCalpulliX from '../common/ButtonCalpulliX';
 import NavigatorCommons from '../navigation/NavigatorCommons';
-import stylesCommon from '../common/style'
+import stylesCommon from '../common/style';
 import { NavigationEvents } from 'react-navigation';
 
 export default class MiddleLogin extends PureComponent {
@@ -13,8 +13,8 @@ export default class MiddleLogin extends PureComponent {
         super(props);
         this.state = {
             borderColorTextInput: "#F49315",
-            borderColorTextInputPass: "#F49315",
             backgroundColorUserInput: 'transparent',
+            borderColorTextInputPass: "#F49315",
             backgroundColorPassInput: 'transparent',
             colorLink: '#000000',
             userText: "",

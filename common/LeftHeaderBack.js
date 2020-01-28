@@ -32,7 +32,7 @@ export default class LeftHeaderBack extends PureComponent {
           id={'buttonBackCommonHeader'}
           height={22}
           width={22}
-          marginTop={20}
+          marginTop={50}
           marginLeft='10%'
           marginRight='auto'
           screen={ screen }
@@ -41,7 +41,7 @@ export default class LeftHeaderBack extends PureComponent {
       button = <View />
     }
     return (
-      <View style={{ flex: 1, backgroundColor: '#F6A338' }} >
+      <View style={{ flex: 1, flexDirection: 'column', backgroundColor: '#F6A338' }} >
         {button}
       </View>
     );

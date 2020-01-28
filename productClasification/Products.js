@@ -1,14 +1,13 @@
-import React , { PureComponent } from 'react';
-import { View,Text, StyleSheet} from "react-native";
+import React, { PureComponent } from 'react';
+import { View, Text, StyleSheet } from "react-native";
 import ClassifyButton from '../common/ClassifyButton'
 import UnclasifiedProducts from './UnclasifiedProducts';
 import stylesCommon from '../common/style';
-import HeaderCalpulliX from "../common/HeaderCalpulliX";
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import Paginator from 'react-native-paginator';
-import PaginatorStyles from '../common/paginatorStyle';
 import ApiCaller from '../api/ApiCaller';
 import CONSTANTS from '../common/Constants';
+import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
 
 
 const dummyProductsList = {
@@ -23,7 +22,7 @@ const dummyProductsList = {
             "color": "Amarillo",
             "material": "Material",
             "price": 125,
-            "classification":2,
+            "classification": 2,
         },
         {
             "id": 1,
@@ -35,7 +34,7 @@ const dummyProductsList = {
             "color": "Amarillo",
             "material": "Material",
             "price": 125,
-            "classification":2,
+            "classification": 2,
         },
         {
             "id": 2,
@@ -73,39 +72,36 @@ const dummyProductsList = {
     ]
 };
 
+export default class Products extends PureComponent {
 
-
-export default class Products extends PureComponent{
-
-
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            showClassifyButton:true,
-            itemsPerPage:5,
-            itemCount:30,
-            page:1,
-            errorMessage:'',
-            productsList:[]
+            showClassifyButton: true,
+            itemsPerPage: 5,
+            itemCount: 30,
+            page: 1,
+            errorMessage: '',
+            productsList: []
         };
 
         this.doProductClassification = this.doProductClassification.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getInitialProducts(null);
     }
 
-    getProductsClassifyRequest(){
+    getProductsClassifyRequest() {
         const request = {
-            page:this.state.page,
-            productsToClassify:this.state.productsList.map((product)=>{return product.id;}),
+            page: this.state.page,
+            productsToClassify: this.state.productsList.map((product) => { return product.id; }),
         };
 
         return request;
     }
 
-    getInitialProducts = async(e) => {
+    getInitialProducts = async (e) => {
         /*var sucessfullCall = true;
         const response = await ApiCaller.callApi('/calpullix/products/classify',
         this.getProductsClassifyRequest(), CONSTANTS.PORT_PRODUCTS, CONSTANTS.POST_METHOD)
@@ -120,7 +116,7 @@ export default class Products extends PureComponent{
                 this.setState({ productsList: response.productsClassify,itemCount: response.itemCount});
         }*/
         this.setState({
-            productsList:dummyProductsList.productsClassify,
+            productsList: dummyProductsList.productsClassify,
         });
     }
 
@@ -143,11 +139,11 @@ export default class Products extends PureComponent{
 
         this.setState({
             productsList: dummyProductsList.productsClassify,
-            showClassifyButton:validResponse,
+            showClassifyButton: validResponse,
         });
     }
 
-    doProductClassification = async() => {
+    doProductClassification = async () => {
         let validResponse = false;
         /*let sucessfullCall = true;
         const response = await ApiCaller.callApi('/calpullix/update/products/classify',
@@ -165,50 +161,59 @@ export default class Products extends PureComponent{
         }*/
 
         this.setState({
-            productsList:dummyProductsList.productsClassify,
-            showClassifyButton:validResponse,
+            productsList: dummyProductsList.productsClassify,
+            showClassifyButton: validResponse,
         });
 
     }
 
     handlerPageChange = (pageNumber) => {
         this.setState({
-            page:pageNumber,
+            page: pageNumber,
         });
         this.getNewProducts(null);
     }
 
 
-    render(){
-        const {productsList,page,errorMessage,itemCount,itemsPerPage,showClassifyButton} = this.state; 
+    render() {
+        const { productsList, page, errorMessage, itemCount, itemsPerPage, showClassifyButton } = this.state;
         const { navigation } = this.props;
-        return(
-            <BackgroundScrollCalpulliX addHeight = {500}>
+        return (
+            <BackgroundScrollCalpulliX addHeight={500}>
                 <View >
-                    <HeaderCalpulliX/>
+                    <HeaderCalpulliXBack
+                        title={'Clasificación de productos'} />
                     <Text
                         id='errorMessage'
-                        style ={stylesCommon.errorMessage}
-                    >
+                        style={stylesCommon.errorMessage}>
                         {errorMessage}
                     </Text>
                     {showClassifyButton &&
-                        <ClassifyButton
-                            doProductClassification={(e)=>{this.doProductClassification()}}
-                        marginTop = {25}
-                         />
+                    <ClassifyButton
+                            doProductClassification={(e) => { this.doProductClassification() }}
+                            marginTop={15}
+                            width={'40%'} />
                     }
+                    <View style={{
+                        borderWidth: 0.2,
+                        borderColor: 'grey',
+                        marginRight: 10,
+                        marginLeft: 10,
+                        marginTop: 20,
+                    }} />
                     {productsList.length != 0 &&
-                        <Text style={[stylesCommon.headerText]} style={{fontSize:25, marginLeft:'5%',marginTop: 30, color:'#F49315'}}>Productos sin clasificar</Text>
+                        <Text style={[stylesCommon.headerText]} style={{ fontSize: 20, marginLeft: '5%', marginTop: 30, color: '#F49315' }}>Productos sin clasificar</Text>
                     }
                     <UnclasifiedProducts
                         navigation={navigation}
-                        labelNames = {{"name":"Nombre","description":"Descripción","brand":"Marca","size":"Tamaño",
-                        "color":"Color","material":"Material","price":"Precio","classification":"Clasificación"}}
-                        productsList = {productsList}
-                        page = {page}
-                        handlerNextPage = {this.handlerNextPage}
-                        
+                        labelNames={{
+                            "name": "Nombre", "description": "Descripción", "brand": "Marca", "size": "Tamaño",
+                            "color": "Color", "material": "Material", "price": "Precio", "classification": "Clasificación"
+                        }}
+                        productsList={productsList}
+                        page={page}
+                        handlerNextPage={this.handlerNextPage}
+
                     />
                     <Paginator
                         totalItems={itemCount}
@@ -218,20 +223,20 @@ export default class Products extends PureComponent{
                         itemsPerPage={itemsPerPage}
                         //buttonStyles={PaginatorStyles.Button}
                         //buttonActiveStyles={PaginatorStyles.ActiveButton}
-                        buttonStyles = {
-                             {
-                                backgroundColor:'#F3F9FA',
-                                color:'#156869',
-                                borderColor:'#156869',
-                                
+                        buttonStyles={
+                            {
+                                backgroundColor: '#F3F9FA',
+                                color: '#156869',
+                                borderColor: '#156869',
+
                             }
                         }
-                        buttonActiveStyles = {{
-                            backgroundColor:'#05AAAB',
-                            color:'#F3F9FA',
-                            borderColor:'#05AAAB'
+                        buttonActiveStyles={{
+                            backgroundColor: '#05AAAB',
+                            color: '#F3F9FA',
+                            borderColor: '#05AAAB'
                         }}
-                        />
+                    />
                 </View>
             </BackgroundScrollCalpulliX>
 

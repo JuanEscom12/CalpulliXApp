@@ -1,6 +1,5 @@
 import ForgotUserPassword from '../forgotUserPassword/ForgotUserPassword';
 import CalpulliX from '../login/CalpulliX';
-import HomeTest from '../homeTest/HomeTest';
 import RegisterAccount from '../registerAccount/RegisterAccount';
 import SideMenu from '../menu/SideMenu';
 import ProductList from '../products/ProductList';
@@ -8,8 +7,12 @@ import ProductDetail from '../products/ProductDetail';
 import BranchOffices from '../branchOffices/Offices';
 import Products from '../productClasification/Products';
 import Users from '../userClassification/Users';
-import Promotions from '../userPromotions/Promotions';
+import CustomerPromotions from '../userPromotions/Promotions';
 import PurchaseOrder from '../purchaseOrder/PurchaseOrder';
+import PurchaseOrderDetail from '../purchaseOrder/PurchaseOrderDetail';
+import ProfilePromotions from '../promotions/ProfilePromotions';
+import DetailPromotions from '../promotions/DetailPromotions';
+import Sales from '../sales/Sales';
 import { createAppContainer, createDrawerNavigator } from "react-navigation";
 
 const AppNavigator = createDrawerNavigator({
@@ -53,7 +56,7 @@ const AppNavigator = createDrawerNavigator({
     screen: Users,
   },
   ClientPromotions:{
-    screen: Promotions,
+    screen: CustomerPromotions,
   },
   PurchaseOrder: {
     screen: PurchaseOrder,
@@ -61,9 +64,33 @@ const AppNavigator = createDrawerNavigator({
       header: null
     },
   },
+  PurchaseOrderDetail: {
+    screen: PurchaseOrderDetail,
+    navigationOptions: {
+      header: null
+    },
+  },
+  ProfilePromotions: {
+    screen: ProfilePromotions,
+    navigationOptions: {
+      header: null
+    },
+  },
+  DetailPromotions: {
+    screen: DetailPromotions,
+    navigationOptions: {
+      header: null
+    },
+  },
+  Sales: {
+    screen: Sales,
+    navigationOptions: {
+      header: null
+    },
+  }
 }, 
 {
-  initialRouteName: 'PurchaseOrder',
+  initialRouteName: 'Sales',
   contentComponent: SideMenu,
   drawerWidth: 300
 }

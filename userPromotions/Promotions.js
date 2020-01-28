@@ -125,20 +125,18 @@ export default class Promotions extends PureComponent {
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     backButton={true} 
-                    screen={'ClassifyUsers'}/>
+                    screen={'ClassifyUsers'} 
+                    title={'Promociones para el cliente'}/>
                     <Text
                         id='errorMessage'
-                        style={stylesCommon.errorMessage}
-                    >
+                        style={stylesCommon.errorMessage}>
                         {this.state.errorMessage}
                     </Text>
-                    <Text style={[stylesCommon.headerText]} style={{ fontSize: 25, marginLeft: '5%', marginTop: '5%', color: '#F49315' }}>Promociones para el cliente</Text>
+                    <Text style={[stylesCommon.headerText]} style={{ fontSize: 20, marginLeft: '5%', marginTop: '5%', color: '#F49315' }}>Promociones</Text>
                     <OfferedPromos
                         labelNames={{ "name": "Nombre de promoción", "description": "Descripción"}}
                         promosList={promosList}
-                        page={page}
-
-                    />
+                        page={page} />
                     {showAccept &&
                      <AcceptPromosButton
                         doAcceptPromos = { (e) => this.doAcceptPromos(e)}

@@ -11,7 +11,8 @@ export default class HeaderCalpulliXBack extends PureComponent {
     const {
         navigation,
         backButton,
-        screen
+        screen,
+        title,
     } = this.props
     return (
           <Header
@@ -22,8 +23,9 @@ export default class HeaderCalpulliXBack extends PureComponent {
             <LeftHeaderBack 
                 navigation={navigation}
                 screen={screen}
-                backButton={backButton}/>
-            <CenterHeader />
+                backButton={backButton} />
+            <CenterHeader 
+                title={title}/>
             <RightHeader />
           </Header>
     );

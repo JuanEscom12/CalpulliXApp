@@ -45,6 +45,26 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: '#000',
     },
+    titleSection: {
+        fontSize: 15, 
+        marginLeft: '10%',  
+        color: '#F49315',
+    },
+    titleSectionStrong: {
+        fontSize: 15, 
+        marginLeft: '10%',  
+        color: '#db7c02',
+    },
+    titleSectionStronger: {
+        fontSize: 14, 
+        marginLeft: '10%',  
+        color: '#D17E11',
+    },
+    titleSectionGreen: {
+        fontSize: 14, 
+        marginLeft: '10%',  
+        color: '#048585',
+    },
     labelText: {
         fontSize: 13, 
         textAlign: 'center', 
@@ -127,7 +147,23 @@ const styles = StyleSheet.create({
         backgroundColor: '#f1f8ff' },
     text: { 
         margin: 6 
-    }
+    },
+    containerTable: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: '90%',
+        backgroundColor: '#fff',
+        marginTop: 10,
+        borderRadius: 5
+    },
+    headTable: {
+        height: 40,
+        backgroundColor: '#f1f8ff'
+    },
+    textTable: {
+        margin: 6,
+        fontSize: 12,
+    },
 });
 
 export default styles;

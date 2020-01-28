@@ -15,7 +15,7 @@ export default class OfficesForm extends Component{
         super(props);
         this.state = {
             borderColorTextInput: "#F49315",
-            backgroundColorUserInput: 'transparent',
+            backgroundColorUserInput: '#FDFDFD',
             yearText: '',
             monthText:'',
             officeNameText:'',
@@ -116,7 +116,7 @@ export default class OfficesForm extends Component{
     handleOnBlur = () => {
         this.setState({
             borderColorTextInput: '#F49315',
-            backgroundColorUserInput: 'transparent'
+            backgroundColorUserInput: '#FDFDFD'
         })
     }
 
@@ -202,16 +202,16 @@ export default class OfficesForm extends Component{
                             onChangeText={(text)=> this.handleChangeOfficeText(text)}
                             onFocus={()=> this.handleOnFocus()}
                             onBlur = {()=> this.handleOnBlur()}
-                            placeholder = 'Ingresa el nombre de la sucursal'
+                            placeholder = '    Ingresa el nombre de la sucursal'
                             placeholderTextColor='#9E9E9E'
                         />
-                        <View  style = {{flexDirection:'row',height : 100}} >
+                        <View  style = {{flexDirection:'row',height : 70}} >
                             <ButtonCalpulliX 
                                 title = {'Buscar'}
                                 id = {'buttonSearch'}
                                 arrayColors = {['#05AAAB', '#048585', '#048585']}
                                 onPress = {doSearch}
-                                width = {'50%'}
+                                width = {'40%'}
                                 height = {45}
                                 marginTop = {marginTop}
                             />

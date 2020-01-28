@@ -1,24 +1,37 @@
 import React, { PureComponent } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, Text } from 'react-native';
 
 
 export default class CenterHeader extends PureComponent {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: '#F6A338', marginBottom: 100 }} >
+      <View style={{ flex: 2, flexDirection: 'column', backgroundColor: '#F6A338', marginBottom: 2 }} >
+        
         <Image
           style={{
-            height: 100, marginLeft: 'auto', marginRight: 'auto',
-            width: 410, resizeMode: 'cover', marginBottom: 100,
+           
+            height: 50, marginLeft: 'auto', marginRight: 'auto',
+            width: 250, resizeMode: 'cover', 
+            alignContent: 'center',
             transform: [
-              { scaleX: 0.3 },
-              { scaleY: 0.4 }
+              { scaleX: 0.4 },
+              { scaleY: 0.5 }
             ]
           }}
           source={require('./logo_CalpulliX.png')} />
+           <Text 
+              style={{
+              textAlign: 'center',
+              color: 'white',
+              fontSize: 16,
+              height: 50,
+              width: 250
+            }}>
+            {this.props.title}
+          </Text>
+          
       </View>);
   }
 
 }
-

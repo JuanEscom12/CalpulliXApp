@@ -16,7 +16,7 @@ export default class ForgotUserPassword extends PureComponent {
     this.state = {
       borderColorTextInput: "#F49315",
       backgroundColorUserInput: '#FDFDFD',
-      headText: "Se enviara una contraseña nueva a tu correo.",
+      headText: "Enviaremos una contraseña nueva a tu correo.",
       userText: "",
     };
   }
@@ -69,7 +69,7 @@ export default class ForgotUserPassword extends PureComponent {
     this.setState({
       borderColorTextInput: "#F49315",
       backgroundColorUserInput: '#FDFDFD',
-      headText: "Se enviara una contraseña nueva a tu correo.",
+      headText: "Enviaremos una contraseña nueva a tu correo.",
       errorMessage: '',
       userText: '',
     });
@@ -79,7 +79,7 @@ export default class ForgotUserPassword extends PureComponent {
     if (this.state.userText === '') {
       this.setState({
         errorMessage: 'El Usuario es requerido',
-        headText: "Se enviara una contraseña nueva a tu correo.",
+        headText: "Enviaremos una contraseña nueva a tu correo.",
         borderColorTextInput: '#F03000',
       });
       return false;
@@ -107,7 +107,8 @@ export default class ForgotUserPassword extends PureComponent {
         <HeaderCalpulliXBack
           navigation={this.props.navigation} 
           backButton={true}
-          screen={'Login'}  />
+          screen={'Login'}
+          title={"Recuperación de contraseña"}  />
         <View style={{ marginTop: 70, marginBottom: 15 }}>
           <Text
             id='errorMessageForgotPassword'

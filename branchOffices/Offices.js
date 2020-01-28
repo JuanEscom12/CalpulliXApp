@@ -4,7 +4,7 @@ import SearchingOffice from './SearchingOffice';
 import ApiCaller from '../api/ApiCaller';
 import React, { PureComponent } from 'react';
 import stylesCommon from '../common/style'
-import HeaderCalpulliX from '../common/HeaderCalpulliX';
+import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
 import {
     StyleSheet,
     View,
@@ -237,18 +237,18 @@ export default class Offices extends PureComponent {
         return (
             <BackgroundScrollCalpulliX addHeight={800}>
                 <View >
-                    <HeaderCalpulliX />
+                    <HeaderCalpulliXBack
+                         title={'Sucursales'} />
                     <Text
                         id='errorMessage'
-                        style={stylesCommon.errorMessage}
-                    >
+                        style={stylesCommon.errorMessage}>
                         {this.state.errorMessage}
                     </Text>
                     <SearchingOffice
                         doSearch={(e) => this.doSearch(e)}
                         handlerSearchInput={this.handlerSearchInput}
                         cleanSearch={this.cleanSearch}
-                        marginTop={20}
+                        marginTop={10}
                     />
                     <View style={{
                         borderWidth: 0.2,

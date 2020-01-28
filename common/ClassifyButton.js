@@ -11,14 +11,14 @@ export default class ClassifyButton extends Component {
     }
 
     render() {
-        const {doProductClassification,marginTop} = this.props;
+        const {doProductClassification,marginTop, width} = this.props;
         return (
             <ButtonCalpulliX
                 title={'Clasificar'}
                 id={'buttonSearch'}
                 arrayColors={['#05AAAB', '#048585', '#048585']}
                 onPress={doProductClassification}
-                width={'50%'}
+                width={width}
                 height={45}
                 marginTop={marginTop}
             />

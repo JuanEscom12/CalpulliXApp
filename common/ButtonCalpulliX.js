@@ -15,8 +15,8 @@ export default class ButtonCalpulliX extends PureComponent {
             arrayColors,
             marginTop,
             marginBottom,
+            disabled,
         } = this.props
-
         return (
             <TouchableHighlight
                 style={{
@@ -26,6 +26,7 @@ export default class ButtonCalpulliX extends PureComponent {
                     height: height, width: width, marginTop: marginTop,
                     marginBottom: marginBottom
                 }}
+                disabled={disabled}
                 onPress={onPress}
                 underlayColor='#05AB50'>
                 <LinearGradient

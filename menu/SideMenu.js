@@ -8,7 +8,8 @@ import NavigatorCommons from '../navigation/NavigatorCommons';
 
 class SideMenu extends Component {
   navigateToScreen = (_route) => () => {
-    NavigatorCommons.navigateTo(this.props.navigation, _route, null);
+    
+    NavigatorCommons.navigateTo(this.props.navigation, _route, { 'navigateFromMenu': true });
   }
 
   render () {
@@ -57,7 +58,7 @@ class SideMenu extends Component {
                         ]}}
                         source={require('./purchase_order.png')} />
               <Text style={{marginTop: 15, marginBottom: 15, fontSize: 16, 
-                marginLeft: '5%'}} onPress={this.navigateToScreen('ProductList')} >
+                marginLeft: '5%'}} onPress={this.navigateToScreen('PurchaseOrder')} >
                 Ordenes de compra
               </Text>
             </View>
@@ -70,7 +71,7 @@ class SideMenu extends Component {
                         ]}}
                         source={require('./promotions.png')} />
               <Text style={{marginTop: 15, marginBottom: 15, fontSize: 16, 
-                marginLeft: '5%'}} onPress={this.navigateToScreen('ProductList')} >
+                marginLeft: '5%'}} onPress={this.navigateToScreen('ProfilePromotions')} >
                 Promociones
               </Text>
             </View>

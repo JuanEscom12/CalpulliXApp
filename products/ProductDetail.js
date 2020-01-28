@@ -3,16 +3,30 @@ import { Text, View, Image, Switch } from 'react-native';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
 
+
 const labels = 
-    {"Fecha de Caducidad": "sellByDate", 'Caja con mas productos ': 'hasMoreProducts', 'Numero de productos': 'numberProducts', 
-    'Id paquete padre': 'parentPackageId', 'Codigo de barras': 'barCode', 'Provedor': 'provider', 'Precio Original': 'originalPrice', 
-    'Precio Tienda': 'priceStore', 'Porcentaje de ganancia': 'percentageProfit', 'Ganancia neta': 'netIncome', 'Tamaño': 'size', 
-    'Unidades': 'units', 'Categoria': 'category', 'Material': 'material', 'Clasificacion del producto': 'productClassification'};
+    {
+    "Fecha de Caducidad": "sellByDate", 
+    'Caja con mas productos ': 'hasMoreProducts', 
+    'Numero de productos': 'numberProducts', 
+    'Id paquete padre': 'parentPackageId', 
+    'Codigo de barras': 'barCode', 
+    'Provedor': 'provider', 
+    'Precio Original': 'originalPrice', 
+    'Precio Tienda': 'priceStore', 
+    'Porcentaje de ganancia': 'percentageProfit', 
+    'Ganancia neta': 'netIncome', 
+    'Tamaño': 'size', 
+    'Unidades': 'units', 
+    'Categoria': 'category', 
+    'Material': 'material', 
+    'Clasificacion del producto': 'productClassification'
+    };
 
 export default class ProductDetail extends PureComponent {
 
     buildContent(_label, _apiResponse, _backGroundColor) {
-        if (typeof(_apiResponse) === 'boolean') {   
+        if (typeof(_apiResponse) === 'boolean') { 
             return <View style={{ flexDirection: 'row', backgroundColor: _backGroundColor, width: '100%' }} >
                 <Text style={{ marginLeft: '5%', fontSize: 11, width: '50%' }}>{ '\n' + _label  + '\n'}</Text>
                 <View style={{width: '50%', alignContent: "center"}}>
@@ -53,8 +67,8 @@ export default class ProductDetail extends PureComponent {
             <View style={{width: '100%', backgroundColor: '#F3F9FA'}}>
             <Image
                     style={{
-                        height: 200, marginLeft: 'auto', marginRight: 'auto',
-                        marginTop: 10, marginBottom: 10, width: '95%',
+                        height: 100, marginLeft: 'auto', marginRight: 'auto',
+                        marginTop: 10, marginBottom: 10, width: '70%',
                     }}
                     source={{uri: base64Image}} />
             </View>
@@ -71,7 +85,8 @@ export default class ProductDetail extends PureComponent {
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     backButton={true}
-                    screen={'ProductList'} />
+                    screen={'ProductList'}
+                    title={'Detalle del producto'} />
                 <View style={{
                     borderColor: '#F49315', borderWidth: 0.5, width: '90%',
                     marginLeft: 'auto', marginRight: 'auto', marginTop: 30 }}>

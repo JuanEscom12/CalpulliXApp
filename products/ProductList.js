@@ -1,13 +1,15 @@
 import React, { PureComponent } from 'react';
-import { Alert, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import { NavigationEvents } from 'react-navigation';
 import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
 import stylesCommon from '../common/style';
-import  ButtonCalpulliX  from '../common/ButtonCalpulliX';
-import  PickerCalpulliX  from '../common/PickerCalpulliX';
+import ButtonCalpulliX from '../common/ButtonCalpulliX';
+import PickerCalpulliX from '../common/PickerCalpulliX';
 import AccordionCalpulliX from '../common/AccordionCalpulliX';
+import Paginator from 'react-native-paginator';
 import ApiCaller from '../api/ApiCaller';
+import CommonAPI from '../api/CommonAPI';
 import CONSTANTS from '../common/Constants';
 
 var functionClearPicker;
@@ -18,28 +20,29 @@ export default class ProductList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      branches:  [],
+      branches: [],
       branchId: null,
       errorMessage: '',
       productListApi: [],
       productList: [],
-    };  
+      page: 1,
+      itemsPerPage: 5,
+      itemCount: 0,
+    };
     this.getBranchList();
   }
 
-  getBranchList  = async () => {
-    const result = await ApiCaller.callApi('/calpullix/branch/list', null, 
-    CONSTANTS.PORT_BRANCH, CONSTANTS.GET_METHOD)
+  getBranchList = async () => {
+    const result = await CommonAPI.callBranches()
       .catch((error) => {
         console.log(error);
         this.setState({
           errorMessage: 'Ocurrio un error, favor de intentar mas tarde',
         });
       });
-      this.setState({
-        branches:  result.branch,
-      });
-      return result.branch;
+    this.setState({
+      branches: result,
+    });
   }
 
   getItems = () => {
@@ -56,25 +59,27 @@ export default class ProductList extends PureComponent {
     return this.state.branchId !== null;
   }
 
-  getProductList  = async () => {
-    const result = await ApiCaller.callApi('/calpullix/product/list', 
-    this.getProductListRequest(), CONSTANTS.PORT_PRODUCT_LIST, CONSTANTS.POST_METHOD)
+  getProductList = async () => {
+    const result = await ApiCaller.callApi('/calpullix/product/list',
+      this.getProductListRequest(), CONSTANTS.PORT_PRODUCT_LIST, CONSTANTS.POST_METHOD)
       .catch((error) => {
         console.log(error);
         this.setState({
           errorMessage: 'Ocurrio un error, favor de intentar mas tarde',
         });
       });
-      this.setState({
-        productListApi:  result.productDetail,
-      });
-      this.addItemsList();
-      return result;
+    this.setState({
+      productListApi: result.productDetail,
+      itemCount: result.productDetail[CONSTANTS.ZERO].totalRows,
+    });
+    this.addItemsList();
+    return result;
   }
 
   getProductListRequest() {
     const request = {
-      "branchId": this.state.branchId.id
+      'page': this.state.page,
+      'branchId': this.state.branchId.id
     };
     return request;
   }
@@ -101,8 +106,6 @@ export default class ProductList extends PureComponent {
     functionClearPicker();
     this.setState({
       branchId: null,
-      errorMessage: '',
-      productList: [],
     });
   }
 
@@ -116,6 +119,13 @@ export default class ProductList extends PureComponent {
     functionClearPicker = _clear;
   }
 
+  handlerPagination = (numberPage) => {
+    this.setState({
+      page: numberPage,
+    });
+    this.getProductList();
+  }
+
   render() {
     return (
       <BackgroundScrollCalpulliX addHeight={300}>
@@ -125,40 +135,59 @@ export default class ProductList extends PureComponent {
           }} />
         <HeaderCalpulliXBack
           navigation={this.props.navigation}
-          backButton={false} />
+          backButton={false}
+          title={'Lista de productos'} />
         <View style={{ marginTop: 5 }}>
           <Text
             id='errorMessageListItems'
-            style={[stylesCommon.errorMessage, {marginTop: 10}]}>{this.state.errorMessage}
+            style={[stylesCommon.errorMessage, { marginTop: 5 }]}>{this.state.errorMessage}
           </Text>
-          <Text style={[stylesCommon.labelText, { marginTop: 10, marginRight: '70%', fontSize: 15 }]}>
+          <Text style={[stylesCommon.labelText, { marginTop: 5, marginRight: '70%', fontSize: 15 }]}>
             Sucursales
           </Text>
-        <PickerCalpulliX 
-          data={this.state.branches}
-          updateState={this.updateState}
-          placeholder={'Seleccione la sucursal'}
-          functionClearPicker={this.setFunctionClearPicker} />
-        <ButtonCalpulliX
+          <PickerCalpulliX
+            data={this.state.branches}
+            updateState={this.updateState}
+            placeholder={'Seleccione la sucursal'}
+            functionClearPicker={this.setFunctionClearPicker} />
+          <ButtonCalpulliX
             title={'Buscar'}
             id={'buttonSearchItems'}
             arrayColors={['#05AAAB', '#048585', '#048585']}
             onPress={this.getItems}
-            width={'40%'}
+            width={'35%'}
             height={45}
             marginTop={30} />
-           <AccordionCalpulliX 
-              content={this.state.productList}
-              path={'/calpullix/product/detail'}
-              port={'8080'}
-              screen={'ProductDetail'}
-              navigation={this.props.navigation} 
-              renderDetailButton={true}
-              titleButton={'Ver Detalle'} 
-              margintTop={25}
-              labels={labels}
-              labelHeader={'Id del producto  '}
-              marginLeftRowHeader={'55%'}/>
+          <AccordionCalpulliX
+            content={this.state.productList}
+            path={'/calpullix/product/detail'}
+            port={CONSTANTS.PORT_PRODUCT_LIST}
+            screen={'ProductDetail'}
+            navigation={this.props.navigation}
+            renderDetailButton={true}
+            titleButton={'Ver Detalle'}
+            margintTop={25}
+            labels={labels}
+            labelHeader={'Id del producto  '}
+            marginLeftRowHeader={'55%'} />
+          <Paginator
+            totalItems={this.state.itemCount}
+            onChange={numberPage => this.handlerPagination(numberPage)}
+            activePage={this.state.page}
+            disabled={false}
+            itemsPerPage={this.state.itemsPerPage}
+            buttonStyles={
+              {
+                backgroundColor: '#F3F9FA',
+                color: '#156869',
+                borderColor: '#156869',
+              }
+            }
+            buttonActiveStyles={{
+              backgroundColor: '#05AAAB',
+              color: '#F3F9FA',
+              borderColor: '#05AAAB'
+            }} />
         </View>
       </BackgroundScrollCalpulliX>
     );

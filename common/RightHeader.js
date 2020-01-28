@@ -6,7 +6,7 @@ export default class RightHeader extends PureComponent {
 
       render () {
         return (
-          <View style={{ flex: 1, backgroundColor: '#F6A338'}} />
+          <View style={{ flex: 1, flexDirection: 'column', backgroundColor: '#F6A338'}} />
         );
       }
 
