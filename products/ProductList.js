@@ -60,7 +60,7 @@ export default class ProductList extends PureComponent {
   }
 
   getProductList = async () => {
-    const result = await ApiCaller.callApi('/calpullix/product/list',
+    const result = await ApiCaller.callApi('/calpullix/product/detail/retrieve',
       this.getProductListRequest(), CONSTANTS.PORT_PRODUCT_LIST, CONSTANTS.POST_METHOD)
       .catch((error) => {
         console.log(error);

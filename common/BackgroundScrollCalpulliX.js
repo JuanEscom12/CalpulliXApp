@@ -34,6 +34,7 @@ export default class BackgroundScrollCalpulliX extends PureComponent {
           behavior={Platform.OS === "ios" ? "padding" : null}
           style={styles.avoidingScroll} >
           <ScrollView
+            keyboardShouldPersistTaps={true}
             style={styles.avoidingScroll}
             contentContainerStyle={styles.containerStyle}
             scrollEnabled={scrollEnabled}

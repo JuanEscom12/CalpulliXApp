@@ -10,6 +10,7 @@ module.exports = {
     PORT_CUSTOMERS: 9099, 
     PORT_PURCHASE_ORDER: 9100,
     PORT_PROMOTIONS: 9101,
+    PORT_SALES: 9101,
     ONE: 1,
     ZERO: 0,
     PREFIX_BASE64: 'data:image/jpg;base64,',
