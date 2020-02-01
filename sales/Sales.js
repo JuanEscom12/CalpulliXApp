@@ -5,7 +5,6 @@ import { NavigationEvents } from 'react-navigation';
 import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
 import PickerCalpulliX from '../common/PickerCalpulliX';
 import ButtonCalpulliX from '../common/ButtonCalpulliX';
-import stylesCommon from '../common/style';
 import CommonAPI from '../api/CommonAPI';
 import Autocomplete from 'react-native-autocomplete-input';
 import styles from './styles';
@@ -14,19 +13,15 @@ import CONSTANTS from '../common/Constants';
 import {
     LineChart,
     BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart
 } from "react-native-chart-kit";
 
 
 var functionClearPickerBranches;
 var functionClearPickerYears;
 var functionClearPickerMonths;
-const opacity = 1;
-const lineColors = [`rgba(233, 251, 88, ${opacity})`, `rgba(34, 151, 238, ${opacity})`, 
-`rgba(4, 133, 133, ${opacity})`, `rgba(118, 12, 19, ${opacity})`, `rgba(178, 87, 151, ${opacity})`];
+const lineColors = [`rgba(233, 251, 88, 1)`, `rgba(34, 151, 238, 1)`,
+    `rgba(4, 133, 133, 1)`, `rgba(118, 12, 19, 1)`, `rgba(178, 87, 151, 1)`];
+const months = ["E", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
 
 export default class Sales extends PureComponent {
 
@@ -200,209 +195,184 @@ export default class Sales extends PureComponent {
                 });
             console.log(':: SALES ', response);
             if (response) {
-                var content = [];
-                var detail = [];
-                detail.push(
-                    <View style={{
-                        backgroundColor: '#EDEDED', width: '100%', borderTopLeftRadius: 5,
-                        borderTopRightRadius: 10,
-                    }} >
-                        <Text style={{ fontSize: 11, }} >{'\n' + '  Artículos vendidos' + ' \n'}</Text>
-                        <Text style={{ fontSize: 11, }} >{'  ' + response.totalAmountSoldOut + ', ' + response.totalAmountItemsSoldOut + '\n'}</Text>
-                    </View>);
-                detail.push(
-                    <View style={{
-                        backgroundColor: '#F3F9FA', width: '100%',
-                    }} >
-                        <Text style={{ fontSize: 11, }} >{'\n' + '  Monto ganancias' + ' \n'}</Text>
-                        <Text style={{ fontSize: 11, }} >{'  ' + response.totalAmonuntSales + '\n'}</Text>
-                    </View>);
-                detail.push(
-                    <View style={{
-                        backgroundColor: '#EDEDED', width: '100%'
-                    }} >
-                        <Text style={{ fontSize: 11, }} >{'\n' + '  Monto insumos' + ' \n'}</Text>
-                        <Text style={{ fontSize: 11, }} >{'  ' + response.totalAmountSupplies + '\n'}</Text>
-                    </View>
-                );
-                detail.push(
-                    <View style={{
-                        backgroundColor: '#F3F9FA', width: '100%'
-                    }} >
-                        <Text style={{ fontSize: 11, }} >{'\n' + '  Monto perdidas' + ' \n'}</Text>
-                        <Text style={{ fontSize: 11, }} >{'  ' + response.tmountLosses + '\n'}</Text>
-                    </View>
-                );
-                detail.push(
-                    <View style={{
-                        backgroundColor: '#EDEDED', width: '100%'
-                    }} >
-                        <Text style={{ fontSize: 11, }} >{'\n' + '  Monto merma' + ' \n'}</Text>
-                        <Text style={{ fontSize: 11, }} >{'  ' + response.totalAmmountCaducousPurchasePrice + ' (Compra), ' +
-                            response.totalAmmountCaducousSalePrice + ' (Venta) \n'}</Text>
-                    </View>
-                );
-                detail.push(
-                    <View style={{
-                        backgroundColor: '#F3F9FA', width: '100%'
-                    }} >
-                        <Text style={{ fontSize: 11, }} >{'\n' + '  Monto aparadores' + ' \n'}</Text>
-                        <Text style={{ fontSize: 11, }} >{'  ' + response.totalAmmountStoredPurchasePrice + ' (Compra), ' +
-                            response.totalAmmountStoredSalePrice + '(Venta) \n'}</Text>
-                    </View>
-                );
-                detail.push(
-                    <View style={{
-                        backgroundColor: '#EDEDED', width: '100%'
-                    }} >
-                        <Text style={{ fontSize: 11, }} >{'\n' + '  Monto robo o extravío' + ' \n'}</Text>
-                        <Text style={{ fontSize: 11, }} >{'  ' + response.totalAmmountStolePurchasePrice + ' (Compra), ' +
-                            response.totalAmmountStoleSalePrice + '(Venta) \n'}</Text>
-                    </View>
-                );
-                detail.push(
-                    <View style={{
-                        backgroundColor: '#F3F9FA', width: '100%',
-                        borderBottomLeftRadius: 5, borderBottomRightRadius: 5
-                    }}>
-                        <Text style={{ fontSize: 11, }} >{'\n' + '  Artículos en aparador' + ' \n'}</Text>
-                        <Text style={{ fontSize: 11, }} >{'  ' + response.totalAmmountSideboardPurchasePrice + ' (Compra), '
-                            + response.totalAmmountSideboardSalePrice + ' (Venta) \n'}</Text>
-                    </View>);
-                content.push(
-                    <View style={{
-                        marginTop: 10, borderWidth: 0.8, borderColor: '#F49315',
-                        width: '90%', marginLeft: 'auto', marginRight: 'auto', borderRadius: 5
-                    }}>
-                        {detail}
-                    </View>);
-
                 const width = Dimensions.get("window").width - 10;
-                const suffix = response.suffix;
-                var barChart = [];
-                var barChartDetail = [];
-                var axis;
-                var axisSecond = [];
-                var isYear = false;
-                var dataSales;
-                var dateSalesSecond;
-
-                if (this.state.month !== null && this.state.month !== 2) {
-                    axis = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'];
-                    dataSales = this.getDataSales(response.monthlySales);
-                } else if (this.state.month !== null && this.state.month === 2) {
-                    axis = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
-                    dataSales = this.getDataSales(response.monthlySales);
-                } else {
-                    isYear = true;
-                    axis = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'];
-                    axisSecond = ['Julio', 'Agosto', 'Septiembre', 'Octubre', 'Nov', 'Dic'];
-                    var chunks = this.chunkArray(response.yearlySales, response.yearlySales.length / 2);
-                    dataSales = this.getDataSales(chunks[0]);
-                    dateSalesSecond = this.getDataSales(chunks[1]);
-                }
-
-                barChartDetail.push(
-                    <BarChart
-                        style={{
-                            marginVertical: 8,
-                            borderRadius: 5,
-                            borderWidth: 0.5,
-                            borderColor: '#5c5c59',
-                            width: (width + 1),
-                        }}
-                        data={{
-                            labels: axis,
-                            datasets: [
-                                {
-                                    data: dataSales,
-                                }
-                            ]
-                        }}
-                        width={width}
-                        height={250}
-                        yAxisLabel="$"
-                        yAxisSuffix={suffix}
-
-                        chartConfig={{
-                            backgroundColor: "#FDFDFD",
-                            backgroundGradientFrom: "#FDFDFD",
-                            backgroundGradientTo: "#FDFDFD",
-                            decimalPlaces: 2,
-                            color: (opacity = 1) => `rgba(190, 14, 27, ${opacity})`,
-                            labelColor: (opacity = 1) => `rgba(36, 36, 35, ${opacity})`,
-                            style: {
-                                borderRadius: 8,
-                            },
-                            propsForDots: {
-                                r: "6",
-                                strokeWidth: "2",
-                                stroke: "#ffa726",
-                            },
-                            propsForLabels: {
-                                fontSize: 8,
-                            },
-                        }} />
-                );
-                if (isYear) {
-                    barChartDetail.push(<BarChart
-                        style={{
-                            marginVertical: 8,
-                            borderRadius: 5,
-                            borderWidth: 0.5,
-                            borderColor: '#5c5c59',
-                            width: (width + 1),
-                        }}
-                        data={{
-                            labels: axisSecond,
-                            datasets: [
-                                {
-                                    data: dateSalesSecond
-                                }
-                            ]
-                        }}
-                        width={width}
-                        height={250}
-                        yAxisLabel="$"
-                        yAxisSuffix={suffix}
-                        chartConfig={{
-                            backgroundColor: "#FDFDFD",
-                            backgroundGradientFrom: "#FDFDFD",
-                            backgroundGradientTo: "#FDFDFD",
-                            decimalPlaces: 2,
-                            color: (opacity = 1) => `rgba(190, 14, 27, ${opacity})`,
-                            labelColor: (opacity = 1) => `rgba(36, 36, 35, ${opacity})`,
-                            style: {
-                                borderRadius: 8,
-                                marginTop: 15,
-                            },
-                            propsForDots: {
-                                r: "6",
-                                strokeWidth: "2",
-                                stroke: "#ffa726"
-                            },
-                            propsForLabels: {
-                                fontSize: 8,
-                            },
-                        }} />);
-                }
-                barChart.push(
-                    <View style={{ marginTop: 15, marginLeft: 5, }}>
-                        <Text style={{ fontSize: 12 }}>Ventas del periodo:</Text>
-                        {barChartDetail}
-                    </View>
-                );
-
-                var lineChart = this.getLineChart(response);
-                this.setState({ barChart: barChart, salesInformation: content, lineChart: lineChart });
+                var content = this.getDetailSales(response);
+                var barChart = this.getBarChart(response, width);
+                var lineChart = this.getLineChart(response, width);
+                this.setState({
+                    salesInformation: content,
+                    barChart: barChart,
+                    lineChart: lineChart,
+                });
             }
         } else {
             Alert.alert('La sucursal o el producto y el año o el mes son requeridos');
         }
     }
 
-    getLineChart = (_salesInformation) => {
-        console.log('******************************************** SALES INFORMATION ', _salesInformation);
+    getDetailSales = (_response) => {
+        var result = [];
+        var detail = [];
+        detail.push(
+            <View style={{
+                backgroundColor: '#EDEDED', width: '100%', borderTopLeftRadius: 5,
+                borderTopRightRadius: 10,
+            }} >
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Artículos vendidos' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmountSoldOut + ' (Monto), ' +
+                    _response.totalAmountItemsSoldOut + ' (Número artículos)\n'}</Text>
+            </View>);
+        detail.push(
+            <View style={{
+                backgroundColor: '#F3F9FA', width: '100%',
+            }} >
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto ganancias' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmonuntSales + '\n'}</Text>
+            </View>);
+        detail.push(
+            <View style={{
+                backgroundColor: '#EDEDED', width: '100%'
+            }} >
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto insumos' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmountSupplies + '\n'}</Text>
+            </View>
+        );
+        detail.push(
+            <View style={{
+                backgroundColor: '#F3F9FA', width: '100%'
+            }} >
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto perdidas' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmountLosses + '\n'}</Text>
+            </View>
+        );
+        detail.push(
+            <View style={{
+                backgroundColor: '#EDEDED', width: '100%'
+            }} >
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto merma' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmmountCaducousPurchasePrice + ' (Compra), $' +
+                    _response.totalAmmountCaducousSalePrice + ' (Venta) \n'}</Text>
+            </View>
+        );
+        detail.push(
+            <View style={{
+                backgroundColor: '#F3F9FA', width: '100%'
+            }} >
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto aparadores' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmmountStoredPurchasePrice + ' (Compra), $' +
+                    _response.totalAmmountStoredSalePrice + ' (Venta) \n'}</Text>
+            </View>
+        );
+        detail.push(
+            <View style={{
+                backgroundColor: '#EDEDED', width: '100%'
+            }} >
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto robo o extravío' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmmountStolePurchasePrice + ' (Compra), $' +
+                    _response.totalAmmountStoleSalePrice + ' (Venta) \n'}</Text>
+            </View>
+        );
+        detail.push(
+            <View style={{
+                backgroundColor: '#F3F9FA', width: '100%',
+                borderBottomLeftRadius: 5, borderBottomRightRadius: 5
+            }}>
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Artículos en aparador' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmmountSideboardPurchasePrice + ' (Compra), $'
+                    + _response.totalAmmountSideboardSalePrice + ' (Venta) \n'}</Text>
+            </View>);
+
+        result.push(
+            <View style={{
+                marginTop: 10, borderWidth: 0.8, borderColor: '#F49315',
+                width: '90%', marginLeft: 'auto', marginRight: 'auto', borderRadius: 5
+            }}>
+                {detail}
+            </View>);
+        return result;
+    }
+
+    getBarChart = (_response, _width) => {
+        var barChart = [];
+        const suffix = _response.suffix;
+        var barChartDetail = [];
+        var axis;
+        var axisSecond = [];
+        var isYear = false;
+        var dataSales;
+        var dateSalesSecond;
+        if (this.state.month !== null && this.state.month !== 2) {
+            axis = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'];
+            dataSales = this.getDataSales(_response.monthlySales);
+        } else if (this.state.month !== null && this.state.month === 2) {
+            axis = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
+            dataSales = this.getDataSales(_response.monthlySales);
+        } else {
+            isYear = true;
+            axis = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'];
+            axisSecond = ['Julio', 'Agosto', 'Septiembre', 'Octubre', 'Nov', 'Dic'];
+            var chunks = this.chunkArray(_response.yearlySales, _response.yearlySales.length / 2);
+            dataSales = this.getDataSales(chunks[0]);
+            dateSalesSecond = this.getDataSales(chunks[1]);
+        }
+        barChartDetail.push(this.getComponentBarChar(axis, dataSales, suffix, _width));
+        if (isYear) {
+            barChartDetail.push(this.getComponentBarChar(axisSecond, dateSalesSecond, suffix, _width));
+        }
+        barChart.push(
+            <View style={{ marginTop: 15, marginLeft: 5, }}>
+                <Text style={{ fontSize: 12 }}>Ventas del periodo:</Text>
+                {barChartDetail}
+            </View>
+        );
+        return barChart;
+    }
+
+    getComponentBarChar = (_label, _data, _suffix, _width) => {
+        return (
+            <BarChart
+                style={{
+                    marginVertical: 8,
+                    borderRadius: 5,
+                    borderWidth: 0.5,
+                    borderColor: '#5c5c59',
+                    width: (_width + 1),
+                }}
+                data={{
+                    labels: _label,
+                    datasets: [
+                        {
+                            data: _data
+                        }
+                    ]
+                }}
+                width={_width}
+                height={250}
+                yAxisLabel="$"
+                yAxisSuffix={_suffix}
+                chartConfig={{
+                    backgroundColor: "#FDFDFD",
+                    backgroundGradientFrom: "#FDFDFD",
+                    backgroundGradientTo: "#FDFDFD",
+                    decimalPlaces: 2,
+                    color: (opacity = 1) => `rgba(190, 14, 27, ${opacity})`,
+                    labelColor: (opacity = 1) => `rgba(36, 36, 35, ${opacity})`,
+                    style: {
+                        borderRadius: 8,
+                        marginTop: 15,
+                    },
+                    propsForDots: {
+                        r: "6",
+                        strokeWidth: "2",
+                        stroke: "#ffa726"
+                    },
+                    propsForLabels: {
+                        fontSize: 8,
+                    },
+                }} />);
+    }
+
+    getLineChart = (_salesInformation, _width) => {
         var result = [];
         var labels = [];
         if (this.state.month !== null) {
@@ -413,23 +383,80 @@ export default class Sales extends PureComponent {
                 labels.push('Semana 5');
             }
         } else {
-            labels = ["E", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+            labels = months;
         }
         var dataSets = this.getDataSets(_salesInformation.bestProduct);
         var dataSetsWorst = this.getDataSets(_salesInformation.worstProduct);
-        console.log('******************************************** DATA SETS ', dataSets[0][0]);
-
         var data = this.getData(dataSets, labels);
         var dataWorst = this.getData(dataSetsWorst, labels);
-        console.log(':::::::::::::::::::::::::::::::: DATA ', data, dataWorst);
+        console.log(':: Data ', data, dataWorst);
         result.push(
             <View style={{ marginTop: 15, marginLeft: 5, }}>
-                <Text style={{ fontSize: 12 }}>Top 5 productos:</Text>
-                {this.getLineChart(data, _salesInformation.suffixBest)}
-                <Text style={{ fontSize: 12 }}>Top-Down 5 productos:</Text>
-                {this.getLineChart(dataWorst, _salesInformation.suffixWorst)}
+                <Text style={{ fontSize: 12, }}>Top 5 productos:</Text>
+                {this.getColorBar(_salesInformation.bestProduct)}
+                {this.getNumberItems(_salesInformation.numberItems)}
+                {this.getLineChartComponent(data, _salesInformation.suffixBest, _width)}
+                <Text style={{ fontSize: 12, marginTop: 15 }}>Top-Down 5 productos:</Text>
+                {this.getColorBar(_salesInformation.worstProduct)}
+                {this.getNumberItems(_salesInformation.numberItemsWorst)}
+                {this.getLineChartComponent(dataWorst, _salesInformation.suffixWorst, _width)}
             </View>
         );
+        return result;
+    }
+
+    getNumberItems = (_numberItems) => {
+        var result = [];
+        console.log(':: Number items ', _numberItems);
+        result.push(
+            <View style={{ marginTop: 5, marginLeft: 5, flexDirection: 'row', marginBottom: 5 }}>
+                <Text style={{ fontSize: 10 }}>Número de productos:</Text>
+                <Text style={{ fontSize: 10, fontWeight: 'bold' }} >{' ['}</Text>
+                {_numberItems.map((item, index) =>
+                    this.getNumber(item, index))}
+                <Text style={{ fontSize: 10, fontWeight: 'bold' }} >{' ]'}</Text>
+            </View>
+        );
+        return result;
+    }
+
+    getNumber = (_numberItem, _index) => {
+        var result;
+        if (_index == 0) {
+            result = (<Text style={{ fontSize: 10, fontWeight: 'bold' }} key={_index}>{' ' + _numberItem}</Text>);
+        } else {
+            result = (<Text style={{ fontSize: 10, fontWeight: 'bold' }} key={_index}>{', ' + _numberItem}</Text>);
+        }
+        return result;
+    }
+
+    getColorBar = (_list) => {
+        var result = [];
+        var detail = [];
+        for (var index = 0; index < _list.length; index++) {
+            detail.push(
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={{ fontSize: 10 }}>{'  ' + _list[index].name}</Text>
+                    <View style={{ height: 5, width: 5, backgroundColor: lineColors[index], marginLeft: 15 }} />
+                </View>
+            );
+        }
+        result.push(
+            <View style={{
+                marginTop: 5,
+                borderWidth: 0.5,
+                borderColor: 'grey',
+                marginLeft: 5,
+                width: '33%',
+                padding: 5,
+                borderRadius: 5,
+                backgroundColor: '#FDFDFD',
+                marginBottom: 5,
+            }}>
+                {detail}
+            </View>
+        );
+        return result;
     }
 
     getDataSets = (_list) => {
@@ -444,53 +471,53 @@ export default class Sales extends PureComponent {
 
     getData = (_datasets, _labels) => {
         var dataset = [];
-        for (var index = 0; index < _datasets.length; index++) {
+        for (var index = 0; index < _datasets[CONSTANTS.ZERO].length; index++) {
+            const color = lineColors[index];
             dataset.push({
-                data: dataSets[CONSTANTS.ZERO][index],
+                data: _datasets[CONSTANTS.ZERO][index],
                 strokeWidth: 3,
-                color: () => lineColors[index],
+                color: () => color,
             });
         }
         var result = {
             color: (opacity = 1) => `rgba(190, 14, 27, ${opacity})`,
             labels: _labels,
-            datasets: [dataset],
+            datasets: dataset,
         };
         return result;
     }
 
-    getLineChart = (_data, _suffix) => {
+    getLineChartComponent = (_data, _suffix, _width) => {
         return (
             <LineChart
-            style={{
-                marginLeft: 5,
-                borderWidth: 0.5,
-                borderRadius: 5,
-                borderColor: '#5c5c59',
-                width: (width + 1),
-            }}
-            data={_data}
-            width={width}
-            height={220}
-            yAxisLabel="$"
-            yAxisSuffix={_suffix}
-            chartConfig={{
-                backgroundColor: "#FDFDFD",
-                backgroundGradientFrom: "#FDFDFD",
-                backgroundGradientTo: "#FDFDFD",
-                color: (opacity = 1) => `rgba(190, 14, 27, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(36, 36, 35, ${opacity})`,
-                strokeWidth: 2, 
-                barPercentage: 0.5,
-                propsForDots: {
-                    r: "5",
-                    strokeWidth: "1",
-                    stroke: "#ffa726"
-                },
-                propsForLabels: {
-                    fontSize: 8,
-                },
-              }}/>
+                style={{
+                    borderWidth: 0.5,
+                    borderRadius: 5,
+                    borderColor: '#5c5c59',
+                    width: (_width + 1),
+                }}
+                data={_data}
+                width={_width}
+                height={220}
+                yAxisLabel="$"
+                yAxisSuffix={_suffix}
+                chartConfig={{
+                    backgroundColor: "#FDFDFD",
+                    backgroundGradientFrom: "#FDFDFD",
+                    backgroundGradientTo: "#FDFDFD",
+                    color: (opacity = 1) => `rgba(190, 14, 27, ${opacity})`,
+                    labelColor: (opacity = 1) => `rgba(36, 36, 35, ${opacity})`,
+                    strokeWidth: 0.5,
+                    barPercentage: 0.5,
+                    propsForDots: {
+                        r: "4",
+                        strokeWidth: "1",
+                        stroke: "#ffa726"
+                    },
+                    propsForLabels: {
+                        fontSize: 8,
+                    },
+                }} />
         );
     }
 
@@ -527,12 +554,9 @@ export default class Sales extends PureComponent {
         return request;
     }
 
-
-
     render() {
-        const width = Dimensions.get("window").width - 10;
         return (
-            <BackgroundScrollCalpulliX addHeight={900}>
+            <BackgroundScrollCalpulliX addHeight={1590}>
                 <NavigationEvents
                     onWillFocus={() => {
                         this.cleanInput();
