@@ -8,6 +8,7 @@ import ButtonCalpulliX from '../common/ButtonCalpulliX';
 import CommonAPI from '../api/CommonAPI';
 import Autocomplete from 'react-native-autocomplete-input';
 import styles from './styles';
+import stylesCommon from '../common/style';
 import ApiCaller from '../api/ApiCaller';
 import CONSTANTS from '../common/Constants';
 import {
@@ -28,6 +29,7 @@ export default class Sales extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            errorMessage: '',
             branches: [],
             branchId: null,
             years: this.getYears(),
@@ -78,9 +80,15 @@ export default class Sales extends PureComponent {
                     errorMessage: 'Ocurrio un error, favor de intentar mas tarde',
                 });
             });
-        this.setState({
-            branches: result,
-        });
+        if (result) {
+            this.setState({
+                branches: result,
+            });
+        } else {
+            this.setState({
+                branches: [],
+            });
+        }
     }
 
     cleanInput = () => {
@@ -89,10 +97,13 @@ export default class Sales extends PureComponent {
             functionClearPickerYears();
             functionClearPickerMonths();
             this.getBranchList();
+
+            this.updateMonth(null);
+            this.updateYear(null);
+            this.updateState(null);
+
             this.setState({
-                branchId: null,
-                year: null,
-                month: null,
+                errorMessage: '',
                 product: '',
                 dataProducts: [],
                 hideResults: true,
@@ -155,7 +166,7 @@ export default class Sales extends PureComponent {
 
     handleAutoComplete = async (_nameIdProduct) => {
         const response = await ApiCaller.callApi(
-            '/calpullix/product-name/retrieve', this.getProductNameRequest(),
+            '/calpullix/product-name/retrieve', this.getProductNameRequest(_nameIdProduct),
             CONSTANTS.PORT_PRODUCT_LIST, CONSTANTS.POST_METHOD)
             .catch((error) => {
                 console.log(error);
@@ -168,6 +179,7 @@ export default class Sales extends PureComponent {
             this.setState({
                 dataProducts: response.products,
                 hideResults: false,
+                errorMessage: '',
             });
         }
         this.setState({
@@ -203,6 +215,7 @@ export default class Sales extends PureComponent {
                     salesInformation: content,
                     barChart: barChart,
                     lineChart: lineChart,
+                    errorMessage: '',
                 });
             }
         } else {
@@ -294,7 +307,6 @@ export default class Sales extends PureComponent {
 
     getBarChart = (_response, _width) => {
         var barChart = [];
-        const suffix = _response.suffix;
         var barChartDetail = [];
         var axis;
         var axisSecond = [];
@@ -315,9 +327,9 @@ export default class Sales extends PureComponent {
             dataSales = this.getDataSales(chunks[0]);
             dateSalesSecond = this.getDataSales(chunks[1]);
         }
-        barChartDetail.push(this.getComponentBarChar(axis, dataSales, suffix, _width));
+        barChartDetail.push(this.getComponentBarChar(axis, dataSales, _response.suffix, _width));
         if (isYear) {
-            barChartDetail.push(this.getComponentBarChar(axisSecond, dateSalesSecond, suffix, _width));
+            barChartDetail.push(this.getComponentBarChar(axisSecond, dateSalesSecond, _response.suffix, _width));
         }
         barChart.push(
             <View style={{ marginTop: 15, marginLeft: 5, }}>
@@ -410,7 +422,7 @@ export default class Sales extends PureComponent {
         console.log(':: Number items ', _numberItems);
         result.push(
             <View style={{ marginTop: 5, marginLeft: 5, flexDirection: 'row', marginBottom: 5 }}>
-                <Text style={{ fontSize: 10 }}>Número de productos:</Text>
+                <Text style={{ fontSize: 10 }}>Número de productos Vendidos:</Text>
                 <Text style={{ fontSize: 10, fontWeight: 'bold' }} >{' ['}</Text>
                 {_numberItems.map((item, index) =>
                     this.getNumber(item, index))}
@@ -554,6 +566,17 @@ export default class Sales extends PureComponent {
         return request;
     }
 
+
+    showStatistics = () => {
+        const response = await ApiCaller.callApi(
+            this.props.path, this.getDetailRequest(), this.props.port, 'POST')
+            .catch((error) => {
+              console.log(error);
+            });
+          NavigatorCommons.navigateTo(this.props.navigation, this.props.screen,
+            { 'responseApi': response });
+    }
+
     render() {
         return (
             <BackgroundScrollCalpulliX addHeight={1590}>
@@ -565,8 +588,12 @@ export default class Sales extends PureComponent {
                     navigation={this.props.navigation}
                     backButton={false}
                     title={'Resumen de Ventas'} />
-                <View style={{ marginTop: 5 }}>
-
+                <View style={{ marginTop: 0 }}>
+                    <Text
+                        id='errorMessageSales'
+                        style={[stylesCommon.errorMessage, { marginTop: 0 }]}>
+                        {this.state.errorMessage}
+                    </Text>
                     <PickerCalpulliX
                         data={this.state.branches}
                         updateState={this.updateState}
@@ -624,6 +651,7 @@ export default class Sales extends PureComponent {
                             placeholder={'Seleccione el mes'}
                             functionClearPicker={this.setFunctionClearPickerMonths} />
                     </View>
+
                     <ButtonCalpulliX
                         title={'Buscar Ventas'}
                         id={'buttonSales'}
@@ -637,6 +665,15 @@ export default class Sales extends PureComponent {
                     {this.state.salesInformation}
                     {this.state.barChart}
                     {this.state.lineChart}
+
+                    <ButtonCalpulliX
+                        title={'Ver Estadísticas'}
+                        id={'buttonStatistics'}
+                        arrayColors={['#05AAAB', '#048585', '#048585']}
+                        onPress={() => this.showStatistics()}
+                        width={'35%'}
+                        height={35}
+                        marginTop={10} />
 
                 </View>
             </BackgroundScrollCalpulliX >

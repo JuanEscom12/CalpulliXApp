@@ -123,7 +123,7 @@ class SideMenu extends Component {
                         ]}}
                         source={require('./sales.png')} />
               <Text style={{marginTop: 15, marginBottom: 15, fontSize: 16, 
-                marginLeft: '5%'}} onPress={this.navigateToScreen('ProductList')} >
+                marginLeft: '5%'}} onPress={this.navigateToScreen('Sales')} >
                 Ventas
               </Text>
             </View>
@@ -136,7 +136,7 @@ class SideMenu extends Component {
                         ]}}
                         source={require('./twitter.png')} />
               <Text style={{marginTop: 15, marginBottom: 15, fontSize: 16, 
-                marginLeft: '5%'}} onPress={this.navigateToScreen('ProductList')} >
+                marginLeft: '5%'}} onPress={this.navigateToScreen('TwitterAnalysis')} >
                Analísis de Twitter
               </Text>
             </View>
@@ -162,7 +162,7 @@ class SideMenu extends Component {
                         ]}}
                         source={require('./predictive_analysis.png')} />
               <Text style={{marginTop: 15, marginBottom: 15, fontSize: 16, 
-                marginLeft: '5%'}} onPress={this.navigateToScreen('ProductList')} >
+                marginLeft: '5%'}} onPress={this.navigateToScreen('Regression')} >
                 Analisis predictivo
               </Text>
             </View>

@@ -13,6 +13,8 @@ import PurchaseOrderDetail from '../purchaseOrder/PurchaseOrderDetail';
 import ProfilePromotions from '../promotions/ProfilePromotions';
 import DetailPromotions from '../promotions/DetailPromotions';
 import Sales from '../sales/Sales';
+import TwitterAnalysis from '../twitter/TwitterAnalysis';
+import Regression from '../regression/Regression';
 import { createAppContainer, createDrawerNavigator } from "react-navigation";
 
 const AppNavigator = createDrawerNavigator({
@@ -40,22 +42,22 @@ const AppNavigator = createDrawerNavigator({
       header: null
     }
   },
-  ProductDetail : {
+  ProductDetail: {
     screen: ProductDetail,
     navigationOptions: {
       header: null
     }
   },
-  Offices:{
+  Offices: {
     screen: BranchOffices,
   },
-  ClassifyProducts:{
+  ClassifyProducts: {
     screen: Products,
   },
-  ClassifyUsers:{
+  ClassifyUsers: {
     screen: Users,
   },
-  ClientPromotions:{
+  ClientPromotions: {
     screen: CustomerPromotions,
   },
   PurchaseOrder: {
@@ -87,13 +89,25 @@ const AppNavigator = createDrawerNavigator({
     navigationOptions: {
       header: null
     },
+  },
+  TwitterAnalysis: {
+    screen: TwitterAnalysis,
+    navigationOptions: {
+      header: null
+    }
+  },
+  Regression: {
+    screen: Regression,
+    navigationOptions: {
+      header: null
+    }
   }
-}, 
-{
-  initialRouteName: 'Sales',
-  contentComponent: SideMenu,
-  drawerWidth: 300
-}
+},
+  {
+    initialRouteName: 'Regression',
+    contentComponent: SideMenu,
+    drawerWidth: 300
+  }
 );
 
 const AppContainerNavigation = createAppContainer(AppNavigator);

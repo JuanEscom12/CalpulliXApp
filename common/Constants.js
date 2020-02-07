@@ -11,6 +11,8 @@ module.exports = {
     PORT_PURCHASE_ORDER: 9100,
     PORT_PROMOTIONS: 9101,
     PORT_SALES: 9101,
+    TWITTER_PORT: 9102,
+    REGRESSION_PORT: 9103,
     ONE: 1,
     ZERO: 0,
     PREFIX_BASE64: 'data:image/jpg;base64,',
