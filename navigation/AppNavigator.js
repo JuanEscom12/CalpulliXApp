@@ -13,6 +13,7 @@ import PurchaseOrderDetail from '../purchaseOrder/PurchaseOrderDetail';
 import ProfilePromotions from '../promotions/ProfilePromotions';
 import DetailPromotions from '../promotions/DetailPromotions';
 import Sales from '../sales/Sales';
+import Statistics  from '../sales/Statistics';
 import TwitterAnalysis from '../twitter/TwitterAnalysis';
 import Regression from '../regression/Regression';
 import { createAppContainer, createDrawerNavigator } from "react-navigation";
@@ -101,10 +102,16 @@ const AppNavigator = createDrawerNavigator({
     navigationOptions: {
       header: null
     }
+  },
+  Statistics : {
+    screen: Statistics,
+    navigationOptions: {
+      header: null
+    }
   }
 },
   {
-    initialRouteName: 'Regression',
+    initialRouteName: 'Sales',
     contentComponent: SideMenu,
     drawerWidth: 300
   }

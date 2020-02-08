@@ -11,6 +11,7 @@ import styles from './styles';
 import stylesCommon from '../common/style';
 import ApiCaller from '../api/ApiCaller';
 import CONSTANTS from '../common/Constants';
+import NavigatorCommons from '../navigation/NavigatorCommons';
 import {
     LineChart,
     BarChart,
@@ -412,6 +413,14 @@ export default class Sales extends PureComponent {
                 {this.getColorBar(_salesInformation.worstProduct)}
                 {this.getNumberItems(_salesInformation.numberItemsWorst)}
                 {this.getLineChartComponent(dataWorst, _salesInformation.suffixWorst, _width)}
+                <ButtonCalpulliX
+                        title={'Ver Estadísticas'}
+                        id={'buttonStatistics'}
+                        arrayColors={['#05AAAB', '#048585', '#048585']}
+                        onPress={() => this.showStatistics()}
+                        width={'35%'}
+                        height={40}
+                        marginTop={10} />
             </View>
         );
         return result;
@@ -567,19 +576,20 @@ export default class Sales extends PureComponent {
     }
 
 
-    showStatistics = () => {
+    showStatistics = async () => {
         const response = await ApiCaller.callApi(
-            this.props.path, this.getDetailRequest(), this.props.port, 'POST')
+            "/calpullix/statistics/retrieve", this.getRequestSales(), CONSTANTS.STATISTICS_PORT,
+            CONSTANTS.POST_METHOD)
             .catch((error) => {
-              console.log(error);
+                console.log(error);
             });
-          NavigatorCommons.navigateTo(this.props.navigation, this.props.screen,
+        NavigatorCommons.navigateTo(this.props.navigation, "Statistics",
             { 'responseApi': response });
     }
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={1590}>
+            <BackgroundScrollCalpulliX addHeight={1620}>
                 <NavigationEvents
                     onWillFocus={() => {
                         this.cleanInput();
@@ -665,15 +675,6 @@ export default class Sales extends PureComponent {
                     {this.state.salesInformation}
                     {this.state.barChart}
                     {this.state.lineChart}
-
-                    <ButtonCalpulliX
-                        title={'Ver Estadísticas'}
-                        id={'buttonStatistics'}
-                        arrayColors={['#05AAAB', '#048585', '#048585']}
-                        onPress={() => this.showStatistics()}
-                        width={'35%'}
-                        height={35}
-                        marginTop={10} />
 
                 </View>
             </BackgroundScrollCalpulliX >

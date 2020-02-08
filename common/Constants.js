@@ -13,6 +13,7 @@ module.exports = {
     PORT_SALES: 9101,
     TWITTER_PORT: 9102,
     REGRESSION_PORT: 9103,
+    STATISTICS_PORT: 9105,
     ONE: 1,
     ZERO: 0,
     PREFIX_BASE64: 'data:image/jpg;base64,',
