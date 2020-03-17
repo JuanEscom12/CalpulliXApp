@@ -9,12 +9,15 @@ import stylesCommon from '../common/style';
 import stylesAutoComplete from '../sales/styles';
 import PickerCalpulliX from '../common/PickerCalpulliX';
 import ButtonCalpulliX from '../common/ButtonCalpulliX';
+import CalpulliXTable from '../common/CalpulliXTable';
 import CommonAPI from '../api/CommonAPI';
 import CONSTANTS from '../common/Constants';
 
 var functionClearPickerBranches;
 var functionClearPickerYears;
 var functionClearPickerMonths;
+
+const headers = ['Var Ind.', 'Var Dep.', 'Coeficiente'];
 
 export default class Regression extends PureComponent {
 
@@ -39,7 +42,7 @@ export default class Regression extends PureComponent {
     getYears = () => {
         var result = [];
         var date = new Date();
-        for (var year = date.getFullYear(); year >= date.getFullYear() - 40; year--) {
+        for (var year = date.getFullYear(); year <= date.getFullYear() + 40; year++) {
             result.push({ id: year, name: year });
         }
         return result;
@@ -185,6 +188,10 @@ export default class Regression extends PureComponent {
         if (!this.isValidInput()) {
             Alert.alert('Se debe capturar el año y la sucursal.');
             return;
+        } 
+        if (!this.isValidaDate()) {
+            Alert.alert('La fecha debe de ser futura.');
+            return;
         }
         const response = await ApiCaller.callApi(
             '/calpullix/retrieve/regression', this.getForecastRequest(),
@@ -198,7 +205,7 @@ export default class Regression extends PureComponent {
         console.log(':: Regression  ', response);
         if (response.graphics.length > CONSTANTS.ZERO) {
             this.setState({
-                images: this.getImages(response.graphics, response.forecast),
+                images: this.getImages(response),
             });
         } else {
             this.setState({
@@ -212,6 +219,13 @@ export default class Regression extends PureComponent {
         return this.state.branchId !== null && this.state.year !== null;
     }
 
+    isValidaDate =  () => {
+        var current = new Date();
+        return (this.state.year == current.getFullYear() && this.state.month !== null && this.state.month > current.getMonth() + CONSTANTS.ONE) || 
+                (this.state.year == current.getFullYear() && this.state.month == null) ||
+                (this.state.year > current.getFullYear());
+    }
+
     getForecastRequest = () => {
         var request = {
             branchId: this.state.branchId,
@@ -223,17 +237,34 @@ export default class Regression extends PureComponent {
         return request;
     }
 
-    getImages = (_images, _forecast) => {
+    getImages = (_apiResponse, _forecast) => {
         var result = [];
         var base64Image;
         result.push(
-            <Text style={{ marginTop: 20, fontSize: 12, marginLeft: '5%' }}>
-                {'La proyección es: '}
-                <Text style={{ fontWeight: 'bold' }}>{'$' + _forecast}</Text>
+            <Text style={{ marginTop: 25, fontSize: 12, marginLeft: '5%' }}>
+                {'La proyección de ventas para el periodo seleccionado es: '}
+                <Text style={{ fontWeight: 'bold' }}>{'$' + _apiResponse.forecast}</Text>
             </Text>
         );
-        for (var index = 0; index < _images.length; index++) {
-            base64Image = CONSTANTS.PREFIX_BASE64 + _images[index];
+
+        result.push(
+            <CalpulliXTable
+                headers={headers}
+                data={_apiResponse.coefficientCorrelation}
+                marginTop={15}
+                textStyle={{
+                    margin: 6,
+                    fontSize: 10
+                }} />
+        );
+
+        for (var index = 0; index < _apiResponse.graphics.length; index++) {
+            result.push(
+                <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#F6A338', marginTop: 10, marginLeft: '5%' }} >
+                    {_apiResponse.labelRelation[index]}
+                </Text>
+            );
+            base64Image = CONSTANTS.PREFIX_BASE64 + _apiResponse.graphics[index];
             result.push(
                 <Image
                     style={{
@@ -243,7 +274,7 @@ export default class Regression extends PureComponent {
                         borderColor: '#746F6F',
                         marginLeft: 'auto',
                         marginRight: 'auto',
-                        marginTop: 10,
+                        marginTop: 5,
                         borderRadius: 3,
                     }}
                     source={{ uri: base64Image }} />
@@ -254,7 +285,7 @@ export default class Regression extends PureComponent {
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={930}>
+            <BackgroundScrollCalpulliX addHeight={1400}>
                 <NavigationEvents
                     onWillFocus={() => {
                         this.cleanInput();
@@ -335,7 +366,7 @@ export default class Regression extends PureComponent {
                         id={'buttonRegression'}
                         arrayColors={['#05AAAB', '#048585', '#048585']}
                         onPress={() => this.getForecast()}
-                        width={'35%'}
+                        width={'38%'}
                         height={45}
                         marginTop={10}
                         marginBottom={0} />

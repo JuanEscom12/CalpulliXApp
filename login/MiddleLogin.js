@@ -70,15 +70,15 @@ export default class MiddleLogin extends PureComponent {
     handleChangeUserText = (text) => {
         this.setState({
             userText: text,
-        })
-        this.props.hanlderInput(this.state);
+        });
+        this.props.hanlderInputUser(text);
     }
 
     handleChangePassText = (text) => {
         this.setState({
             passText: text,
-        })
-        this.props.hanlderInput(this.state);
+        });
+        this.props.hanlderInputPass(text);
     }
 
     cleanInput = () => {
@@ -158,15 +158,15 @@ export default class MiddleLogin extends PureComponent {
                     <Text
                         style={{
                             fontSize: 13, marginTop: 25, textAlign: 'center', textDecorationLine: 'underline',
-                            color: this.state.colorLink
+                            color: this.state.colorLink, width: '50%', marginLeft: 'auto', marginRight: 'auto'
                         }}
                         onPress={() => this.handleForgotPasswordOrUser()}>
-                        Olvidaste tu contraseña
+                        Cambiar contraseña
                   </Text>
                     <Text
                         style={{
                             fontSize: 13, marginTop: 15, textAlign: 'center', textDecorationLine: 'underline',
-                            color: this.state.colorLink
+                            color: this.state.colorLink, width: '50%', marginLeft: 'auto', marginRight: 'auto'
                         }}
                         onPress={() => this.handleRegisterAccount()}>
                         Registrate

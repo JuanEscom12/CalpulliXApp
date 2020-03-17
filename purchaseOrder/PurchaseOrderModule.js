@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Alert } from 'react-native';
 import stylesCommon from '../common/style';
 import { NavigationEvents } from 'react-navigation';
 import AccordionCalpulliX from '../common/AccordionCalpulliX';
@@ -12,10 +12,12 @@ import CommonAPI from '../api/CommonAPI';
 import CONSTANTS from '../common/Constants';
 
 
+
 var functionClearPicker;
+var functionClearPickerStatus;
 const initDate = '2000-01-01';
-const labels = ['Nombre', 'Descripcion', 'Sucursal', 'Numero de productos en almacen',
-    'Numero de productos en anaqueles', 'Cantidad'];
+const labels = ['Nombre', 'Fecha', 'Descripcion orden de compra', 'Sucursal', 'Cantidad de productos en almacen',
+    'Cantidad de productos en anaqueles', 'Estatus de la orden de compra'];
 
 export default class PurchaseOrderModule extends PureComponent {
 
@@ -26,8 +28,10 @@ export default class PurchaseOrderModule extends PureComponent {
             quantityItems: "",
             purchaseOrderList: [],
             branches: [],
+            purchaseOrderStatus: [],
             purchaseOrderListApi: null,
             branchId: null,
+            idStatus: null,
             page: 1,
             itemsPerPage: 5,
             itemCount: 0,
@@ -35,7 +39,8 @@ export default class PurchaseOrderModule extends PureComponent {
             endDate: initDate,
         };
         this.getBranchList();
-        this.getPurchaseOrderList();
+        this.getPurchaseOrderStatus();
+        this.getPurchaseOrderList(CONSTANTS.ONE);
     }
 
     getBranchList = async () => {
@@ -53,9 +58,31 @@ export default class PurchaseOrderModule extends PureComponent {
         }
     }
 
+    getPurchaseOrderStatus = async () => {
+        const result = await ApiCaller.callApi('/calpullix/purchaseorder/status/retrieve',
+            {}, CONSTANTS.PORT_PURCHASE_ORDER, CONSTANTS.POST_METHOD)
+            .catch((error) => {
+                console.log(error);
+                this.setState({
+                    errorMessage: 'Ocurrio un error, favor de intentar mas tarde.',
+                });
+            });
+        console.log(':: Result API Purchase Order Status ', result);
+        if (result.purchaseOrderStatus.length > CONSTANTS.ZERO) {
+            this.setState({
+                purchaseOrderStatus: result.purchaseOrderStatus,
+            });
+        } else {
+            this.setState({
+                errorMessage: 'Ocurrio un error, favor de intentar mas tarde.',
+            });
+        }
+    }
+
+
     getPurchaseOrderFilters = () => {
         if (this.isValidInput()) {
-            this.getPurchaseOrderList();
+            this.getPurchaseOrderList(CONSTANTS.ONE);
         } else {
             this.setState({
                 errorMessage: 'Selecciona valores validos de busqueda.',
@@ -64,13 +91,44 @@ export default class PurchaseOrderModule extends PureComponent {
     }
 
     isValidInput = () => {
-        return this.state.branchId !== null ||
-            (this.state.date !== initDate && this.state.endDate !== initDate);
+        if (this.state.branchId == null && 
+            this.state.idStatus == null && 
+            this.areInitialDates()) {
+            return true;
+        }
+        if ((this.state.branchId !== null && this.areValidDatesAndStatus()) ||
+            (this.state.branchId !== null && this.areInitialDates() || this.areValidDatesAndStatus()) ||
+            (this.state.branchId == null && this.areValidDatesAndStatus()) ||
+            (this.state.branchId !== null && this.areInitialDates()) ||
+            (this.state.idStatus !== null && this.areInitialDates())) {
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
     }
 
-    getPurchaseOrderList = async () => {
+    areInitialDates  = () => {
+        
+        return this.state.date == initDate && this.state.endDate == initDate;
+    }
+    
+    areValidDatesAndStatus = () => {
+        var split = this.state.date.split("-");
+        var month = parseInt(split[1], 10) - CONSTANTS.ONE;
+        var firstDate = new Date(split[0], month, split[2]);
+        split = this.state.endDate.split("-");
+        month = parseInt(split[1], 10) - CONSTANTS.ONE;
+        var endDate = new Date(split[0], month, split[2]);
+        var today = new Date();
+        
+        return firstDate.getTime() <= endDate.getTime() &&
+                endDate.getTime() <= today.getTime() && this.state.idStatus !== null;
+    }
+
+    getPurchaseOrderList = async (_numberPage) => {
         const result = await ApiCaller.callApi('/calpullix/retrieve/purchaseorder',
-            this.getPurchaseOrderRequest(),
+            this.getPurchaseOrderRequest(_numberPage),
             CONSTANTS.PORT_PURCHASE_ORDER, CONSTANTS.POST_METHOD)
             .catch((error) => {
                 console.log(error);
@@ -79,50 +137,63 @@ export default class PurchaseOrderModule extends PureComponent {
                 });
             });
         console.log(':: Result API Purchase Order ', result);
-        if (result.purchaseOrder.length > CONSTANTS.ZERO) {
+        if (result.purchaseOrder && result.purchaseOrder.length > CONSTANTS.ZERO) {
             this.setState({
                 purchaseOrderListApi: result.purchaseOrder,
-                itemCount: result.purchaseOrder[CONSTANTS.ZERO].totalRows,
+                itemCount: result.totalRows,
                 errorMessage: '',
             });
-            this.addItemsPurchaseOrderList();
+            this.addItemsPurchaseOrderList(result.purchaseOrder);
+        } else if (result.purchaseOrder === undefined) {
+            this.setState({
+                purchaseOrderListApi: [],
+                purchaseOrderList: [],
+                itemCount: 0,
+                errorMessage: 'Ocurrio un error, favor de intentar mas tarde.',
+            });
+        } else if (result.purchaseOrder == null) {
+            this.setState({
+                purchaseOrderListApi: [],
+                purchaseOrderList: [],
+                itemCount: 0,
+                errorMessage: 'No se encontraron resultados',
+            });
         }
     }
 
-    getPurchaseOrderRequest() {
-        var branchId = 0;
-        if (this.state.branchId) {
-            branchId = this.state.branchId.id;
-        }
-        var date = '';
-        var endDate = '';
-        if (this.state.date !== initDate && this.state.endDate !== initDate) {
+    getPurchaseOrderRequest(_numberPage) {
+        var date = null;
+        var endDate = null;
+        if (this.state.date !== initDate  || 
+            this.state.endDate !== initDate) {
             date = this.state.date;
             endDate = this.state.endDate;
         }
         const request = {
-            "branchId": branchId,
-            "page": this.state.page,
+            "branchId": this.state.branchId !== null ? this.state.branchId.id : null,
             "date": date,
             "endDate": endDate,
+            "purchaseOrderStatus": this.state.idStatus !== null ? this.state.idStatus.id: null,
+            "page": _numberPage
         };
         return request;
     }
 
-    addItemsPurchaseOrderList() {
+    addItemsPurchaseOrderList(purchaseOrderListApi) {
         var fields = [];
-        for (let i = 0; i < this.state.purchaseOrderListApi.length; i++) {
+        for (let i = 0; i < purchaseOrderListApi.length; i++) {
             var item = [];
-            item.push(this.state.purchaseOrderListApi[i].idProduct);
-            item.push(this.state.purchaseOrderListApi[i].name);
-            item.push(this.state.purchaseOrderListApi[i].description);
-            item.push(this.state.purchaseOrderListApi[i].branchName);
-            item.push(this.state.purchaseOrderListApi[i].numberStockProducts);
-            item.push(this.state.purchaseOrderListApi[i].numberShelfProducts);
-            item.push(this.state.purchaseOrderListApi[i].suggestedNumberItems);
-            item.push(this.state.purchaseOrderListApi[i].totalRows);
-            item.push(this.state.purchaseOrderListApi[i].enabled);
-            item.push(this.state.purchaseOrderListApi[i].index);
+            item.push(purchaseOrderListApi[i].idPurchaseOrder);
+            item.push(purchaseOrderListApi[i].name);
+            item.push(purchaseOrderListApi[i].date);
+            item.push(purchaseOrderListApi[i].description);
+            item.push(purchaseOrderListApi[i].branchName);
+            item.push(purchaseOrderListApi[i].numberStockProducts);
+            item.push(purchaseOrderListApi[i].numberShelfProducts);
+            item.push(purchaseOrderListApi[i].status);
+            item.push(purchaseOrderListApi[i].totalRows);
+            item.push(purchaseOrderListApi[i].enabled);
+            item.push(purchaseOrderListApi[i].index);
             fields.push(item);
         }
         this.setState({
@@ -134,22 +205,22 @@ export default class PurchaseOrderModule extends PureComponent {
         this.setState({
             page: numberPage,
         });
-        this.getPurchaseOrderList();
+        this.getPurchaseOrderList(numberPage);
     }
 
     cleanInput = () => {
-        console.log(':: CLEAN INPUT ', this.props.parentProps.navigation.state.params.navigateFromMenu);
-        functionClearPicker();
-        this.setState({
-            branchId: null,
-            date: initDate,
-            dateEnd: initDate,
-        });
-        if (this.props.parentProps.navigation.state.params && this.props.parentProps.navigation.state.params.navigateFromMenu) {
+        if (this.props.parentProps.navigation.state.params && 
+            this.props.parentProps.navigation.state.params.navigateFromMenu) {
+            functionClearPicker();
+            functionClearPickerStatus();
             this.setState({
                 purchaseOrderList: [],
+                branchId: null,
+                idStatus: null,
+                date: initDate,
+                endDate: initDate,
             });
-            this.getPurchaseOrderList();
+            this.getPurchaseOrderList(CONSTANTS.ONE);
             this.props.parentProps.navigation.state.params.navigateFromMenu = false;
         }
     }
@@ -160,129 +231,156 @@ export default class PurchaseOrderModule extends PureComponent {
         })
     }
 
+    updateStateStatus = (_value) => {
+        this.setState({
+            idStatus: _value
+        })
+    }
+
     setFunctionClearPicker = (_clear) => {
         functionClearPicker = _clear;
     }
 
+    setFunctionClearPickerStatus = (_clear) => {
+        functionClearPickerStatus = _clear;
+    }
+
+
+
     render() {
         return (
-                <View style={{ marginTop: 5 }}>
-                    <NavigationEvents
-                        onWillFocus={() => {
-                            this.cleanInput();
-                        }} />
-                    <Text
-                        id='errorMessagePurchaseOrder'
-                        style={[stylesCommon.errorMessage, { marginTop: 5 }]}>
-                        {this.state.errorMessage}
+            <View style={{ marginTop: 5 }}>
+                <NavigationEvents
+                    onWillFocus={() => {
+                        this.cleanInput();
+                    }} />
+                <Text
+                    id='errorMessagePurchaseOrder'
+                    style={[stylesCommon.errorMessage, { marginTop: 5 }]}>
+                    {this.state.errorMessage}
+                </Text>
+                <Text style={[stylesCommon.labelText,
+                { marginTop: 5, marginRight: '70%', fontSize: 13 }]}>
+                    Sucursales
                     </Text>
-                    <Text style={[stylesCommon.labelText,
-                    { marginTop: 5, marginRight: '70%', fontSize: 15 }]}>
-                        Sucursales
+                <PickerCalpulliX
+                    data={this.state.branches}
+                    updateState={this.updateState}
+                    placeholder={'Seleccione la sucursal'}
+                    functionClearPicker={this.setFunctionClearPicker} />
+                <Text style={[stylesCommon.labelText,
+                { marginTop: 5, marginRight: '48%', fontSize: 13 }]}>
+                    Estatus orden de compra.
                     </Text>
-                    <PickerCalpulliX
-                        data={this.state.branches}
-                        updateState={this.updateState}
-                        placeholder={'Seleccione la sucursal'}
-                        functionClearPicker={this.setFunctionClearPicker} />
-                    <View style={{ flexDirection: 'row' }}>
-                        <DatePicker
-                            style={{ width: 180, margintTop: 20 }}
-                            date={this.state.date}
-                            mode="date"
-                            placeholder="Select date"
-                            format="YYYY-MM-DD"
-                            minDate="1970-01-01"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
-                            customStyles={{
-                                dateIcon: {
-                                    marginTop: 12,
-                                    position: 'absolute',
-                                    left: 0,
-                                    top: 4,
-                                    marginLeft: 40,
-                                },
-                                dateInput: {
-                                    marginTop: 20,
-                                    marginLeft: 36,
-                                    borderRadius: 5,
-                                    borderWidth: 0.5,
-                                    borderColor: '#F49315',
-                                    backgroundColor: '#FDFDFD',
-                                }
-                            }}
-                            onDateChange={(date) => { this.setState({ date: date }) }} />
-                        <DatePicker
-                            style={{ width: 180, margintTop: 20, }}
-                            date={this.state.endDate}
-                            mode="date"
-                            placeholder="Select date"
-                            format="YYYY-MM-DD"
-                            minDate="1970-01-01"
-                            confirmBtnText="Confirm"
-                            cancelBtnText="Cancel"
-                            customStyles={{
-                                dateIcon: {
-                                    marginTop: 12,
-                                    position: 'absolute',
-                                    left: 0,
-                                    top: 4,
-                                    marginLeft: 40,
-                                },
-                                dateInput: {
-                                    marginTop: 20,
-                                    marginLeft: 36,
-                                    borderRadius: 5,
-                                    borderWidth: 0.5,
-                                    borderColor: '#F49315',
-                                    backgroundColor: '#FDFDFD',
-                                }
-                            }}
-                            onDateChange={(date) => { this.setState({ dateEnd: date }) }} />
-                    </View>
-                    <ButtonCalpulliX
-                        title={'Buscar'}
-                        id={'buttonSearchPurchaseOrder'}
-                        arrayColors={['#05AAAB', '#048585', '#048585']}
-                        onPress={this.getPurchaseOrderFilters}
-                        width={'30%'}
-                        height={40}
-                        marginTop={20}
-                        marginBottom={0} />
-                    <AccordionCalpulliX
-                        content={this.state.purchaseOrderList}
-                        labels={labels}
-                        port={CONSTANTS.PORT_PURCHASE_ORDER}
-                        navigation={this.props.parentProps.navigation}
-                        renderDetailButton={true}
-                        renderInputText={true}
-                        titleButton={'Ver detalle'}
-                        margintTop={10}
-                        labelHeader={'Id del producto  '}
-                        marginLeftRowHeader={'55%'}
-                        path={'/calpullix/retrieve/purchaseorder/detail'}
-                        screen={'PurchaseOrderDetail'}
-                    />
-                    <Paginator
-                        totalItems={this.state.itemCount}
-                        onChange={numberPage => this.handlerPagination(numberPage)}
-                        activePage={this.state.page}
-                        disabled={false}
-                        itemsPerPage={this.state.itemsPerPage}
-                        buttonStyles={
-                            {
-                                backgroundColor: '#F3F9FA',
-                                color: '#156869',
-                                borderColor: '#156869',
+                <PickerCalpulliX
+                    data={this.state.purchaseOrderStatus}
+                    updateState={this.updateStateStatus}
+                    placeholder={'Seleccione un estatus'}
+                    functionClearPicker={this.setFunctionClearPickerStatus} />
+                <View style={{ flexDirection: 'row', }}>
+                    <DatePicker
+                        style={{ width: 160, marginTop: 20, }}
+                        date={this.state.date}
+                        mode="date"
+                        placeholder="Select date"
+                        format="YYYY-MM-DD"
+                        minDate="1970-01-01"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        customStyles={{
+                            dateIcon: {
+                                marginTop: 12,
+                                position: 'absolute',
+                                left: 0,
+                                top: 9,
+                                marginLeft: 53,
+                                width: 20,
+                                height: 20
+                            },
+                            dateInput: {
+                                marginTop: 20,
+                                marginLeft: 55,
+                                borderRadius: 5,
+                                borderWidth: 0.5,
+                                borderColor: '#F49315',
+                                backgroundColor: '#FDFDFD',
                             }
-                        }
-                        buttonActiveStyles={{
-                            backgroundColor: '#05AAAB',
-                            color: '#F3F9FA',
-                            borderColor: '#05AAAB'
-                        }} />
+                        }}
+                        onDateChange={(date) => { this.setState({ date: date }) }} />
+                    <DatePicker
+                        style={{ width: 160, marginTop: 20, }}
+                        date={this.state.endDate}
+                        mode="date"
+                        placeholder="Select date"
+                        format="YYYY-MM-DD"
+                        minDate="1970-01-01"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        customStyles={{
+                            dateIcon: {
+                                marginTop: 12,
+                                position: 'absolute',
+                                left: 0,
+                                top: 9,
+                                marginLeft: 53,
+                                width: 20,
+                                height: 20
+                            },
+                            dateInput: {
+                                marginTop: 20,
+                                marginLeft: 55,
+                                borderRadius: 5,
+                                borderWidth: 0.5,
+                                borderColor: '#F49315',
+                                backgroundColor: '#FDFDFD',
+                            }
+                        }}
+                        onDateChange={(date) => { this.setState({ endDate: date }) }} />
                 </View>
+
+                <ButtonCalpulliX
+                    title={'Buscar'}
+                    id={'buttonSearchPurchaseOrder'}
+                    arrayColors={['#05AAAB', '#048585', '#048585']}
+                    onPress={this.getPurchaseOrderFilters}
+                    width={'30%'}
+                    height={40}
+                    marginTop={20}
+                    marginBottom={0} />
+
+                <AccordionCalpulliX
+                    content={this.state.purchaseOrderList}
+                    labels={labels}
+                    port={CONSTANTS.PORT_PURCHASE_ORDER}
+                    navigation={this.props.parentProps.navigation}
+                    renderDetailButton={true}
+                    renderInputText={true}
+                    titleButton={'Ver detalle'}
+                    margintTop={10}
+                    labelHeader={'Id de la orden de compra  '}
+                    marginLeftRowHeader={'35%'}
+                    path={'/calpullix/retrieve/purchaseorder/detail'}
+                    screen={'PurchaseOrderDetail'}
+                />
+                <Paginator
+                    totalItems={this.state.itemCount}
+                    onChange={numberPage => this.handlerPagination(numberPage)}
+                    activePage={this.state.page}
+                    disabled={false}
+                    itemsPerPage={this.state.itemsPerPage}
+                    buttonStyles={
+                        {
+                            backgroundColor: '#F3F9FA',
+                            color: '#156869',
+                            borderColor: '#156869',
+                        }
+                    }
+                    buttonActiveStyles={{
+                        backgroundColor: '#05AAAB',
+                        color: '#F3F9FA',
+                        borderColor: '#05AAAB'
+                    }} />
+            </View>
         );
     }
 }

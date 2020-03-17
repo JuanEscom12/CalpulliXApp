@@ -11,17 +11,17 @@ var navigate;
 
 const labels =
 {
-    "Tipo de cliente": "customerType",
-    'Edad': 'age',
-    'Entidad Federativa': 'state',
-    'Consumo promedio mensual': 'averageExpenditure',
-    'Sexo': 'sex',
-    'Estado Civil': 'maritalStatus',
-    'Producto mas comprado': 'preferredItem',
-    'Clasificación del producto': 'itemClassification',
-    'Departamento del producto': 'department',
-    'Tipo de pago': 'paymentMethod',
-    'Banco del cliente': 'bank',
+    'Edad promedio:': 'age',
+    'Entidad federativa con mayor peso:': 'state',
+    'Consumo promedio mensual en promociones:': 'averagePromotions',
+    'Distribución de género:': 'sex',
+    'Promoción mas recurrente:': 'preferredPromotion',
+    'Artículo:': 'preferredItem',
+    'Precio de venta del artículo:': 'salePriceItem',
+    'Precio de compra del artículo:': 'purchasePriceItem',
+    'Vigencia de la promoción:': 'lifePromotion',
+    'Clasificación del producto:': 'itemClassification',
+    'Departamento del producto:': 'department'
 };
 
 buildTabDetail = (profileObject) => {
@@ -46,9 +46,10 @@ buildTabDetail = (profileObject) => {
     } else {
         backgroundButton = '#F3F9FA';
     }
-    result.push(<View style={[styles.scene]} >
+    result.push(
+    <View style={[styles.scene]} >
         {detail}
-        <View style={{ backgroundColor: backgroundButton, height: '100%' }}>
+        <View style={{ backgroundColor: backgroundButton, height: 100 }}>
         <ButtonCalpulliX
             title={'Elegir promociones'}
             id={'buttonDetailPromotions'}
@@ -57,7 +58,7 @@ buildTabDetail = (profileObject) => {
             width={'40%'}
             height={40}
             marginTop={15}
-            marginBottom={10} />
+            marginBottom={50} />
         </View>
     </View>);
     return result;
@@ -87,6 +88,7 @@ showPromotions = async (_idProfile) => {
 getImagesPromotionRequest = (_idProfile) => {
     const request = {
         'idProfile': _idProfile,
+        'page': 1,
     };
     console.log(':: Request Detail ', request);
     return request;
@@ -94,9 +96,9 @@ getImagesPromotionRequest = (_idProfile) => {
 
 const TabPromotionsFunc = (props) => {
     const [index, setIndex] = React.useState(0);
-    const renderTabBar = props2 => (
+    const renderTabBar = tabBarProps => (
         <TabBar
-            {...props2}
+            {...tabBarProps}
             indicatorStyle={{ backgroundColor: '#05AAAB' }}
             style={[styles.tabBar]}
             labelStyle={{ color: 'black', fontSize: 9 }} />

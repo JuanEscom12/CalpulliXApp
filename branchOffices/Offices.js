@@ -8,248 +8,253 @@ import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
 import {
     StyleSheet,
     View,
-    Text
+    Text,
+    Image
 } from 'react-native';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import CONSTANTS from '../common/Constants';
+import { NavigationEvents } from 'react-navigation';
+import Carousel from 'react-native-snap-carousel';
+import Paginator from 'react-native-paginator';
 
-
-/* Quitar al solucionar bug TypeError: Network request failed*/
-
-const dummyBestBranch = {
-    "branch": [
-        {
-            "id": 0,
-            "content": "\nLatitud                                                19.349106\n\nLongitud                                               -99.0942395\n\nTotal de ventas                                         9.0942395\n\nTotal de perdidas                                       99.0942395\n\nBalance                                                 23.90\n",
-            "balance": 10,
-            "latitude": "19.349106",
-            "longitude": "-99.0942395",
-            "totalLosses": 10,
-            "totalSales": 10
-        },
-        {
-            "id": 1,
-            "content": "\nLatitud                                                19.349106\n\nLongitud                                               -99.0942395\n\nTotal de ventas                                         9.0942395\n\nTotal de perdidas                                       99.0942395\n\nBalance                                                 23.90\n",
-            "balance": 10,
-            "latitude": "19.349106",
-            "longitude": "-99.0942395",
-            "totalLosses": 10,
-            "totalSales": 10
-        },
-        {
-            "id": 2,
-            "content": "\nLatitud                                                19.349106\n\nLongitud                                               -99.0942395\n\nTotal de ventas                                         9.0942395\n\nTotal de perdidas                                       99.0942395\n\nBalance                                                 23.90\n",
-            "balance": 10,
-            "latitude": "19.349106",
-            "longitude": "-99.0942395",
-            "totalLosses": 10,
-            "totalSales": 10
-        },
-        {
-            "id": 3,
-            "content": "\nLatitud                                                19.349106\n\nLongitud                                               -99.0942395\n\nTotal de ventas                                         9.0942395\n\nTotal de perdidas                                       99.0942395\n\nBalance                                                 23.90\n",
-            "balance": 10,
-            "latitude": "19.349106",
-            "longitude": "-99.0942395",
-            "totalLosses": 10,
-            "totalSales": 10
-        },
-        {
-            "id": 4,
-            "content": "\nLatitud                                                19.349106\n\nLongitud                                               -99.0942395\n\nTotal de ventas                                         9.0942395\n\nTotal de perdidas                                       99.0942395\n\nBalance                                                 23.90\n",
-            "balance": 10,
-            "latitude": "19.349106",
-            "longitude": "-99.0942395",
-            "totalLosses": 10,
-            "totalSales": 10
-        }
-    ]
+const branchesInformation = {
+    "name": "Nombre",
+    "manager": "Gerente",
+    "address": "Dirección",
+    "contact": "Contacto",
+    "state": "Estado",
+    "municipality": "Municipio",
+    "postalCode": "Código Postal",
+    "region": "Región",
+    "numberEmployes": "Número de empledaos",
+    "periodPayroll": "Nómina Mensual",
+    "periodIsr": "I.S.R. mensual",
+    "monthlyRent": "Renta mensual",
+    "periodDeductions": "Deducciones del periodo",
+    "periodPurchases": "Compras del periodo",
+    "periodSales": "Ventas del periodo",
+    "periodLosses": "Merma del periodo",
+    "periodThefts": "Perdidas del periodo",
+    "periodBalance": "Balance del periodo",
+    "periodServices": "Servicios de internet y teléfono del periodo",
+    "periodMaintenance": "Total de mantenimiento del periodo",
+    "periodElectricity": "Servicio de electricidad del periodo",
 };
-
-
-const dummyBranchSearched = {
-    "id": 1,
-    "content": "\nLatitud                                                19.349106\n\nLongitud                                               -99.0942395\n\nTotal de ventas                                        9.0942395\n\nTotal de perdidas                                      99.0942395\n\nBalance                                                23.90\n",
-    "balance": 10,
-    "latitude": "19.349106",
-    "longitude": "-99.0942395",
-    "totalLosses": 10,
-    "totalSales": 10
-}
 
 export default class Offices extends PureComponent {
 
     constructor(props) {
-        // Call API.
         super(props);
         this.state = {
             errorMessage: '',
-            officeName: '',
-            year: '',
-            month: '',
             officesList: [],
-            regions: this.getInitialRegion(),
-            markers: this.getInitialMarkers(),
-            // Initial Branch Name, 
-            // Initial Branch Address 
+            region: null,
+            markers: null,
+
+            imagesReferenceCarousel: [],
+            imagesCarousel: [],
+
+            year: null,
+            month: null,
+            branchId: null,
+
+            itemCount: 0,
+            page: 1,
+            itemsPerPage: 5,
         };
-        this.doSearch = this.doSearch.bind(this);
+        this.getOffices(this.getBranchrequest(CONSTANTS.ONE));
     }
 
-    getInitialMarkers() {
-        return [
-            { latitude: 19.53, longitude: -99.10 },
-            { latitude: 19.43, longitude: -99.10 },
-            { latitude: 19.33, longitude: -99.12 },
-        ];
-    }
-
-
-    getInitialRegion() {
-        return {
-            latitude: 19.39623,
-            longitude: -99.03682,
-            longitudeDelta: 1,
-            latitudeDelta: 1,
-        }
-    }
-
-    componentDidMount() {
-        this.getBestOffices(null);
-    }
-
-    getBestOffices = async (e) => {
-        /*var sucessfullCall = true;
-        const response = await ApiCaller.callApiGET('/calpullix/best/branch',
-            null, CONSTANTS.PORT_BRANCH, CONSTANTS.GET_METHOD
-        ).catch( (error) => {
+    getOffices = async (_request) => {
+        const response = await ApiCaller.callApi('/calpullix/branch/retrieve',
+            _request, CONSTANTS.PORT_BRANCH, CONSTANTS.POST_METHOD
+        ).catch((error) => {
             console.log(error);
-            sucessfullCall = false;
             this.setState({
-                errorMessage:'Ocurrió un error al comunicarse con el servidor, intenta más rarde'
+                errorMessage: 'Ocurrio un error, favor de intentar mas tarde'
             });
         });
-        if(sucessfullCall){
-                this.setState({ officesList: response.branch});
-        }*/
-        this.setState({
-            officesList: dummyBestBranch.branch,
-        });
-
-    }
-
-    getRegionOfBranch(branch) {
-        const coords = {
-            latitude: Number(branch.latitude),
-            longitude: Number(branch.longitude),
-            longitudeDelta: 1,
-            latitudeDelta: 1,
-        };
-        return coords;
-    }
-
-    getMarkerOfBranch(branch) {
-
-        const marker = {
-            latitude: Number(branch.latitude),
-            longitude: Number(branch.longitude),
-        };
-
-        return marker;
-    }
-
-
-
-    doSearch = async (e) => {
-        if (this.isValidOfficeSearch()) {
-            /* const response = await ApiCaller.callApi('/calpullix/branch', 
-                this.getSearchBranchRequest(), CONSTANTS.PORT_BRANCH, CONSTANTS.POST_METHOD)
-                .catch((error) => {
-                console.log(error);
-                this.setState({
-                    errorMessage: 'Ocurrio un error, intenta más tarde'
-                })
-            });
-            if(response.isValid){
-                //Renderizar resultado en componente acordeon
-                this.setState({
-                    officesList : response
-                });
-            }*/
-            this.clearSearch();
+        if (response.branches.length > CONSTANTS.ZERO) {
             this.setState({
-                officesList: [dummyBranchSearched],
-                regions: this.getRegionOfBranch(dummyBranchSearched),
-                markers: [this.getMarkerOfBranch(dummyBranchSearched)],
+                officesList: response.branches,
+                region: this.getRegion(response),
+                markers: this.getMarkers(response),
+                imagesReferenceCarousel: this.getImagesReferenceCarousel(response),
+                imagesCarousel: this.getImagesCarousel(response),
+                itemCount: response.itemCount,
+                errorMessage: '',
+            });
+        } else {
+            this.setState({
+                officesList: [],
+                region: null,
+                markers: null,
+                imagesReferenceCarousel: [],
+                imagesCarousel: [],
+                itemCount: 0,
             });
         }
     }
 
-    handlerSearchInput = (_State) => {
-        this.setState({
-            officeName: _State.officeNameText,
-            year: _State.yearText,
-            month: _State.monthText,
-        });
-    }
-
-    getSearchBranchRequest() {
-        const { officeName, year, month } = this.state;
-        const request = {
-            "name": officeName,
-            "year": year,
-            "month": month
-        };
-        return request;
-    }
-
-    isValidOfficeSearch() {
-        const { year, month, officeName } = this.state;
-        if ((year != '' || month != '') && officeName === '') {
-            this.setState({
-                errorMessage: 'El nombre de la oficina es requerido también.'
+    getImagesReferenceCarousel = (_response) => {
+        var result = [];
+        for (var index = 0; index < _response.branches.length; index++) {
+            result.push({
+                title: _response.branches[index].name,
             });
-            return false;
-        } else
-            if ((year === '' && month === '') && officeName === '') {
-                this.setState({
-                    errorMessage: 'El nombre de la sucursal es requerido.'
-                });
-                return false;
-            } else {
-                return true;
-            }
+        }
+        return result;
     }
 
-    clearSearch = () => {
+    getImagesCarousel = (_response) => {
+        var result = [];
+        for (var index = 0; index < _response.pictures.length; index++) {
+            result.push(CONSTANTS.PREFIX_BASE64 + _response.pictures[index]);
+        }
+        return result;
+    }
+
+    getBranchrequest = (_page) => {
+        return {
+            "page": _page
+        };
+    }
+
+    getRegion = (_responseApi) => {
+        return {
+            latitude: Number(_responseApi.latitudeRegion),
+            longitude: Number(_responseApi.longitudeRegion),
+            longitudeDelta: 1,
+            latitudeDelta: 1,
+        };
+    }
+
+    getMarkers = (_responseApi) => {
+        var result = [];
+        for (var index = 0; index < _responseApi.markers.length; index++) {
+            var marker = {
+                latitude: Number(_responseApi.markers[index].latituide),
+                longitude: Number(_responseApi.markers[index].longitude)
+            };
+            result.push(
+                <MapView.Marker key={index} coordinate={marker} title={_responseApi.markers[index].name}
+                    description={_responseApi.markers[index].address} />
+            );
+        }
+        return result;
+    }
+
+    cleanInput = () => {
+        if (this.props.navigation.state.params &&
+            this.props.navigation.state.params.navigateFromMenu) {
+            this.getOffices(this.getBranchrequest(CONSTANTS.ONE));
+            this.setState({
+                year: null,
+                month: null,
+                branchId: null,
+                page: 1,
+            });
+        }
+    }
+
+    _renderItem = ({ item, index }) => {
+        return (
+            <View style={{
+                backgroundColor: 'transparent', height: 140, width: 310,
+                marginLeft: 'auto', marginRight: 'auto', marginBottom: 30,
+                borderWidth: 0, marginTop: 15,
+            }}>
+                <Image
+                    style={{
+                        height: 110,
+                        width: 310,
+                        borderWidth: 1,
+                        borderColor: '#746F6F',
+                        resizeMode: 'stretch',
+                        borderWidth: 0.5,
+                        borderColor: '#F6A338',
+                    }}
+                    source={{ uri: this.state.imagesCarousel[index] }} />
+                <View style={{ backgroundColor: '#4C4C4C', height: 30, width: 310, }}>
+                    <Text style={{
+                        fontSize: 10,
+                        color: 'white',
+                        top: 5,
+                        textAlign: 'center',
+                    }} >
+                        {item.title}
+                    </Text>
+                </View>
+            </View>
+        );
+    }
+
+    handleSnapToItem(index) {
+        console.log("snapped to ", index)
+    }
+
+
+    setYear = (_year) => {
         this.setState({
-            officeName: '',
-            year: '',
-            month: '',
+            year: _year,
         });
     }
+
+    setMonth = (_month) => {
+        this.setState({
+            month: _month,
+        });
+    }
+
+    setBranchId = (_branchId) => {
+        this.setState({
+            branchId: _branchId,
+        });
+    }
+
+    handlerPagination = (numberPage) => {
+        this.setState({
+          page: numberPage,
+        });
+        this.getOffices(this.getPaginatorRequest(numberPage));
+    }
+
+      getPaginatorRequest = (_page) => {
+        var result =  {
+            "id": this.state.branchId,
+            "year": this.state.year,
+            "month": this.state.month,
+            "page": _page,
+          };
+          return result;
+      }
+
 
     render() {
-        const { officesList } = this.state;
-        let branchMarkers = this.state.markers.map((marker, index) => {
-            return <MapView.Marker key={index} coordinate={marker} title={'Nombre de la sucursal'} description={'Direccion'} />;
-        });
+        const { officesList, markers } = this.state;
+
         return (
-            <BackgroundScrollCalpulliX addHeight={800}>
+            <BackgroundScrollCalpulliX addHeight={2100}>
                 <View >
                     <HeaderCalpulliXBack
-                         title={'Sucursales'} />
+                        title={'Sucursales'} />
+                    <NavigationEvents onWillFocus={() => {
+                        this.cleanInput();
+                    }} />
                     <Text
                         id='errorMessage'
-                        style={stylesCommon.errorMessage}>
+                        style={[stylesCommon.errorMessage, { marginTop: 5 }]}>
                         {this.state.errorMessage}
                     </Text>
                     <SearchingOffice
-                        doSearch={(e) => this.doSearch(e)}
-                        handlerSearchInput={this.handlerSearchInput}
-                        cleanSearch={this.cleanSearch}
-                        marginTop={10}
-                    />
+                        doSearch={this.getOffices}
+                        marginTop={5}
+                        navigationParent={this.props.navigation}
+                        setYear={this.setYear}
+                        setMonth={this.setMonth}
+                        setBranchId={this.setBranchId}
+                        page={this.state.page} />
+
                     <View style={{
                         borderWidth: 0.2,
                         borderColor: 'grey',
@@ -257,30 +262,53 @@ export default class Offices extends PureComponent {
                         marginLeft: 10,
                         marginBottom: 20,
                     }} />
-                    <Text style={[stylesCommon.headerText]} style={{ fontSize: 20, marginLeft: '5%', color: '#F49315' }}>Resultados</Text>
+                    <Text style={[stylesCommon.headerText]} style={{ fontSize: 16, marginLeft: '5%', color: '#F49315' }}>
+                        Sucursales
+                    </Text>
                     <ResultOffices
-                        labelNames={
-                            { "balance": "Balance", "latitude": "Latitud", "longitude": "Longitud", "totalLosses": "Pérdidas Totales", "totalSales": "Ventas Totales" }}
-                        officesList={officesList}
-                    />
+                        labelNames={branchesInformation}
+                        officesList={officesList} />
+
+                    <Paginator
+                        totalItems={this.state.itemCount}
+                        onChange={numberPage => this.handlerPagination(numberPage)}
+                        activePage={this.state.page}
+                        disabled={false}
+                        itemsPerPage={this.state.itemsPerPage}
+                        buttonStyles={
+                            {
+                                backgroundColor: '#F3F9FA',
+                                color: '#156869',
+                                borderColor: '#156869',
+                            }
+                        }
+                        buttonActiveStyles={{
+                            backgroundColor: '#05AAAB',
+                            color: '#F3F9FA',
+                            borderColor: '#05AAAB'
+                        }} />
+
+                    <Carousel
+                        ref={(c) => { this._carousel = c; }}
+                        data={this.state.imagesReferenceCarousel}
+                        renderItem={this._renderItem.bind(this)}
+                        onSnapToItem={this.handleSnapToItem.bind(this)}
+                        sliderWidth={350}
+                        itemWidth={320}
+                        firstItem={0}
+                        layout={'tinder'} />
+
 
                     <View style={styles.container}>
                         <MapView
                             provider={PROVIDER_GOOGLE}
                             style={styles.map}
-                            region={{
-                                latitude: 37.78825,
-                                longitude: -122.4324,
-                                latitudeDelta: 0.015,
-                                longitudeDelta: 0.0121,
-                            }}
-                            region={this.state.regions}
+                            region={this.state.region}
                             zoomEnabled={true}
-                            minZoomLevel={11} >
-                            {branchMarkers}
+                            minZoomLevel={10} >
+                            {markers}
                         </MapView>
                     </View>
-
                 </View>
             </BackgroundScrollCalpulliX>
         );
@@ -298,6 +326,7 @@ const styles = StyleSheet.create({
         height: 400,
         borderColor: '#F49315',
         borderWidth: 0.5,
+
     },
     map: {
         position: 'absolute',
@@ -307,5 +336,6 @@ const styles = StyleSheet.create({
         bottom: 0,
         width: '100%',
         height: '100%',
+
     },
 });

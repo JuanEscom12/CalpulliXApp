@@ -10,7 +10,7 @@ export default class CalpulliXTable extends PureComponent {
 
     
     render() {
-        const { headers, data, marginTop, textStyle } = this.props;
+        const { headers, data, marginTop, textStyle, width, marginLeft, backgroundColorView, backgroundColorRows } = this.props;
         var textStyleRow;
         if (textStyle) {
             textStyleRow = textStyle;
@@ -18,8 +18,12 @@ export default class CalpulliXTable extends PureComponent {
             textStyleRow = style.textTable;
         }
         return (
-            <View style={[style.containerTable, { marginTop: marginTop }]}>
-                <Table style={{ borderRadius: 5, }} borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
+            <View style={[style.containerTable, { 
+                    marginTop: marginTop, 
+                    width: width ? width : '90%', 
+                    marginLeft: marginLeft ? marginLeft: 'auto', backgroundColor: backgroundColorView ? backgroundColorView : '' }]}>
+                <Table style={{ borderRadius: 5, backgroundColor : backgroundColorRows ? backgroundColorRows : 'white' }} 
+                                borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
                     <Row data={headers} style={style.headTable} textStyle={style.textTable} />
                     <Rows data={data} textStyle={textStyleRow} />
                 </Table>

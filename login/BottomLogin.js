@@ -13,7 +13,7 @@ export default class BottomLogin extends PureComponent {
       duration: 0,
       isFullScreen: false,
       isLoading: false,
-      paused: false,
+      paused: true,
       playerState: PLAYER_STATES.PAUSED,
       screenType: 'content',
     };
@@ -72,16 +72,14 @@ export default class BottomLogin extends PureComponent {
       <View style={styles.container}>
         <Video
           onEnd={this.onEnd}
-          
           onProgress={this.onProgress}
           paused={this.state.paused}
           ref={videoPlayer => (this.videoPlayer = videoPlayer)}
           resizeMode={this.state.screenType}
           onFullScreen={this.state.isFullScreen}
-          source={require('./Video_Test_React.mov')}
+          source={require('./Retail.mp4')}
           style={styles.mediaPlayer}
-          volume={10}
-        />
+          volume={10} />
         <MediaControls
           duration={this.state.duration}
           isLoading={this.state.isLoading}
@@ -92,8 +90,7 @@ export default class BottomLogin extends PureComponent {
           onSeek={this.onSeek}
           onSeeking={this.onSeeking}
           playerState={this.state.playerState}
-          progress={this.state.currentTime}
-        />
+          progress={this.state.currentTime} />
       </View>
     );
   }

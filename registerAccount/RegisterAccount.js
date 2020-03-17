@@ -5,8 +5,13 @@ import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import stylesCommon from '../common/style';
 import ButtonCalpulliX from '../common/ButtonCalpulliX';
 import ApiCaller from '../api/ApiCaller';
+import Validator from '../validation/Validator';
 import { NavigationEvents } from 'react-navigation';
 import CONSTANTS from '../common/Constants';
+
+const emailRegExp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+const cellPhoneRegExp = /^\d{10}$/;
+const idRegexp = /^\d/;
 
 export default class RegisterAccount extends PureComponent {
 
@@ -153,7 +158,7 @@ export default class RegisterAccount extends PureComponent {
                 });
             } else {
                 this.setState({
-                    errorMessage: 'Ocurrio un error, favor de intentar mas tarde.'
+                    errorMessage: 'El usuario que estas tratando de registrar no es valido.'
                 })
             }
         }
@@ -161,31 +166,31 @@ export default class RegisterAccount extends PureComponent {
 
     isValidInput() {
         result = true;
-        if (this.state.userText === '') {
+        if (Validator.isEmpty(this.state.userText)) {
             this.setState({
                 borderColorUserTextInput: '#F03000',
             });
             result = false;
         }
-        if (this.state.nameText === '') {
+        if (Validator.isEmpty(this.state.nameText)) {
             this.setState({
                 borderColorNameTextInput: '#F03000',
             });
             result = false;
         }
-        if (this.state.lastNameText === '') {
+        if (Validator.isEmpty(this.state.lastNameText)) {
             this.setState({
                 borderColorLastNameTextInput: '#F03000',
             });
             result = false;
         }
-        if (this.state.emailText === '') {
+        if (Validator.isEmpty(this.state.emailText)) {
             this.setState({
                 borderColorEmailTextInput: '#F03000',
             });
             result = false;
         }
-        if (this.state.phoneText === '') {
+        if (Validator.isEmpty(this.state.phoneText)) {
             this.setState({
                 borderColorPhoneTextInput: '#F03000',
             });
@@ -196,13 +201,34 @@ export default class RegisterAccount extends PureComponent {
                 errorMessage: 'Todos los campos son requeridos.',
                 headText: "Regístrate",
             });
+        } else if (!Validator.isValidRegExp(this.state.userText, idRegexp, false)) {
+            this.setState({
+                borderColorUserTextInput: '#F03000',
+                errorMessage: 'Introduce un Id de usuario valido.',
+                headText: "Regístrate",
+            });
+            result = false;
+        } else if (!Validator.isValidRegExp(this.state.emailText, emailRegExp, false)) {
+            this.setState({
+                borderColorEmailTextInput: '#F03000',
+                errorMessage: 'Introduce un email valido.',
+                headText: "Regístrate",
+            });
+            result = false;
+        } else if (!Validator.isValidRegExp(this.state.phoneText, cellPhoneRegExp, false)) {
+            this.setState({
+                borderColorPhoneTextInput: '#F03000',
+                errorMessage: 'Introduce un teléfono valido.',
+                headText: "Regístrate",
+            });
+            result = false;
         }
         return result;
     }
 
     getRegisterUserRequest() {
         const request = {
-            "user": this.state.userText,
+            "id": this.state.userText,
             "name": this.state.nameText,
             "lastName": this.state.lastNameText,
             "email": this.state.emailText,
@@ -250,7 +276,7 @@ export default class RegisterAccount extends PureComponent {
                     <Text
                         id='errorMessageUserRegister'
                         style={stylesCommon.errorMessage}>{this.state.errorMessage}</Text>
-                    <Text style={[stylesCommon.labelText, { marginTop: 5, fontSize: 15 }]}>
+                    <Text style={[stylesCommon.labelText, { marginTop: 5, fontSize: 15, color: '#F6A338' }]}>
                         {this.state.headText}
                     </Text>
                     <TextInput

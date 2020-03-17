@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import {
   View,
-  Text
+  Text,
 } from 'react-native';
 import TopLogin from './TopLogin';
 import MiddleLogin from './MiddleLogin';
@@ -12,9 +12,11 @@ import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import styles from './style'
 import stylesCommon from '../common/style'
 import CONSTANTS from '../common/Constants';
+import Validator from '../validation/Validator';
 
 var user = '';
 var pass = '';
+const idRegexp = /^\d/;
 
 export default class CalpulliX extends PureComponent {
 
@@ -35,10 +37,17 @@ export default class CalpulliX extends PureComponent {
             errorMessage: 'Ocurrio un error, favor de intentar mas tarde'
           })
         });
+      
       if (response.isValid) {
-        NavigatorCommons.navigateTo(this.props.navigation, 'ProductList');
+        this.setState({
+          errorMessage: ''
+        });
+        NavigatorCommons.navigateTo(this.props.navigation, 'ProductList', { 'navigateFromLogin': true });
+      } else {
+        this.setState({
+          errorMessage: 'El usuario o la contraseña son invalidos'
+        })
       }
-      this.cleanInput();
     }
   }
 
@@ -46,6 +55,11 @@ export default class CalpulliX extends PureComponent {
     if (user === '' || pass === '') {
       this.setState({
         errorMessage: 'El Usuario y Contraseña son requeridos'
+      });
+      return false;
+    } else if (!Validator.isValidRegExp(user, idRegexp, false)) {
+      this.setState({
+        errorMessage: 'Ingresa un Usuario valido'
       });
       return false;
     } else {
@@ -61,9 +75,14 @@ export default class CalpulliX extends PureComponent {
     return request;
   }
 
-  hanlderInput = (_State) => {
-    user = _State.userText;
-    pass = _State.passText;
+  hanlderInputUser = (_user) => {
+    //Alert.alert("::::::::::::: State User " + _State.userText + ":: PASS " + _State.passText);
+    user = _user;
+  }
+
+  hanlderInputPass = (_pass) => {
+    //Alert.alert("::::::::::::: State User " + _State.userText + ":: PASS " + _State.passText);
+    pass = _pass;
   }
 
   cleanInput = () => {
@@ -81,7 +100,8 @@ export default class CalpulliX extends PureComponent {
             id='errorMEssage'
             style={stylesCommon.errorMessage}>{this.state.errorMessage}</Text>
           <MiddleLogin doLogin={(e) => this.doLogin(e)}
-            hanlderInput={this.hanlderInput}
+            hanlderInputUser={this.hanlderInputUser}
+            hanlderInputPass={this.hanlderInputPass}
             marginTop={30}
             navigation={this.props.navigation}
             cleanInput={this.cleanInput} />

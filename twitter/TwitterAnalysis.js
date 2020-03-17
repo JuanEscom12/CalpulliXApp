@@ -44,27 +44,24 @@ export default class TwitterAnalysis extends PureComponent {
                 twitterDetail: twitterDetail,
             });
         } else {
+            twitterDetail.push(
+                <ButtonCalpulliX
+                    title={'Iniciar Análisis'}
+                    id={'buttonAnalysis'}
+                    arrayColors={['#05AAAB', '#048585', '#048585']}
+                    onPress={() => this.startAnalisis()}
+                    width={'35%'}
+                    height={38}
+                    marginTop={25}
+                    marginBottom={0} />
+            );
             this.setState({
-                twitterDetail: [],
+                twitterDetail: twitterDetail,
+                errorMessage: 'No se encontraron resultados.',
+
             });
         }
     }
-
-    startAnalisis = async () => {
-        const result = await ApiCaller.callApi('/calpullix/twitter/start-analysis',
-            this.getTwitterRequest(),
-            CONSTANTS.TWITTER_PORT, CONSTANTS.GET_METHOD)
-            .catch((error) => {
-                console.log(error);
-                this.setState({
-                    errorMessage: 'Ocurrio un error, favor de intentar mas tarde.',
-                });
-            });
-        if (result) {
-            Alert.alert("Se ha iniciado el análisis con éxito.");
-        }
-    }
-
 
     getProfileImage = (_perfilInfo) => {
         return (
@@ -124,11 +121,11 @@ export default class TwitterAnalysis extends PureComponent {
     }
 
     getPieChart = (_perfilInfo) => {
-        const width = Dimensions.get("window").width - 50;
+        const width = Dimensions.get("window").width - 20;
         var data = this.getGraphicData(_perfilInfo.graphic);
         return (
             <View style={{
-                marginTop: 10, marginLeft: '5%', backgroundColor: '#EDEDED', marginRight: '5%',
+                marginTop: 10, marginLeft: '2%', backgroundColor: '#EDEDED', marginRight: '2%',
                 borderWidth: 0.5, borderColor: '#4C4C4C', borderRadius: 3
             }} >
                 <PieChart
@@ -183,7 +180,6 @@ export default class TwitterAnalysis extends PureComponent {
         );
     }
 
-
     getGraphicData = (_graphic) => {
         var result = [];
         for (var index = 0; index < _graphic.length; index++) {
@@ -219,7 +215,8 @@ export default class TwitterAnalysis extends PureComponent {
     }
 
     cleanInput = () => {
-        if (this.props.navigation.state.params && this.props.navigation.state.params.navigateFromMenu) {
+        if (this.props.navigation.state.params && 
+            this.props.navigation.state.params.navigateFromMenu) {
             this.setState({
                 errorMessage: '',
             });
@@ -227,6 +224,21 @@ export default class TwitterAnalysis extends PureComponent {
             this.props.navigation.state.params.navigateFromMenu = false;
         }
 
+    }
+
+    startAnalisis = async () => {
+        const result = await ApiCaller.callApi('/calpullix/twitter/start-analysis',
+            this.getTwitterRequest(),
+            CONSTANTS.TWITTER_PORT, CONSTANTS.GET_METHOD)
+            .catch((error) => {
+                console.log(error);
+                this.setState({
+                    errorMessage: 'Ocurrio un error, favor de intentar mas tarde.',
+                });
+            });
+        if (result) {
+            Alert.alert("Se ha iniciado el análisis con éxito.");
+        }
     }
 
     render() {

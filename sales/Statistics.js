@@ -184,7 +184,6 @@ export default class Statistics extends PureComponent {
             </Text>
         );
         for (var index = 0; index < _responseApi.anovaDetail.length; index++) {
-            console.log('::::::::::::::::::::: ANOVA ', _responseApi.anovaDetail[index]);
             detail.push(
                 <Text style={{ fontSize: 11, marginTop: 5, fontWeight: 'bold' }} >
                     {_responseApi.anovaDetail[index].nameVariable}
@@ -221,7 +220,7 @@ export default class Statistics extends PureComponent {
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={1200}>
+            <BackgroundScrollCalpulliX addHeight={1250}>
                 <NavigationEvents
                     onWillFocus={() => {
                         this.cleanInput();

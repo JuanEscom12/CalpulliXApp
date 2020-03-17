@@ -14,14 +14,13 @@ export default class ClassifyButton extends Component {
         const {doProductClassification,marginTop, width} = this.props;
         return (
             <ButtonCalpulliX
-                title={'Clasificar'}
+                title={'Iniciar Proceso'}
                 id={'buttonSearch'}
                 arrayColors={['#05AAAB', '#048585', '#048585']}
                 onPress={doProductClassification}
                 width={width}
                 height={45}
-                marginTop={marginTop}
-            />
+                marginTop={marginTop} />
         );
     }
 }

@@ -13,28 +13,32 @@ import PurchaseOrderDetail from '../purchaseOrder/PurchaseOrderDetail';
 import ProfilePromotions from '../promotions/ProfilePromotions';
 import DetailPromotions from '../promotions/DetailPromotions';
 import Sales from '../sales/Sales';
-import Statistics  from '../sales/Statistics';
+import Statistics from '../sales/Statistics';
 import TwitterAnalysis from '../twitter/TwitterAnalysis';
 import Regression from '../regression/Regression';
+import ClassificationUsersDetail from '../userClassification/ClassificationUsersDetail';
 import { createAppContainer, createDrawerNavigator } from "react-navigation";
 
 const AppNavigator = createDrawerNavigator({
   Login: {
     screen: CalpulliX,
     navigationOptions: {
-      header: null
+      header: null,
+      drawerLockMode:'locked-closed',
     }
   },
   ForgotUserPassword: {
     screen: ForgotUserPassword,
     navigationOptions: {
-      header: null
+      header: null,
+      drawerLockMode:'locked-closed',
     }
   },
   RegisterAccount: {
     screen: RegisterAccount,
     navigationOptions: {
-      header: null
+      header: null,
+      drawerLockMode:'locked-closed',
     }
   },
   ProductList: {
@@ -57,6 +61,9 @@ const AppNavigator = createDrawerNavigator({
   },
   ClassifyUsers: {
     screen: Users,
+    navigationOptions: {
+      header: null,
+    },
   },
   ClientPromotions: {
     screen: CustomerPromotions,
@@ -103,15 +110,21 @@ const AppNavigator = createDrawerNavigator({
       header: null
     }
   },
-  Statistics : {
+  Statistics: {
     screen: Statistics,
+    navigationOptions: {
+      header: null
+    }
+  },
+  ClassificationUsersDetail: {
+    screen: ClassificationUsersDetail,
     navigationOptions: {
       header: null
     }
   }
 },
   {
-    initialRouteName: 'Sales',
+    initialRouteName: 'ClassifyUsers',
     contentComponent: SideMenu,
     drawerWidth: 300
   }

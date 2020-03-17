@@ -1,14 +1,13 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import styles from './SideMenu.style';
-import {NavigationActions} from 'react-navigation';
 import {Image, Text, View} from 'react-native';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import NavigatorCommons from '../navigation/NavigatorCommons';
 
 class SideMenu extends Component {
+
   navigateToScreen = (_route) => () => {
-    
     NavigatorCommons.navigateTo(this.props.navigation, _route, { 'navigateFromMenu': true });
   }
 
@@ -138,19 +137,6 @@ class SideMenu extends Component {
               <Text style={{marginTop: 15, marginBottom: 15, fontSize: 16, 
                 marginLeft: '5%'}} onPress={this.navigateToScreen('TwitterAnalysis')} >
                Analísis de Twitter
-              </Text>
-            </View>
-            <View style={[styles.sectionHeadingStyle]}>
-              <Image
-                        style={{ height: 25, width: 26, marginLeft: '5%', 
-                        marginTop: 15, transform: [
-                          { scaleX: 0.8 },
-                          { scaleY: 0.8 }
-                        ]}}
-                        source={require('./statistics.png')} />
-              <Text style={{marginTop: 15, marginBottom: 15, fontSize: 16, 
-                marginLeft: '5%'}} onPress={this.navigateToScreen('ProductList')} >
-                Estadisticas
               </Text>
             </View>
             <View style={[styles.sectionHeadingBottomStyle]}>

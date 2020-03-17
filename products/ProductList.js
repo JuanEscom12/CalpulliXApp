@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity, Alert } from 'react-native';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import { NavigationEvents } from 'react-navigation';
 import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
@@ -11,9 +11,12 @@ import Paginator from 'react-native-paginator';
 import ApiCaller from '../api/ApiCaller';
 import CommonAPI from '../api/CommonAPI';
 import CONSTANTS from '../common/Constants';
+import stylesAutoComplete from '../sales/styles';
+import Autocomplete from 'react-native-autocomplete-input';
 
 var functionClearPicker;
-const labels = ['Id', 'Descripcion', 'Marca', 'Status', 'Id de la sucursal'];
+const labels = ['Descripción', 'Nombre', 'Marca', 'Status', 'Sucursal', 'Precio venta',
+                'Promedio ventas mensuales', 'Promedio ventas diario', 'Gramaje'];
 
 export default class ProductList extends PureComponent {
 
@@ -28,6 +31,9 @@ export default class ProductList extends PureComponent {
       page: 1,
       itemsPerPage: 5,
       itemCount: 0,
+      dataProducts: [],
+      product: '',
+      hideResults: true,
     };
     this.getBranchList();
   }
@@ -40,14 +46,20 @@ export default class ProductList extends PureComponent {
           errorMessage: 'Ocurrio un error, favor de intentar mas tarde',
         });
       });
-    this.setState({
-      branches: result,
-    });
+    if (result) {
+      this.setState({
+        branches: result,
+      });
+    } else {
+      this.setState({
+        branches: [],
+      });
+    }
   }
 
   getItems = () => {
     if (this.isValidInput()) {
-      this.getProductList();
+      this.getProductList(CONSTANTS.ONE);
     } else {
       this.setState({
         errorMessage: 'El campo sucursal es requerido.',
@@ -59,9 +71,9 @@ export default class ProductList extends PureComponent {
     return this.state.branchId !== null;
   }
 
-  getProductList = async () => {
-    const result = await ApiCaller.callApi('/calpullix/product/detail/retrieve',
-      this.getProductListRequest(), CONSTANTS.PORT_PRODUCT_LIST, CONSTANTS.POST_METHOD)
+  getProductList = async (_numberPage) => {
+    const result = await ApiCaller.callApi('/calpullix/product/list/retrieve',
+      this.getProductListRequest(_numberPage), CONSTANTS.PORT_PRODUCT_LIST, CONSTANTS.POST_METHOD)
       .catch((error) => {
         console.log(error);
         this.setState({
@@ -76,10 +88,11 @@ export default class ProductList extends PureComponent {
     return result;
   }
 
-  getProductListRequest() {
+  getProductListRequest(_numberPage) {
     const request = {
-      'page': this.state.page,
-      'branchId': this.state.branchId.id
+      'page': _numberPage,
+      'branchId': this.state.branchId.id,
+      "product": this.state.product,
     };
     return request;
   }
@@ -89,11 +102,16 @@ export default class ProductList extends PureComponent {
     for (let i = 0; i < this.state.productListApi.length; i++) {
       var item = [];
       item.push(this.state.productListApi[i].id);
-      item.push(this.state.productListApi[i].name);
       item.push(this.state.productListApi[i].description);
+      item.push(this.state.productListApi[i].name);
       item.push(this.state.productListApi[i].brand);
       item.push(this.state.productListApi[i].status);
-      item.push(this.state.productListApi[i].branchId);
+      item.push(this.state.productListApi[i].branch);
+      item.push(this.state.productListApi[i].salePrice);
+      item.push(this.state.productListApi[i].monthlyAverageSales);
+      item.push(this.state.productListApi[i].dailyAverageSales);
+      item.push(this.state.productListApi[i].weight);
+      item.push();
       fields.push(item);
     }
     this.setState({
@@ -103,10 +121,23 @@ export default class ProductList extends PureComponent {
   }
 
   cleanInput = () => {
-    functionClearPicker();
-    this.setState({
-      branchId: null,
-    });
+    if (this.props.navigation.state.params && 
+        (this.props.navigation.state.params.navigateFromMenu || 
+         this.props.navigation.state.params.navigateFromLogin)) {
+      functionClearPicker();
+      this.setState({
+        errorMessage: '',
+        branchId: null,
+        dataProducts: [],
+        product: '',
+        hideResults: true,
+        itemCount: 0,
+        productList: [],
+      });
+      this.getBranchList();
+      this.props.navigation.state.params.navigateFromMenu = false;
+      this.props.navigation.state.params.navigateFromLogin = false;
+    } 
   }
 
   updateState = (_value) => {
@@ -123,12 +154,42 @@ export default class ProductList extends PureComponent {
     this.setState({
       page: numberPage,
     });
-    this.getProductList();
+    this.getProductList(numberPage);
+  }
+
+  handleAutoComplete = async (_nameIdProduct) => {
+    const response = await ApiCaller.callApi(
+      '/calpullix/product-name/retrieve', this.getProductNameRequest(_nameIdProduct),
+      CONSTANTS.PORT_PRODUCT_LIST, CONSTANTS.POST_METHOD)
+      .catch((error) => {
+        console.log(error);
+        this.setState({
+          errorMessage: 'Hubo un error favor de intentar mas tarde.',
+        });
+      });
+    console.log(':: TEXT ', _nameIdProduct, response.products);
+    if (response.products && response.products.length > CONSTANTS.ZERO) {
+      this.setState({
+        dataProducts: response.products,
+        hideResults: false,
+        errorMessage: '',
+      });
+    }
+    this.setState({
+      product: _nameIdProduct,
+    });
+  }
+
+  getProductNameRequest = (_nameIdProduct) => {
+    var request = {
+      name: _nameIdProduct
+    };
+    return request;
   }
 
   render() {
     return (
-      <BackgroundScrollCalpulliX addHeight={300}>
+      <BackgroundScrollCalpulliX addHeight={900}>
         <NavigationEvents
           onWillFocus={() => {
             this.cleanInput();
@@ -142,7 +203,7 @@ export default class ProductList extends PureComponent {
             id='errorMessageListItems'
             style={[stylesCommon.errorMessage, { marginTop: 5 }]}>{this.state.errorMessage}
           </Text>
-          <Text style={[stylesCommon.labelText, { marginTop: 5, marginRight: '70%', fontSize: 15 }]}>
+          <Text style={[stylesCommon.labelText, { marginTop: 5, marginRight: '70%', fontSize: 13 }]}>
             Sucursales
           </Text>
           <PickerCalpulliX
@@ -150,6 +211,47 @@ export default class ProductList extends PureComponent {
             updateState={this.updateState}
             placeholder={'Seleccione la sucursal'}
             functionClearPicker={this.setFunctionClearPicker} />
+
+          <Text style={[stylesCommon.labelText, { marginTop: 5, marginRight: '73%', fontSize: 13 }]}>
+            Producto
+          </Text>
+          <View style={{ marginTop: 5 }}>
+            <View style={[stylesAutoComplete.autocompleteContainer]} >
+              <Autocomplete
+                placeholder={'   Introduzca el producto'}
+                data={this.state.dataProducts}
+                defaultValue={this.state.product}
+                onChangeText={(text) => this.handleAutoComplete(text)}
+                hideResults={this.state.hideResults}
+                onBlur={() => this.setState({ hideResults: true })}
+                style={{
+                  borderWidth: 0,
+                  borderColor: '#F49315',
+                }}
+                inputContainerStyle={{
+                  borderColor: '#F49315', borderRadius: 5, 
+                  borderWidth: 0.5, backgroundColor: '#FDFDFD',
+                }}
+                renderItem={({ item, i }) => (
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      console.log(':: ON PRESS ', item)
+                      this.setState({ product: item, hideResults: true })
+                    }}>
+
+                    <Text style={{
+                      backgroundColor: '#FDFDFD',
+                      fontSize: 12,
+                      borderColor: '#F49315',
+                      borderWidth: 0.2,
+                    }}>{'\n  ' + item + '\n'}</Text>
+
+                  </TouchableOpacity>
+                )} />
+            </View>
+          </View>
+
           <ButtonCalpulliX
             title={'Buscar'}
             id={'buttonSearchItems'}
@@ -157,10 +259,11 @@ export default class ProductList extends PureComponent {
             onPress={this.getItems}
             width={'35%'}
             height={45}
-            marginTop={30} />
+            marginTop={70} />
           <AccordionCalpulliX
             content={this.state.productList}
-            path={'/calpullix/product/detail'}
+            requestParameter={this.state.branchId ? this.state.branchId.id : this.state.branchId}
+            path={'/calpullix/product/detail/retrieve'}
             port={CONSTANTS.PORT_PRODUCT_LIST}
             screen={'ProductDetail'}
             navigation={this.props.navigation}

@@ -13,8 +13,8 @@ export default class TopLogin extends PureComponent {
                         height: 84, marginLeft: 'auto', marginRight: 'auto',
                         marginTop: 40, width: '95%',
                         transform: [
-                            { scaleX: 0.8 },
-                            { scaleY: 0.8 }
+                            { scaleX: 0.7 },
+                            { scaleY: 0.7 }
                           ]
                     }}
                     source={require('./logo_CalpulliX.png')} />

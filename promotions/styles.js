@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     textDetail: {
-        marginLeft: 10, 
+        marginLeft: 20, 
         fontSize: 11,
     },
     tabBar: {
@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 5,
     },
     tabView: {
-        width: '90%', 
-        height: '10%', 
+        width: '100%', 
+        height: '100%',
         marginTop: 20, 
         marginBottom: 50,
         marginLeft: 'auto', 

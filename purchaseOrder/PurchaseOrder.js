@@ -11,7 +11,7 @@ export default class PurchaseOrder extends PureComponent {
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={500}>
+            <BackgroundScrollCalpulliX addHeight={700}>
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     title={"Ordenes de compra"} />

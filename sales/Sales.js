@@ -93,7 +93,9 @@ export default class Sales extends PureComponent {
     }
 
     cleanInput = () => {
-        if (this.props.navigation.state.params && this.props.navigation.state.params.navigateFromMenu) {
+        if (this.props.navigation.state.params && 
+            this.props.navigation.state.params.navigateFromMenu) {
+
             functionClearPickerBranches();
             functionClearPickerYears();
             functionClearPickerMonths();
@@ -113,6 +115,7 @@ export default class Sales extends PureComponent {
                 lineChart: [],
             });
             this.props.navigation.state.params.navigateFromMenu = false;
+            
         }
     }
 
@@ -281,7 +284,7 @@ export default class Sales extends PureComponent {
             <View style={{
                 backgroundColor: '#EDEDED', width: '100%'
             }} >
-                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto robo o extravío' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto robo/extravío' + ' \n'}</Text>
                 <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmmountStolePurchasePrice + ' (Compra), $' +
                     _response.totalAmmountStoleSalePrice + ' (Venta) \n'}</Text>
             </View>
@@ -589,7 +592,7 @@ export default class Sales extends PureComponent {
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={1620}>
+            <BackgroundScrollCalpulliX addHeight={1700}>
                 <NavigationEvents
                     onWillFocus={() => {
                         this.cleanInput();
@@ -597,7 +600,7 @@ export default class Sales extends PureComponent {
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     backButton={false}
-                    title={'Resumen de Ventas'} />
+                    title={'Detalle de Ventas'} />
                 <View style={{ marginTop: 0 }}>
                     <Text
                         id='errorMessageSales'
@@ -608,12 +611,13 @@ export default class Sales extends PureComponent {
                         data={this.state.branches}
                         updateState={this.updateState}
                         placeholder={'Seleccione la sucursal'}
-                        functionClearPicker={this.setFunctionClearPickerBranches} />
+                        functionClearPicker={this.setFunctionClearPickerBranches}  />
+
 
                     <View style={{ marginTop: 5 }}>
                         <View style={[styles.autocompleteContainer]} >
                             <Autocomplete
-                                placeholder={'   Seleccione el producto'}
+                                placeholder={'   Introduzca el producto'}
                                 data={this.state.dataProducts}
                                 defaultValue={this.state.product}
                                 onChangeText={(text) => this.handleAutoComplete(text)}
@@ -646,6 +650,7 @@ export default class Sales extends PureComponent {
                         </View>
                     </View>
 
+
                     <View style={{ marginTop: 60 }}>
                         <PickerCalpulliX
                             data={this.state.years}
@@ -663,11 +668,11 @@ export default class Sales extends PureComponent {
                     </View>
 
                     <ButtonCalpulliX
-                        title={'Buscar Ventas'}
+                        title={'Buscar'}
                         id={'buttonSales'}
                         arrayColors={['#05AAAB', '#048585', '#048585']}
                         onPress={() => this.findSales()}
-                        width={'35%'}
+                        width={'30%'}
                         height={38}
                         marginTop={10}
                         marginBottom={10} />

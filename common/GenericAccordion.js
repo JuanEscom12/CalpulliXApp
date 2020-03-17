@@ -58,15 +58,14 @@ export default class GenericAccordion extends PureComponent {
     collapsed: true,
   };
 
-
-
   openDetail = async () => {
-    /*console.log(':: ID VALUE: ' + idValue);
-    const response = await ApiCaller.callApi(this.props.path, this.getDetailRequest())
+    const response = await ApiCaller.callApi(
+      this.props.path, this.getDetailRequest(), this.props.port, 'POST')
       .catch((error) => {
         console.log(error);
-      });*/
-    NavigatorCommons.navigateTo(this.props.navigation, this.props.screen);
+      });
+    NavigatorCommons.navigateTo(this.props.navigation, this.props.screen,
+      { 'responseApi': response });
   }
 
   setSections = sections => {
@@ -89,11 +88,11 @@ export default class GenericAccordion extends PureComponent {
         duration={400}
         style={[accordionStyles.accordionHeader, (isActive ? accordionStyles.accordionActiveHeader : '')]}
         transition="backgroundColor" >
-        <Text style={accordionStyles.accordionHeaderText} style={{ color: (isActive ? '#FFFFFF' : '#000000') }}>{(headerLabel != null ? headerLabel : "") + " " + (section.id + 1)}</Text>
+        <Text style={accordionStyles.accordionHeaderText}
+          style={{ color: (isActive ? '#FFFFFF' : '#000000') }}>{(headerLabel != null ? headerLabel : "") + " " + (section.header)}</Text>
         <Image
-
           style={{
-            position: 'absolute', height: 25, width: 26, marginLeft: '90%', marginTop: '2%', transform: [
+            position: 'absolute', height: 17, width: 10, marginLeft: '90%', marginTop: '2%', transform: [
               { scaleX: 0.5 },
               { scaleY: 0.5 }
             ]
@@ -103,13 +102,6 @@ export default class GenericAccordion extends PureComponent {
     );
   };
 
-  /** Si se especifíca un objeto de labels para sustituir los nombres
-   *  de los atributos del json que renderiza el acordeón se realiza la búsqueda
-   *  del labelName que corresponde a la property indicada y se regresa dicho valor.
-   * 
-   *  Si no se define en las props el objeto labelNames entonces este método
-   *  regresará la property como labelName para renderizarla en la UI.
-   */
   getPropertyLabelName(property) {
     let labelName = property;
     const { labelNames } = this.props;
@@ -124,7 +116,7 @@ export default class GenericAccordion extends PureComponent {
     let rows = [];
     for (let property in object)
       if (!filteredProps.includes(property))
-        rows.push(this.getPropertyLabelName(property) + "\t \n" + object[property]);
+        rows.push(this.getPropertyLabelName(property) + "\t \n \n" + object[property]);
 
     return rows;
   }
@@ -133,6 +125,7 @@ export default class GenericAccordion extends PureComponent {
     let highlightRow = false;
     let filteredContent = this.mapObjectToRow(this.props.filteredProperties, section).map((row, index) => {
       highlightRow = !highlightRow;
+
       return (
         <Animatable.Text
           key={index}
@@ -152,8 +145,7 @@ export default class GenericAccordion extends PureComponent {
         <Animatable.View
           duration={50}
           style={[styles.content, isActive ? styles.active : styles.inactive]}
-          transition="backgroundColor"
-        >
+          transition="backgroundColor" >
           {filteredContent}
           <Animatable.View
             animation={isActive ? 'bounceIn' : undefined}
@@ -175,8 +167,7 @@ export default class GenericAccordion extends PureComponent {
         <Animatable.View
           duration={50}
           style={[styles.content, isActive ? styles.active : styles.inactive]}
-          transition="backgroundColor"
-        >
+          transition="backgroundColor" >
           {filteredContent}
         </Animatable.View>
       );
@@ -194,7 +185,7 @@ export default class GenericAccordion extends PureComponent {
 
     return (
       <View>
-        <View style={{ marginTop: 15, marginBottom: 15 }}>
+        <View style={{ marginTop: 10, marginBottom: 15 }}>
           <Accordion
             activeSections={activeSections}
             sections={content}

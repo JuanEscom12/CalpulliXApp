@@ -11,7 +11,9 @@ import ButtonCalpulliX from '../common/ButtonCalpulliX';
 import NavigatorCommons from '../navigation/NavigatorCommons';
 import ApiCaller from '../api/ApiCaller';
 import styles from './style';
+import { NavigationEvents } from 'react-navigation';
 idValue = 0;
+
 
 export default class AccordionCalpulliX extends PureComponent {
 
@@ -40,9 +42,18 @@ export default class AccordionCalpulliX extends PureComponent {
   };
 
   getDetailRequest = () => {
-    return {
-      "id": idValue
-    };
+    var result;
+    if (this.props.requestParameter) {
+      result = {
+        "id": idValue,
+        "parameter": this.props.requestParameter,
+      };
+    } else {
+      result = {
+        "id": idValue
+      };
+    }
+    return result;
   }
 
   renderHeader = (section, _, isActive) => {
@@ -96,7 +107,8 @@ export default class AccordionCalpulliX extends PureComponent {
       );
     }
   if (_renderDetailButton) {
-      return (<Animatable.View
+      return (
+      <Animatable.View
         duration={50}
         style={[_labels.length % 2 === 0 ? styles.content : styles.contentLight]}
         transition="backgroundColor" >
@@ -123,6 +135,12 @@ export default class AccordionCalpulliX extends PureComponent {
     }
   }
 
+  closeSections = () => {
+    this.setState({
+      //activeSections: [],
+    });
+  }
+
   render() {
     const { activeSections } = this.state;
     const {
@@ -137,6 +155,10 @@ export default class AccordionCalpulliX extends PureComponent {
     return (
       <View>
         <View style={{ marginTop: margintTop, marginBottom: 15 }}>
+        <NavigationEvents
+          onWillFocus={() => {
+            this.closeSections();
+          }} />
           <Accordion
             activeSections={activeSections}
             sections={content}

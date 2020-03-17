@@ -1,109 +1,56 @@
 import React, { Component } from 'react';
-import { View,Picker,Text,TextInput} from "react-native";
-import HeaderCalpulliX from "../common/HeaderCalpulliX";
-import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
-import stylesCommon from '../common/style';
+import { View, Text, Alert } from "react-native";
 import ButtonCalpulliX from '../common/ButtonCalpulliX';
-import  PickerCalpulliX  from '../common/PickerCalpulliX';
-
+import PickerCalpulliX from '../common/PickerCalpulliX';
+import { NavigationEvents } from 'react-navigation';
+import CommonAPI from '../api/CommonAPI';
 
 var functionClearPicker;
+var functionClearPickerYears;
+var functionClearPickerMonths;
 
-export default class OfficesForm extends Component{
+export default class OfficesForm extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
+            branches: [],
             borderColorTextInput: "#F49315",
             backgroundColorUserInput: '#FDFDFD',
-            yearText: '',
-            monthText:'',
-            officeNameText:'',
+            year: null,
+            month: null,
+            officeNameText: '',
+            branchId: null,
+            years: this.getYears(),
+            months: this.getMonths(),
         };
+        this.getBranchList();
     }
 
-    generateMonths = () =>{
-        return [
-            {
-                color:'#2660A4',
-                name:'Enero',
-                value:1
-            },
-            {
-                color:'#FF6B35',
-                name:'Febrero',
-                value:2
-            },
-            {
-                color:'#2660A4',
-                name:'Marzo',
-                value:3
-            },
-            {
-                color:'#FF6B35',
-                name:'Abril',
-                value:4
-            },
-            {
-                color:'#2660A4',
-                name:'Mayo',
-                value:5
-            },
-            {
-                color:'#FF6B35',
-                name:'Junio',
-                value:5
-            },
-            {
-                color:'#2660A4',
-                name:'Julio',
-                value:6
-            },
-            {
-                color:'#FF6B35',
-                name:'Julio',
-                value:7
-            },
-            {
-                color:'#2660A4',
-                name:'Agosto',
-                value:8
-            },
-            {
-                color:'#FF6B35',
-                name:'Septiembre',
-                value:9
-            },
-            {
-                color:'#2660A4',
-                name:'Octubre',
-                value:10
-            },
-            {
-                color:'#FF6B35',
-                name:'Noviembre',
-                value:11
-            },
-            {
-                color:'#2660A4',
-                name:'Diciembre',
-                value:12
-            },
-        ];
-    }
-
-    generateYears = () =>{
-        let currentYear = new Date().getFullYear();
-        let arrayYears = [];
-        const initialYear = 1970;
-        for(var i = initialYear; i <= currentYear; i++ ){
-            arrayYears.push({
-                color: (initialYear % 2 == 0 ? '#FF6B35' :'#2660A4'),
-                name:""+i,
-                value:i-initialYear+1,
-            });
+    getYears = () => {
+        var result = [];
+        var date = new Date();
+        for (var year = date.getFullYear(); year >= date.getFullYear() - 40; year--) {
+            result.push({ id: year, name: year });
         }
-        return arrayYears;
+        return result;
+    }
+
+    getMonths = () => {
+        var result = [];
+        result.push({ id: 1, name: 'Enero' });
+        result.push({ id: 2, name: 'Febrero' });
+        result.push({ id: 3, name: 'Marzo' });
+        result.push({ id: 4, name: 'Abril' });
+        result.push({ id: 5, name: 'Mayo' });
+        result.push({ id: 6, name: 'Junio' });
+        result.push({ id: 7, name: 'Julio' });
+        result.push({ id: 8, name: 'Agosto' });
+        result.push({ id: 9, name: 'Septiembre' });
+        result.push({ id: 10, name: 'Octubre' });
+        result.push({ id: 11, name: 'Noviembre' });
+        result.push({ id: 12, name: 'Diciembre' });
+        return result;
     }
 
     handleOnFocus = () => {
@@ -120,100 +67,180 @@ export default class OfficesForm extends Component{
         })
     }
 
-    handleChangeOfficeText = (text) => {
-        this.setState({
-            officeNameText: text,
-        });
-        this.props.handlerSearchInput(this.state);
-    }
 
-    handleSelectedYearChanged = (value) =>{
-        this.setState({
-            yearText:value
-        });
-        this.props.handlerSearchInput(this.state);
-    }
-
-    handleSelectedMonthChanged = (value) => {
-        this.setState({
-            monthText:value
-        });
-        this.props.handlerSearchInput(this.state);
+    setFunctionClearPickerYears = (_clear) => {
+        functionClearPickerYears = _clear;
     }
 
     setFunctionClearPicker = (_clear) => {
         functionClearPicker = _clear;
-      }
+    }
 
-    render(){
+    setFunctionClearPickerMonths = (_clear) => {
+        functionClearPickerMonths = _clear;
+    }
 
-        const {
-            doSearch,
-            marginTop
-        } = this.props;
-        return(
+    getBranchList = async () => {
+        const result = await CommonAPI.callBranches()
+            .catch((error) => {
+                console.log(error);
+                this.setState({
+                    errorMessage: 'Ocurrio un error, favor de intentar mas tarde',
+                });
+            });
+        if (result) {
+            this.setState({
+                branches: result,
+            });
+        } else {
+            this.setState({
+                branches: [],
+            });
+        }
+    }
+
+    updateState = (_value) => {
+        if (_value) {
+            this.setState({
+                branchId: _value.id,
+            });
+            this.props.setBranchId(_value.id);
+        } else {
+            this.setState({
+                branchId: null,
+            });
+            this.props.setBranchId(null);
+        }
+        
+    }
+
+    updateYear = (_value) => {
+        if (_value) {
+            this.setState({
+                year: _value.id
+            });
+            this.props.setYear(_value.id);
+        } else {
+            this.setState({
+                year: null,
+            });
+            this.props.setYear(null);
+        }
+        
+    }
+
+    updateMonth = (_value) => {
+        if (_value) {
+            this.setState({
+                month: _value.id
+            });
+            this.props.setMonth(_value.id);
+        } else {
+            this.setState({
+                month: null,
+            });
+            this.props.setMonth(null);
+        }
+       
+    }
+
+    cleanInput = () => {
+        if (this.props.navigationParent.state.params &&
+            this.props.navigationParent.state.params.navigateFromMenu) {
+            functionClearPicker();
+            functionClearPickerYears();
+            functionClearPickerMonths();
+            this.updateYear(null);
+            this.updateMonth(null);
+            this.updateState(null);
+            this.getBranchList();
+            this.props.navigationParent.state.params.navigateFromMenu = false;
+        }
+    }
+
+    searchBranches = () => {
+        if (this.isInputValid()) {
+            this.props.doSearch(this.getSearchBranchRequest());
+        } else {
+            Alert.alert("El año es requerido.");
+        }
+    }
+
+    isInputValid = () => {
+        var result;
+        if (this.state.year !== null) {
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    getSearchBranchRequest() {
+        const request = {
+            "id": this.state.branchId,
+            "year": this.state.year,
+            "month": this.state.month,
+            "page": this.props.page
+        };
+        return request;
+    }
+
+    render() {
+        return (
             <View>
-                <View style={{marginBottom:10}}>
-                    <View style={{ flexDirection: 'row'}}>
-                        <Text style={{marginLeft:'5%', fontSize:15}}>
+                <NavigationEvents onWillFocus={() => {
+                    this.cleanInput();
+                }} />
+                <View style={{ marginBottom: 10 }}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text style={{ marginLeft: '5%', fontSize: 13 }}>
                             Año
                         </Text>
-                        <Text style={{marginLeft:'45%',fontSize:15}}>
+                        <Text style={{ marginLeft: '45%', fontSize: 13 }}>
                             Mes
                         </Text>
                     </View>
-                    <View style={{ flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                         <View
-                        style = {{marginLeft:'2.5%',width:'44%',height:'10%'}} >
+                            style={{ marginLeft: '2.5%', width: '44%', }} >
                             <PickerCalpulliX
-                                data={this.generateYears()}
-                                updateState={(item) =>this.handleSelectedYearChanged(item)}
-                                placeholder={'Año'}
-                                labelFunction={item => item.name}
-                                functionClearPicker={this.setFunctionClearPicker} />
+                                data={this.state.years}
+                                updateState={this.updateYear}
+                                placeholder={'Seleccione el año'}
+                                functionClearPicker={this.setFunctionClearPickerYears} />
                         </View>
-                        <View
-                            style = {{marginLeft:'6%',width:'44%',height:'10%'}} >
+                        <View style={{ marginLeft: '6%', width: '44%', }} >
                             <PickerCalpulliX
-                                data={this.generateMonths()}
-                                updateState={this.handleSelectedMonthChanged}
-                                placeholder={'Mes'}
-                                labelFunction={item => item.name}
-                                functionClearPicker={this.setFunctionClearPicker} />
+                                data={this.state.months}
+                                updateState={this.updateMonth}
+                                placeholder={'Seleccione el mes'}
+                                functionClearPicker={this.setFunctionClearPickerMonths} />
                         </View>
                     </View>
                     <View >
-                        <View style={{flexDirection:'row',marginTop:'5%'}}>
-                            <Text style={{marginLeft:'5%',fontSize:15}} >
-                                Nombre de sucursal
+                        <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                            <Text style={{ marginLeft: '5%', fontSize: 13 }} >
+                                Sucursal
                             </Text>
                         </View>
-                        <TextInput  
-                            id='inputOffice'
-                            style={[
-                                stylesCommon.textInputCalpulliX,
-                                {
-                                    width:'90%',
-                                    borderColor: this.state.borderColorTextInput,
-                                    backgroundColor: this.state.backgroundColorUserInput
-                                }
-                            ]}
-                            value={this.state.officeNameText}
-                            onChangeText={(text)=> this.handleChangeOfficeText(text)}
-                            onFocus={()=> this.handleOnFocus()}
-                            onBlur = {()=> this.handleOnBlur()}
-                            placeholder = '    Ingresa el nombre de la sucursal'
-                            placeholderTextColor='#9E9E9E'
-                        />
-                        <View  style = {{flexDirection:'row',height : 70}} >
-                            <ButtonCalpulliX 
-                                title = {'Buscar'}
-                                id = {'buttonSearch'}
-                                arrayColors = {['#05AAAB', '#048585', '#048585']}
-                                onPress = {doSearch}
-                                width = {'40%'}
-                                height = {45}
-                                marginTop = {marginTop}
+
+                        <PickerCalpulliX
+                            data={this.state.branches}
+                            updateState={this.updateState}
+                            placeholder={'Seleccione la sucursal'}
+                            functionClearPicker={this.setFunctionClearPicker} />
+
+
+                        <View style={{ flexDirection: 'row', height: 70 }} >
+                            <ButtonCalpulliX
+                                title={'Buscar'}
+                                id={'buttonSearch'}
+                                arrayColors={['#05AAAB', '#048585', '#048585']}
+                                onPress={this.searchBranches}
+                                width={'35%'}
+                                height={45}
+                                marginTop={20}
                             />
                         </View>
                     </View>

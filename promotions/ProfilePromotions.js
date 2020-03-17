@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 import stylesCommon from '../common/style';
 import { NavigationEvents } from 'react-navigation';
 import ApiCaller from '../api/ApiCaller';
@@ -11,7 +11,7 @@ import Paginator from 'react-native-paginator';
 import TabPromotions from './TabPromotions';
 
 
-const headers = ['Id promoción', 'No. clientes', 'Ganancias promocion', 'Caducidad promoción'];
+const headers = ['Id promoción', 'No. clientes', 'Ventas promoción', 'Caducidad promoción'];
 
 export default class ProfilePromotions extends PureComponent {
 
@@ -108,7 +108,8 @@ export default class ProfilePromotions extends PureComponent {
     }
 
     cleanInput = () => {
-        if (this.props.navigation.state.params && this.props.navigation.state.params.navigateFromMenu) {
+        if (this.props.navigation.state.params && 
+            this.props.navigation.state.params.navigateFromMenu) {
             console.log(':: Clean Input ');
             this.getAnalysisPromotion(CONSTANTS.ONE);
             this.getProfilesDetail();
@@ -169,8 +170,8 @@ export default class ProfilePromotions extends PureComponent {
                         color: '#F3F9FA',
                         borderColor: '#05AAAB'
                     }} />
-                <Text style={[stylesCommon.titleSectionStrong, { marginTop: 5, marginLeft: '5%' }]}>
-                    Detalle del perfil del cliente.
+                <Text style={[stylesCommon.titleSectionStrong, { marginTop: 10, marginLeft: '5%' }]}>
+                    Detalle de los perfiles del cliente.
                 </Text>
 
                 <TabPromotions

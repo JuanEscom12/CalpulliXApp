@@ -10,13 +10,14 @@ import CONSTANTS from '../common/Constants';
 import DoubleClick from 'react-native-double-click';
 import Modal from "react-native-modal";
 import ApiCaller from '../api/ApiCaller';
+import Paginator from 'react-native-paginator';
 import styles from './styles';
 
 
 const labels =
 {
     'Nombre': 'name',
-    'Id producto': 'idProduct',
+    'Producto': 'product',
     'Descripción': 'description',
     'Precio original': 'originalPrice',
     'Precio descuento': 'discountPrice',
@@ -25,7 +26,6 @@ const labels =
     'Ganancia Neta': 'netIncome',
     'Proveedor': 'vendor',
     'Fechas de la promoción': 'dates',
-    'Proyección de exito': 'amountProfit'
 };
 export default class DetailPromotions extends PureComponent {
 
@@ -34,26 +34,44 @@ export default class DetailPromotions extends PureComponent {
         this.state = {
             showDetailPromotion: false,
             contentDetailPromotion: [],
-            checkValue: this.getCheckValues(),
-            borderColorImages: this.getBorderColorImages(),
+            images: null,
+            checkValue: this.getCheckValues(
+                this.props.navigation.state.params.responseApi.promotions),
+            borderColorImages: this.getBorderColorImages(
+                this.props.navigation.state.params.responseApi.promotions),
+            promotionsImages: this.getImages(
+                this.props.navigation.state.params.responseApi.promotions),
+            promotionsName: this.props.navigation.state.params.responseApi.promotions,
+            selectPromotions: null,
+            itemCount: this.props.navigation.state.params.responseApi.itemCount,
+            page: 1,
+            itemsPerPage: 5,
         }
         console.log(':: Constructor ');
     }
 
-    getCheckValues = () => {
+    getImages = (_promotions) => {
+        var base64Image;
         var result = [];
-        const promotions = this.props.navigation.state.params.responseApi.promotions;
-        for (var index = 0; index < promotions.length; index++) {
-            result.push(promotions[index].selected);
+        for (var index = 0; index < _promotions.length; index++) {
+            base64Image = CONSTANTS.PREFIX_BASE64 + _promotions[index].image;
+            result.push(base64Image);
         }
         return result;
     }
 
-    getBorderColorImages = () => {
+    getCheckValues = (_promotions) => {
         var result = [];
-        const promotions = this.props.navigation.state.params.responseApi.promotions;
-        for (var index = 0; index < promotions.length; index++) {
-            if (promotions[index].selected) {
+        for (var index = 0; index < _promotions.length; index++) {
+            result.push(_promotions[index].selected);
+        }
+        return result;
+    }
+
+    getBorderColorImages = (_promotions) => {
+        var result = [];
+        for (var index = 0; index < _promotions.length; index++) {
+            if (_promotions[index].selected) {
                 result.push("#e53c3c");
             } else {
                 result.push("#048585");
@@ -62,21 +80,71 @@ export default class DetailPromotions extends PureComponent {
         return result;
     }
 
-    getDragDropImages = () => {
-        console.log(':: getDragDropImages ');
-        var promotions = this.props.navigation.state.params.responseApi.promotions;
+    getPromotions = async (_idProfile, _page) => {
+        console.log(':: Call Promotions ', _idProfile, _page);
+        const result = await ApiCaller.callApi(
+            '/calpullix/promotions/image/retrieve', this.getImagesPromotionRequest(_idProfile, _page),
+            CONSTANTS.PORT_PROMOTIONS, CONSTANTS.POST_METHOD)
+            .catch((error) => {
+                console.log(error);
+                this.setState({
+                    errorMessage: 'Ocurrio un error, intenta mas tarde por favor',
+                    checkValue: null,
+                    borderColorImages: null,
+                });
+            });
+        return result;
+    }
+
+    getImagesPromotionRequest = (_idProfile, _page) => {
+        const request = {
+            'idProfile': _idProfile,
+            'page': _page,
+        };
+        console.log(':: Request Detail ', request);
+        return request;
+    }
+
+    getDragDropImages = (_numberPage) => {
+        if (_numberPage == CONSTANTS.ONE) {
+            this.setState({
+                checkValue: this.getCheckValues(
+                    this.props.navigation.state.params.responseApi.promotions),
+                borderColorImages: this.getBorderColorImages(
+                    this.props.navigation.state.params.responseApi.promotions),
+                promotionsImages: this.getImages(
+                    this.props.navigation.state.params.responseApi.promotions),
+                promotionsName: this.props.navigation.state.params.responseApi.promotions,
+            });
+        } else {
+            var promotions = this.getPromotions(
+                this.props.navigation.state.params.responseApi.idProfile, _numberPage);
+            Promise.all([promotions]).then((responses) => {
+                this.setState({
+                    checkValue: this.getCheckValues(
+                        responses[CONSTANTS.ZERO].promotions),
+                    borderColorImages: this.getBorderColorImages(
+                        responses[CONSTANTS.ZERO].promotions),
+                    promotionsImages: this.getImages(
+                        responses[CONSTANTS.ZERO].promotions),
+                    promotionsName: responses[CONSTANTS.ZERO].promotions,
+                });
+            });
+        }
+    }
+
+    buildImages = (promotions, _itemCount) => {
+        if (!promotions || promotions.length == CONSTANTS.ZERO) {
+            return;
+        }
         var content = [];
         var result = [];
-        var img64;
-        var base64Image;
-        const x = 30;
+        const x = 5;
         const yInic = 30;
         var y;
         for (var index = 0; index < promotions.length; index++) {
-            img64 = promotions[index].image;
-            base64Image = CONSTANTS.PREFIX_BASE64 + img64;
             const idPromotion = promotions[index].idPromotion;
-            y = yInic + 90 * index;
+            y = yInic + 80 * index;
             content.push(
                 <Draggable key={'draggable' + index} x={x} y={y} shouldReverse={true} >
                     <DoubleClick onClick={() => this.handleDetailPromotion(idPromotion)}>
@@ -84,16 +152,62 @@ export default class DetailPromotions extends PureComponent {
                             style={{
                                 height: 70,
                                 width: 120,
-                                borderWidth: 1.5,
+                                borderWidth: 2.5,
                                 borderColor: this.state.borderColorImages[index],
                             }}
-                            source={{ uri: base64Image }} />
+                            source={{ uri: this.state.promotionsImages[index] }} />
                     </DoubleClick>
                 </Draggable>
             );
         }
         result.push(<View>{content}</View>);
         return result;
+    }
+
+    buildSelectPromotionSection = () => {
+        var content = [];
+        const yInic = 50;
+        var y;
+        for (var index = 0; index < this.state.promotionsName.length; index++) {
+            if (index > 0) {
+                y = yInic + 5;
+            } else {
+                y = yInic;
+            }
+            const indexSwitch = index;
+            content.push(
+                <View style={{ flexDirection: 'row', marginTop: y, width: '100%' }} >
+                    <Text style={[stylesCommon.titleSectionGreen, { marginLeft: 0, fontSize: 11, marginTop: 4, 
+                        width: "80%" }]} >
+                        {this.state.promotionsName[index].name}
+                    </Text>
+                    <Switch
+                        id={'switchImage' + indexSwitch}
+                        value={this.state.checkValue[indexSwitch]}
+                        style={{ width: '20%' }}
+                        thumbColor={'#FFF'}
+                        trackColor={{ true: '#9ADDDF', false: '#9E9E9E' }}
+                        onValueChange={(value) => this.toggleSwitch(value, indexSwitch)} />
+                </View>
+            );
+        }
+        return content;
+    }
+
+    toggleSwitch = (value, index) => {
+        var checkValue = [...this.state.checkValue];
+        checkValue[index] = value;
+        var borderColor = [...this.state.borderColorImages];
+        if (value) {
+            borderColor[index] = '#e53c3c';
+        } else {
+            borderColor[index] = '#048585';
+        }
+        this.setState({
+            checkValue: checkValue,
+            borderColorImages: borderColor,
+        });
+        console.log(':: Changing check ', value, index, checkValue);
     }
 
     handleDetailPromotion = async (_idPromotion) => {
@@ -106,7 +220,7 @@ export default class DetailPromotions extends PureComponent {
                     errorMessage: 'Ocurrio un error, favor de intentar mas tarde.',
                 });
             });
-        if (result.response !== undefined) {
+        if (result !== null && result.response !== undefined) {
             var content = [];
             var detail = [];
             var index = 0;
@@ -130,11 +244,10 @@ export default class DetailPromotions extends PureComponent {
             }
             detail.push(
                 <View style={{
-                    backgroundColor: backgroundButton, height: 100,
-                }}>
+                    backgroundColor: backgroundButton, height: 100, }}>
                     <TouchableOpacity style={{
                         marginLeft: '42%',
-                        marginTop: 25,
+                        marginTop: 20,
                         backgroundColor: backgroundButton,
                         height: 35,
                         width: 35,
@@ -152,7 +265,7 @@ export default class DetailPromotions extends PureComponent {
                     </TouchableOpacity>
                 </View>);
             content.push(
-                <BackgroundScrollCalpulliX addHeight={150}>
+                <BackgroundScrollCalpulliX addHeight={110}>
                     <View style={{
                         height: '100%', backgroundColor: '#F3F9FA', borderColor: '#F49315',
                         borderWidth: 1
@@ -163,6 +276,11 @@ export default class DetailPromotions extends PureComponent {
             this.setState({
                 showDetailPromotion: true,
                 contentDetailPromotion: content,
+                errorMessage: '',
+            });
+        } else {
+            this.setState({
+                errorMessage: 'No existen datos',
             });
         }
     }
@@ -199,17 +317,23 @@ export default class DetailPromotions extends PureComponent {
     }
 
     getUpdatePromotionsRequest = () => {
-        const promotions = this.props.navigation.state.params.responseApi.promotions;
+        var promotions;
+        if (this.state.page == CONSTANTS.ONE) {
+            promotions = this.props.navigation.state.params.responseApi.promotions;
+        } else {
+            promotions = this.state.promotionsName;
+        }
         var detail = [];
         promotions.map((data, index) => {
-            var promotion = { 
+            var promotion = {
                 idPromotion: data.idPromotion,
                 statusPromotion: this.state.checkValue[index],
             };
-            detail.push(promotion); 
+            detail.push(promotion);
         });
         var result = {
-            promotions: [{detail}]
+            idProfile: this.props.navigation.state.params.responseApi.idProfile,
+            promotions: [{ detail }]
         };
         console.log(':: Request Update ', result);
         return result;
@@ -219,67 +343,39 @@ export default class DetailPromotions extends PureComponent {
         this.setState({ showDetailPromotion: false });
     }
 
-    buildSelectPromotionSection = () => {
-        var content = [];
-        const promotions = this.props.navigation.state.params.responseApi.promotions;
-        const yInic = 50;
-        var y;
-        for (var index = 0; index < promotions.length; index++) {
-            if (index > 0) {
-                y = yInic + 15;
-            } else {
-                y = yInic;
-            }
-            const indexSwitch = index;
-
-            content.push(
-                <View style={{ flexDirection: 'row', marginTop: y }} >
-                    <Text style={[stylesCommon.titleSectionGreen, { fontSize: 11, marginTop: 4 }]} >
-                        {promotions[index].name}
-                    </Text>
-                    <Switch
-                        id={'switchImage' + index}
-                        style={{ borderColor: '', }}
-                        value={this.state.checkValue[indexSwitch]}
-                        thumbColor={'#FFF'}
-                        trackColor={{ true: '#9ADDDF', false: '#9E9E9E' }}
-                        onValueChange={(value) => this.toggleSwitch(value, indexSwitch)} />
-                </View>
-            );
-        }
-        return content;
-    }
-
-    toggleSwitch = (value, index) => {
-        var checkValue = [...this.state.checkValue];
-        checkValue[index] = value;
-        var borderColor = [...this.state.borderColorImages];
-        if (value) {
-            borderColor[index] = '#e53c3c';
-        } else {
-            borderColor[index] = '#048585';
-        }
-        this.setState({
-            checkValue: checkValue,
-            borderColorImages: borderColor,
-        });
-        console.log(':: Changing check ', value, index, checkValue);
-    }
 
     cleanInput = () => {
-        console.log(':: Clean input ');
+        console.log(':: Clean input ', this.props.navigation.state.params.responseApi.itemCount);
         this.setState({
-            checkValue: this.getCheckValues(),
-            borderColorImages: this.getBorderColorImages(),
+            checkValue: this.getCheckValues(
+                this.props.navigation.state.params.responseApi.promotions),
+            borderColorImages: this.getBorderColorImages(
+                this.props.navigation.state.params.responseApi.promotions),
+            promotionsImages: this.getImages(
+                this.props.navigation.state.params.responseApi.promotions),
+            promotionsName: this.props.navigation.state.params.responseApi.promotions,
+            images: null,
+            selectPromotions: null,
+            itemCount: this.props.navigation.state.params.responseApi.itemCount,
+            page: 1,
         });
+    }
+
+    handlerPagination = (numberPage) => {
+        this.setState({
+            page: numberPage,
+        });
+        this.getDragDropImages(numberPage);
     }
 
     render() {
-        console.log(':: RENDER ');
-        var images = this.getDragDropImages();
-        var content = this.buildSelectPromotionSection();
+        
+        var imagesContent = this.buildImages(this.props.navigation.state.params.responseApi.promotions,
+            this.props.navigation.state.params.responseApi.promotions.itemCount);
+        var selectImages = this.buildSelectPromotionSection();
+
         return (
-            <BackgroundScrollCalpulliX addHeight={0}>
+            <BackgroundScrollCalpulliX addHeight={100}>
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     title={'Detalle de promociones del perfil'}
@@ -297,7 +393,7 @@ export default class DetailPromotions extends PureComponent {
                     </Modal>
                 </View>
 
-                <View style={{ height: '100%' }}>
+                <View style={{ height: '100%', width: '100%' }}>
                     <View style={{ marginTop: 20, }}>
                         <Text style={[stylesCommon.titleSectionStronger, {
                             fontSize: 14, textAlign: "center", marginLeft: 0
@@ -312,23 +408,43 @@ export default class DetailPromotions extends PureComponent {
 
                     <View>
                         <ButtonCalpulliX
-                            title={'Actualizar promociones'}
+                            title={'Confirmar promociones'}
                             id={'buttonUpdatePromotions'}
                             arrayColors={['#05AAAB', '#048585', '#048585']}
                             onPress={this.updatePromotions}
-                            width={'43%'}
+                            width={'45%'}
                             height={40}
                             marginTop={20} />
                     </View>
 
-                    <View style={{ width: '100%', flexDirection: 'row', }}>
-                        <View>
-                            {images}
+                    <View style={{ width: '100%', flexDirection: 'row', marginBottom: 20, }}>
+                        <View style={{ width: '50%' }}>
+                            {imagesContent}
                         </View>
-                        <View style={{ marginLeft: 195 }}>
-                            {content}
+                        <View style={{ width: '50%' }}>
+                            {selectImages}
                         </View>
                     </View>
+
+                    <Paginator
+                        totalItems={this.state.itemCount}
+                        onChange={numberPage => this.handlerPagination(numberPage)}
+                        activePage={this.state.page}
+                        disabled={false}
+                        itemsPerPage={this.state.itemsPerPage}
+
+                        buttonStyles={
+                            {
+                                backgroundColor: '#F3F9FA',
+                                color: '#156869',
+                                borderColor: '#156869',
+                            }
+                        }
+                        buttonActiveStyles={{
+                            backgroundColor: '#05AAAB',
+                            color: '#F3F9FA',
+                            borderColor: '#05AAAB'
+                        }} />
 
                 </View>
             </BackgroundScrollCalpulliX>);
