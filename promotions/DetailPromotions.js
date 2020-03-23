@@ -106,31 +106,19 @@ export default class DetailPromotions extends PureComponent {
     }
 
     getDragDropImages = (_numberPage) => {
-        if (_numberPage == CONSTANTS.ONE) {
+        var promotions = this.getPromotions(
+            this.props.navigation.state.params.responseApi.idProfile, _numberPage);
+        Promise.all([promotions]).then((responses) => {
             this.setState({
                 checkValue: this.getCheckValues(
-                    this.props.navigation.state.params.responseApi.promotions),
+                    responses[CONSTANTS.ZERO].promotions),
                 borderColorImages: this.getBorderColorImages(
-                    this.props.navigation.state.params.responseApi.promotions),
+                    responses[CONSTANTS.ZERO].promotions),
                 promotionsImages: this.getImages(
-                    this.props.navigation.state.params.responseApi.promotions),
-                promotionsName: this.props.navigation.state.params.responseApi.promotions,
+                    responses[CONSTANTS.ZERO].promotions),
+                promotionsName: responses[CONSTANTS.ZERO].promotions,
             });
-        } else {
-            var promotions = this.getPromotions(
-                this.props.navigation.state.params.responseApi.idProfile, _numberPage);
-            Promise.all([promotions]).then((responses) => {
-                this.setState({
-                    checkValue: this.getCheckValues(
-                        responses[CONSTANTS.ZERO].promotions),
-                    borderColorImages: this.getBorderColorImages(
-                        responses[CONSTANTS.ZERO].promotions),
-                    promotionsImages: this.getImages(
-                        responses[CONSTANTS.ZERO].promotions),
-                    promotionsName: responses[CONSTANTS.ZERO].promotions,
-                });
-            });
-        }
+        });
     }
 
     buildImages = (promotions, _itemCount) => {
@@ -177,8 +165,10 @@ export default class DetailPromotions extends PureComponent {
             const indexSwitch = index;
             content.push(
                 <View style={{ flexDirection: 'row', marginTop: y, width: '100%' }} >
-                    <Text style={[stylesCommon.titleSectionGreen, { marginLeft: 0, fontSize: 11, marginTop: 4, 
-                        width: "80%" }]} >
+                    <Text style={[stylesCommon.titleSectionGreen, {
+                        marginLeft: 0, fontSize: 11, marginTop: 4,
+                        width: "80%"
+                    }]} >
                         {this.state.promotionsName[index].name}
                     </Text>
                     <Switch
@@ -244,7 +234,8 @@ export default class DetailPromotions extends PureComponent {
             }
             detail.push(
                 <View style={{
-                    backgroundColor: backgroundButton, height: 100, }}>
+                    backgroundColor: backgroundButton, height: 100,
+                }}>
                     <TouchableOpacity style={{
                         marginLeft: '42%',
                         marginTop: 20,
@@ -369,7 +360,7 @@ export default class DetailPromotions extends PureComponent {
     }
 
     render() {
-        
+
         var imagesContent = this.buildImages(this.props.navigation.state.params.responseApi.promotions,
             this.props.navigation.state.params.responseApi.promotions.itemCount);
         var selectImages = this.buildSelectPromotionSection();

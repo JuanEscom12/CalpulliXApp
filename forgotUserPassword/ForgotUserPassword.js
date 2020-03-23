@@ -20,7 +20,7 @@ export default class ForgotUserPassword extends PureComponent {
       errorMessage: '',
       borderColorTextInput: "#F49315",
       backgroundColorUserInput: '#FDFDFD',
-      headText: "Enviaremos una contraseña nueva a tu correo.",
+      headText: "Enviaremos una contraseña nueva a tu correo",
       userText: "",
       showChangePassword: false,
       oldPassword: "",
@@ -74,11 +74,11 @@ export default class ForgotUserPassword extends PureComponent {
         this.setState({
           errorMessage: '',
           borderColorTextInput: '#F49315',
-          headText: "Se ha enviado un correo con la nueva contraseña."
+          headText: "Se te ha enviado un correo con la nueva contraseña"
         });
       } else {
         this.setState({
-          errorMessage: 'El usuario es incorrecto.'
+          errorMessage: 'El usuario es incorrecto'
         })
       }
     }
@@ -88,7 +88,7 @@ export default class ForgotUserPassword extends PureComponent {
     this.setState({
       borderColorTextInput: "#F49315",
       backgroundColorUserInput: '#FDFDFD',
-      headText: "Enviaremos una contraseña nueva a tu correo.",
+      headText: "Enviaremos una contraseña nueva a tu correo",
       errorMessage: '',
       userText: '',
       oldPassword: "",
@@ -119,7 +119,7 @@ export default class ForgotUserPassword extends PureComponent {
     } else if (!Validator.isValidRegExp(this.state.userText, idRegexp, false)) {
       this.setState({
           borderColorTextInput: '#F03000',
-          errorMessage: 'Introduce un Id de usuario valido.',
+          errorMessage: 'Introduce un Id de usuario valido',
       });
   }
      else {
@@ -244,7 +244,7 @@ export default class ForgotUserPassword extends PureComponent {
           borderColorOldPasswordTextInput: "#F49315",
           borderColorNewPasswordInput: "#F49315",
           borderColorNewPasswordRepInput: "#F49315",
-          headTextChangePass: "Se ha cambiado la nueva contraseña con éxito.",
+          headTextChangePass: "Se ha cambiado la nueva contraseña con éxito",
           userChangePassword: '',
           oldPassword: '',
           newPassword: '',
@@ -252,7 +252,7 @@ export default class ForgotUserPassword extends PureComponent {
         });
       } else {
         this.setState({
-          errorMessage: 'El usuario o la contraseña son incorrectos.'
+          errorMessage: 'El usuario o la contraseña son incorrectos'
         })
       }
     }
@@ -301,14 +301,14 @@ isValidChangePasswordInput = () => {
   }
   if (result && !Validator.isValidRegExp(this.state.userChangePassword, idRegexp, false) ) {
     this.setState({
-      errorMessageChangePasword: 'Ingresa un usuario valido.',
+      errorMessageChangePasword: 'Ingresa un usuario valido',
       borderColorUserChangePasswordInput: '#F03000',
     });
     result = false;
   }
   if (result && this.state.newPassword.length < 8 ) {
     this.setState({
-      errorMessageChangePasword: 'La nueva contraseña debe contener al menos 8 caracteres.',
+      errorMessageChangePasword: 'La nueva contraseña debe contener al menos 8 caracteres',
       borderColorNewPasswordInput: '#F03000',
       borderColorNewPasswordRepInput: '#F03000',
     });
@@ -357,7 +357,7 @@ render() {
           onChangeText={(text) => this.handleChangeUserText(text)}
           onFocus={() => this.handleOnFocus()}
           onBlur={() => this.handleOnBlur()}
-          placeholder='        Ingresa el nombre de tu usuario'
+          placeholder='        Ingresa el id de tu usuario'
           placeholderTextColor='#9E9E9E' />
         <ButtonCalpulliX
           title={'Recuperar Contraseña'}

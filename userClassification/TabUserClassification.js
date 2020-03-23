@@ -314,7 +314,6 @@ export default class TabUserClassification extends PureComponent {
                 <TabPromotionsFunc data={profiles} />
             );
         } else {
-
             result = (
                 <View />
             );

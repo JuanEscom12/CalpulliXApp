@@ -154,7 +154,7 @@ export default class RegisterAccount extends PureComponent {
                 this.setState({
                     errorMessage: '',
                     borderColorTextInput: '#F49315',
-                    headText: "Se ha enviado un correo para confirmar su registro."
+                    headText: "Se le ha enviado un correo para confirmar su registro"
                 });
             } else {
                 this.setState({
@@ -294,7 +294,7 @@ export default class RegisterAccount extends PureComponent {
                         onChangeText={(text) => this.handleChangeUserText(text)}
                         onFocus={() => this.handleUserOnFocus()}
                         onBlur={() => this.handleUserOnBlur()}
-                        placeholder='        Ingresa tu Id'
+                        placeholder='        Ingresa tu Id de usuario'
                         placeholderTextColor='#9E9E9E' />
                     <TextInput
                         id='inputNameRegisterUser'

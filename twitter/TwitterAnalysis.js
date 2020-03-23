@@ -85,7 +85,7 @@ export default class TwitterAnalysis extends PureComponent {
     getHeaderScreen = (_perfilInfo) => {
         var base64Image = CONSTANTS.PREFIX_BASE64 + _perfilInfo.perfilPicture;
         return (
-            <View style={{ flexDirection: "row", }}>
+            <View style={{ flexDirection: "row" }}>
                 <Image
                     style={{
                         height: 70,
@@ -223,7 +223,6 @@ export default class TwitterAnalysis extends PureComponent {
             this.getTwitters();
             this.props.navigation.state.params.navigateFromMenu = false;
         }
-
     }
 
     startAnalisis = async () => {
@@ -236,7 +235,7 @@ export default class TwitterAnalysis extends PureComponent {
                     errorMessage: 'Ocurrio un error, favor de intentar mas tarde.',
                 });
             });
-        if (result) {
+        if (result.started) {
             Alert.alert("Se ha iniciado el análisis con éxito.");
         }
     }

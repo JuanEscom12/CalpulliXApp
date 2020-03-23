@@ -140,7 +140,7 @@ export default class ProfilePromotions extends PureComponent {
                     Promociones para el perfil {this.state.profileName}.
                 </Text>
                 <Text style={[stylesCommon.titleSectionGreen, { 
-                    marginTop: 5, marginLeft: '5%' }]}>
+                    marginTop: 5, marginLeft: '5%', color: '#037777' }]}>
                     Total de clientes del perfil {this.state.profileName}
                     {': ' + this.state.numberCustomers}
                 </Text>

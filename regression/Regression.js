@@ -203,7 +203,8 @@ export default class Regression extends PureComponent {
                 });
             });
         console.log(':: Regression  ', response);
-        if (response.graphics.length > CONSTANTS.ZERO) {
+        if (response.graphics !== null && 
+            response.graphics.length > CONSTANTS.ZERO) {
             this.setState({
                 images: this.getImages(response),
             });
@@ -221,7 +222,8 @@ export default class Regression extends PureComponent {
 
     isValidaDate =  () => {
         var current = new Date();
-        return (this.state.year == current.getFullYear() && this.state.month !== null && this.state.month > current.getMonth() + CONSTANTS.ONE) || 
+        return (this.state.year == current.getFullYear() && this.state.month !== null && 
+                this.state.month > current.getMonth() + CONSTANTS.ONE) || 
                 (this.state.year == current.getFullYear() && this.state.month == null) ||
                 (this.state.year > current.getFullYear());
     }
@@ -309,43 +311,8 @@ export default class Regression extends PureComponent {
                         placeholder={'Seleccione la sucursal'}
                         functionClearPicker={this.setFunctionClearPickerBranches} />
 
-                    <View style={{ marginTop: 5 }}>
-                        <View style={[stylesAutoComplete.autocompleteContainer]} >
-                            <Autocomplete
-                                placeholder={'   Seleccione el producto'}
-                                data={this.state.dataProducts}
-                                defaultValue={this.state.product}
-                                onChangeText={(text) => this.handleAutoComplete(text)}
-                                hideResults={this.state.hideResults}
-                                onBlur={() => this.setState({ hideResults: true })}
-                                style={{
-                                    borderWidth: 0,
-                                    borderColor: '#F49315',
-                                }}
-                                inputContainerStyle={{
-                                    borderColor: '#F49315', borderRadius: 5, borderWidth: 0.5, backgroundColor: '#FDFDFD',
-                                }}
-                                renderItem={({ item, i }) => (
 
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            console.log(':: ON PRESS ', item)
-                                            this.setState({ product: item, hideResults: true })
-                                        }}>
-
-                                        <Text style={{
-                                            backgroundColor: '#FDFDFD',
-                                            fontSize: 12,
-                                            borderColor: '#F49315',
-                                            borderWidth: 0.2,
-                                        }}>{'\n  ' + item + '\n'}</Text>
-
-                                    </TouchableOpacity>
-                                )} />
-                        </View>
-                    </View>
-
-                    <View style={{ marginTop: 60 }}>
+                    <View style={{ marginTop: 10 }}>
                         <PickerCalpulliX
                             data={this.state.years}
                             updateState={this.updateYear}

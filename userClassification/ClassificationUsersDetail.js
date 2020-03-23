@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, Alert } from "react-native";
+import { Text } from "react-native";
 import stylesCommon from '../common/style';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import HeaderCalpulliXBack from '../common/HeaderCalpulliXBack';
@@ -36,7 +36,8 @@ export default class ClassificationUsersDetail extends PureComponent {
 
                     <TabUserClassification
                         profiles={apiResponse}
-                        navigation={this.props.navigation} />
+                        navigation={this.props.navigation}
+                     />
                
             </BackgroundScrollCalpulliX>
         );

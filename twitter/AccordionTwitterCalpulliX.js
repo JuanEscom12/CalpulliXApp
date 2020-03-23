@@ -72,14 +72,18 @@ export default class AccordionTwitterCalpulliX extends PureComponent {
         <View style={[commonStyles.contentTextLight]}>
           <View style={{ marginTop: 10, backgroundColor: '#F3F9FA', }}>
             <Text style={{ fontSize: 10, fontWeight: "bold", marginLeft: 10 }}>{_section[index].name}</Text>
+
+
             <View style={{ flexDirection: "row" }}>
-              <Text style={{ fontSize: 8, color: '#9E9E9E', marginLeft: 10 }}>{_section[index].atName}</Text>
+              <Text style={{ fontSize: 8, color: '#9E9E9E', marginLeft: 10, width: '87%' }}>{_section[index].atName}</Text>
               <Image
                 style={{
-                  height: 25, width: 25, marginLeft: '72%', 
+                  height: 25, width: 25, 
                 }}
                 source={require('./twitter-icon.jpg')} />
             </View>
+
+
             <View style={{ marginTop: 5, }}>
               <Text style={{
                 padding: 3, width: '95%', height: 60, marginLeft: 'auto', marginRight: 'auto',
@@ -87,7 +91,7 @@ export default class AccordionTwitterCalpulliX extends PureComponent {
               }}>
                 {_section[index].message}
               </Text>
-              <Text style={{ marginLeft: '67%', color: '#9E9E9E', fontSize: 10, marginBottom: 10 }} >
+              <Text style={{ marginLeft: '80%', color: '#9E9E9E', fontSize: 10, marginBottom: 10 }} >
                 {_section[index].date}
               </Text>
             </View>

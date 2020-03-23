@@ -21,8 +21,11 @@ import {
 var functionClearPickerBranches;
 var functionClearPickerYears;
 var functionClearPickerMonths;
-const lineColors = [`rgba(233, 251, 88, 1)`, `rgba(34, 151, 238, 1)`,
-    `rgba(4, 133, 133, 1)`, `rgba(118, 12, 19, 1)`, `rgba(178, 87, 151, 1)`];
+const lineColors = [`rgba(233, 251, 88, 1)`, 
+                    `rgba(34, 151, 238, 1)`,
+                    `rgba(4, 133, 133, 1)`, 
+                    `rgba(118, 12, 19, 1)`, 
+                    `rgba(178, 87, 151, 1)`];
 const months = ["E", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
 
 export default class Sales extends PureComponent {
