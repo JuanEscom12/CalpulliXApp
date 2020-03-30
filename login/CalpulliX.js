@@ -76,12 +76,10 @@ export default class CalpulliX extends PureComponent {
   }
 
   hanlderInputUser = (_user) => {
-    //Alert.alert("::::::::::::: State User " + _State.userText + ":: PASS " + _State.passText);
     user = _user;
   }
 
   hanlderInputPass = (_pass) => {
-    //Alert.alert("::::::::::::: State User " + _State.userText + ":: PASS " + _State.passText);
     pass = _pass;
   }
 

@@ -21,11 +21,11 @@ import {
 var functionClearPickerBranches;
 var functionClearPickerYears;
 var functionClearPickerMonths;
-const lineColors = [`rgba(233, 251, 88, 1)`, 
-                    `rgba(34, 151, 238, 1)`,
-                    `rgba(4, 133, 133, 1)`, 
-                    `rgba(118, 12, 19, 1)`, 
-                    `rgba(178, 87, 151, 1)`];
+const lineColors = [`rgba(233, 251, 88, 1)`,
+    `rgba(34, 151, 238, 1)`,
+    `rgba(4, 133, 133, 1)`,
+    `rgba(118, 12, 19, 1)`,
+    `rgba(178, 87, 151, 1)`];
 const months = ["E", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
 
 export default class Sales extends PureComponent {
@@ -96,7 +96,7 @@ export default class Sales extends PureComponent {
     }
 
     cleanInput = () => {
-        if (this.props.navigation.state.params && 
+        if (this.props.navigation.state.params &&
             this.props.navigation.state.params.navigateFromMenu) {
 
             functionClearPickerBranches();
@@ -118,7 +118,7 @@ export default class Sales extends PureComponent {
                 lineChart: [],
             });
             this.props.navigation.state.params.navigateFromMenu = false;
-            
+
         }
     }
 
@@ -238,22 +238,21 @@ export default class Sales extends PureComponent {
                 backgroundColor: '#EDEDED', width: '100%', borderTopLeftRadius: 5,
                 borderTopRightRadius: 10,
             }} >
-                <Text style={{ fontSize: 11, }} >{'\n' + '  Artículos vendidos' + ' \n'}</Text>
-                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmountSoldOut + ' (Monto), ' +
-                    _response.totalAmountItemsSoldOut + ' (Número artículos)\n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto de ventas:' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmountSoldOut + '\n'}</Text>
             </View>);
         detail.push(
             <View style={{
                 backgroundColor: '#F3F9FA', width: '100%',
             }} >
-                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto ganancias' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto de ganancias:' + ' \n'}</Text>
                 <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmonuntSales + '\n'}</Text>
             </View>);
         detail.push(
             <View style={{
                 backgroundColor: '#EDEDED', width: '100%'
             }} >
-                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto insumos' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto de compras:' + ' \n'}</Text>
                 <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmountSupplies + '\n'}</Text>
             </View>
         );
@@ -261,7 +260,7 @@ export default class Sales extends PureComponent {
             <View style={{
                 backgroundColor: '#F3F9FA', width: '100%'
             }} >
-                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto perdidas' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto de perdidas:' + ' \n'}</Text>
                 <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmountLosses + '\n'}</Text>
             </View>
         );
@@ -269,35 +268,26 @@ export default class Sales extends PureComponent {
             <View style={{
                 backgroundColor: '#EDEDED', width: '100%'
             }} >
-                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto merma' + ' \n'}</Text>
-                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmmountCaducousPurchasePrice + ' (Compra), $' +
-                    _response.totalAmmountCaducousSalePrice + ' (Venta) \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto de merma:' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmmountCaducousPurchasePrice + ' \n'}</Text>
             </View>
         );
         detail.push(
             <View style={{
                 backgroundColor: '#F3F9FA', width: '100%'
             }} >
-                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto aparadores' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto de productos en bodega:' + ' \n'}</Text>
                 <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmmountStoredPurchasePrice + ' (Compra), $' +
                     _response.totalAmmountStoredSalePrice + ' (Venta) \n'}</Text>
             </View>
         );
+
         detail.push(
             <View style={{
-                backgroundColor: '#EDEDED', width: '100%'
-            }} >
-                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto robo/extravío' + ' \n'}</Text>
-                <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmmountStolePurchasePrice + ' (Compra), $' +
-                    _response.totalAmmountStoleSalePrice + ' (Venta) \n'}</Text>
-            </View>
-        );
-        detail.push(
-            <View style={{
-                backgroundColor: '#F3F9FA', width: '100%',
+                backgroundColor: '#EDEDED', width: '100%',
                 borderBottomLeftRadius: 5, borderBottomRightRadius: 5
             }}>
-                <Text style={{ fontSize: 11, }} >{'\n' + '  Artículos en aparador' + ' \n'}</Text>
+                <Text style={{ fontSize: 11, }} >{'\n' + '  Monto de productos en aparador:' + ' \n'}</Text>
                 <Text style={{ fontSize: 11, }} >{'  $' + _response.totalAmmountSideboardPurchasePrice + ' (Compra), $'
                     + _response.totalAmmountSideboardSalePrice + ' (Venta) \n'}</Text>
             </View>);
@@ -404,10 +394,19 @@ export default class Sales extends PureComponent {
         } else {
             labels = months;
         }
-        var dataSets = this.getDataSets(_salesInformation.bestProduct);
-        var dataSetsWorst = this.getDataSets(_salesInformation.worstProduct);
-        var data = this.getData(dataSets, labels);
-        var dataWorst = this.getData(dataSetsWorst, labels);
+
+        var dataSets = null;
+        var dataSetsWorst = null;
+        var data = null;
+        var dataWorst = null;
+        if (_salesInformation.bestProduct !== null) {
+            dataSets = this.getDataSets(_salesInformation.bestProduct);
+            data = this.getData(dataSets, labels);
+        }
+        if (_salesInformation.worstProduct !== null) {
+            dataSetsWorst = this.getDataSets(_salesInformation.worstProduct);
+            dataWorst = this.getData(dataSetsWorst, labels);
+        }
         console.log(':: Data ', data, dataWorst);
         result.push(
             <View style={{ marginTop: 15, marginLeft: 5, }}>
@@ -420,13 +419,13 @@ export default class Sales extends PureComponent {
                 {this.getNumberItems(_salesInformation.numberItemsWorst)}
                 {this.getLineChartComponent(dataWorst, _salesInformation.suffixWorst, _width)}
                 <ButtonCalpulliX
-                        title={'Ver Estadísticas'}
-                        id={'buttonStatistics'}
-                        arrayColors={['#05AAAB', '#048585', '#048585']}
-                        onPress={() => this.showStatistics()}
-                        width={'35%'}
-                        height={40}
-                        marginTop={10} />
+                    title={'Ver Estadísticas'}
+                    id={'buttonStatistics'}
+                    arrayColors={['#05AAAB', '#048585', '#048585']}
+                    onPress={() => this.showStatistics()}
+                    width={'35%'}
+                    height={40}
+                    marginTop={10} />
             </View>
         );
         return result;
@@ -463,8 +462,8 @@ export default class Sales extends PureComponent {
         for (var index = 0; index < _list.length; index++) {
             detail.push(
                 <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontSize: 10 }}>{'  ' + _list[index].name}</Text>
-                    <View style={{ height: 5, width: 5, backgroundColor: lineColors[index], marginLeft: 15 }} />
+                    <Text style={{ fontSize: 10, width: '80%' }}>{'  ' + _list[index].name}</Text>
+                    <View style={{ height: 5, width: 5, backgroundColor: lineColors[index], marginLeft: 17 }} />
                 </View>
             );
         }
@@ -474,7 +473,7 @@ export default class Sales extends PureComponent {
                 borderWidth: 0.5,
                 borderColor: 'grey',
                 marginLeft: 5,
-                width: '33%',
+                width: '45%',
                 padding: 5,
                 borderRadius: 5,
                 backgroundColor: '#FDFDFD',
@@ -515,37 +514,40 @@ export default class Sales extends PureComponent {
     }
 
     getLineChartComponent = (_data, _suffix, _width) => {
-        return (
-            <LineChart
-                style={{
-                    borderWidth: 0.5,
-                    borderRadius: 5,
-                    borderColor: '#5c5c59',
-                    width: (_width + 1),
-                }}
-                data={_data}
-                width={_width}
-                height={220}
-                yAxisLabel="$"
-                yAxisSuffix={_suffix}
-                chartConfig={{
-                    backgroundColor: "#FDFDFD",
-                    backgroundGradientFrom: "#FDFDFD",
-                    backgroundGradientTo: "#FDFDFD",
-                    color: (opacity = 1) => `rgba(190, 14, 27, ${opacity})`,
-                    labelColor: (opacity = 1) => `rgba(36, 36, 35, ${opacity})`,
-                    strokeWidth: 0.5,
-                    barPercentage: 0.5,
-                    propsForDots: {
-                        r: "4",
-                        strokeWidth: "1",
-                        stroke: "#ffa726"
-                    },
-                    propsForLabels: {
-                        fontSize: 8,
-                    },
-                }} />
-        );
+        if (_data == null) {
+            return (<View></View>);
+        } else {
+            return (
+                <LineChart
+                    style={{
+                        borderWidth: 0.5,
+                        borderRadius: 5,
+                        borderColor: '#5c5c59',
+                        width: (_width + 1),
+                    }}
+                    data={_data}
+                    width={_width}
+                    height={220}
+                    yAxisLabel="$"
+                    yAxisSuffix={_suffix}
+                    chartConfig={{
+                        backgroundColor: "#FDFDFD",
+                        backgroundGradientFrom: "#FDFDFD",
+                        backgroundGradientTo: "#FDFDFD",
+                        color: (opacity = 1) => `rgba(190, 14, 27, ${opacity})`,
+                        labelColor: (opacity = 1) => `rgba(36, 36, 35, ${opacity})`,
+                        strokeWidth: 0.5,
+                        barPercentage: 0.5,
+                        propsForDots: {
+                            r: "4",
+                            strokeWidth: "1",
+                            stroke: "#ffa726"
+                        },
+                        propsForLabels: {
+                            fontSize: 8,
+                        },
+                    }} />);
+        }
     }
 
     chunkArray = (myArray, chunk_size) => {
@@ -614,7 +616,7 @@ export default class Sales extends PureComponent {
                         data={this.state.branches}
                         updateState={this.updateState}
                         placeholder={'Seleccione la sucursal'}
-                        functionClearPicker={this.setFunctionClearPickerBranches}  />
+                        functionClearPicker={this.setFunctionClearPickerBranches} />
 
 
                     <View style={{ marginTop: 5 }}>
