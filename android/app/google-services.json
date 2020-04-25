@@ -1,0 +1,40 @@
+{
+    "project_info": {
+      "project_number": "591600671198",
+      "firebase_url": "https://calpullix-53883.firebaseio.com",
+      "project_id": "calpullix-53883",
+      "storage_bucket": "calpullix-53883.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:591600671198:android:631e7b07b53177f489254f",
+          "android_client_info": {
+            "package_name": "com.calpullixapp"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "591600671198-4a1raifpd98vvknsob9vpeh0vd3gqajt.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyBf5HHH6Pyw2ZigXFt0mB1cbKrHoOKPH6k"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "591600671198-4a1raifpd98vvknsob9vpeh0vd3gqajt.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

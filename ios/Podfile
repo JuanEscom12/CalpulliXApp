@@ -35,6 +35,10 @@ target 'CalpulliXApp' do
 
   pod 'RNFileViewer', :path => '../node_modules/react-native-file-viewer'
 
+  pod 'RNFBAnalytics', :path => '../node_modules/@react-native-firebase/analytics'
+
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+
   target 'CalpulliXAppTests' do
     inherit! :search_paths
     # Pods for testing

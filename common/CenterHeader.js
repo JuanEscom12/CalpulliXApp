@@ -6,7 +6,7 @@ export default class CenterHeader extends PureComponent {
 
   render() {
     return (
-      <View style={{ flex: 2, flexDirection: 'column', backgroundColor: '#F6A338', marginBottom: 2 }} >
+      <View style={{ flex: 2, flexDirection: 'column', backgroundColor: '#F6A338', marginBottom: 100 }} >
         
         <Image
           style={{

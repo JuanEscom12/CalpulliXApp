@@ -91,7 +91,7 @@ export default class AccordionTwitterCalpulliX extends PureComponent {
               }}>
                 {_section[index].message}
               </Text>
-              <Text style={{ marginLeft: '80%', color: '#9E9E9E', fontSize: 10, marginBottom: 10 }} >
+              <Text style={{ marginLeft: '68%', color: '#9E9E9E', fontSize: 10, marginBottom: 10 }} >
                 {_section[index].date}
               </Text>
             </View>

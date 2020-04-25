@@ -382,6 +382,9 @@ export default class Sales extends PureComponent {
     }
 
     getLineChart = (_salesInformation, _width) => {
+        if (this.state.product !== '') {
+            return <View></View>;
+        }
         var result = [];
         var labels = [];
         if (this.state.month !== null) {
@@ -394,7 +397,6 @@ export default class Sales extends PureComponent {
         } else {
             labels = months;
         }
-
         var dataSets = null;
         var dataSetsWorst = null;
         var data = null;
@@ -435,7 +437,7 @@ export default class Sales extends PureComponent {
         var result = [];
         console.log(':: Number items ', _numberItems);
         result.push(
-            <View style={{ marginTop: 5, marginLeft: 5, flexDirection: 'row', marginBottom: 5 }}>
+            <View style={{ marginTop: 15, marginLeft: 5, flexDirection: 'row', marginBottom: 5 }}>
                 <Text style={{ fontSize: 10 }}>Número de productos Vendidos:</Text>
                 <Text style={{ fontSize: 10, fontWeight: 'bold' }} >{' ['}</Text>
                 {_numberItems.map((item, index) =>
@@ -597,7 +599,7 @@ export default class Sales extends PureComponent {
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={1700}>
+            <BackgroundScrollCalpulliX addHeight={1600}>
                 <NavigationEvents
                     onWillFocus={() => {
                         this.cleanInput();

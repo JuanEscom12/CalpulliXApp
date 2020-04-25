@@ -33,7 +33,7 @@ export default class Users extends PureComponent {
             .catch((error) => {
                 console.log(error);
                 this.setState({
-                    errorMessage: 'Hubo un error favor de intentar mas tarde.',
+                    errorMessage: 'Ocurrio un error favor de intentar mas tarde.',
                 });
             });
         console.log(':: Initial users: ', response.clients);
@@ -113,7 +113,7 @@ export default class Users extends PureComponent {
                 }} />
                 <View >
                     <HeaderCalpulliXBack
-                        title={'Clasificación de usuarios'} />
+                        title={'Clasificación de clientes'} />
                     <Text
                         id='errorMessage'
                         style={[stylesCommon.errorMessage, {marginTop: 5}]}>
@@ -137,12 +137,14 @@ export default class Users extends PureComponent {
                     
                     {usersList.length !== 0 &&
                         <View style={{ marginLeft: '5%', }}>
-                            <Text style={[stylesCommon.headerText]} style={{ fontSize: 17, marginTop: 15, color: '#F49315' }}>
+                            <Text style={[stylesCommon.headerText]} style={{ fontSize: 12, marginTop: 15, color: '#F49315' }}>
+                                {'Fecha del último análisis: ' + lastClassificationDate}
+                            </Text>
+
+                            <Text style={[stylesCommon.headerText]} style={{ fontSize: 17, marginTop: 10, color: '#F49315' }}>
                                 Perfiles del cliente
                             </Text>
-                            <Text style={[stylesCommon.headerText]} style={{ fontSize: 12, marginTop: 10, color: '#F49315' }}>
-                                {'Fecha del análisis: ' + lastClassificationDate}
-                            </Text>
+                            
                         </View>
                     }
 
@@ -150,7 +152,7 @@ export default class Users extends PureComponent {
                         navigation={this.props.navigation}
                         labelNames={{
                             "classification": "Clasificación:", // Distribucion de la clasificación
-                            "branch": "Sucursales de mayor peso:", // (3) sucursales
+                            "branch": "Sucursales de mayor jerarquia de compras:", // (3) sucursales
                             "schoolingLevel": "Nivel de escolaridad mas frecuente:", 
                             "employment": "Ocupación mas frecuente:",
                             "bestProducts": "Productos de mayor consumo:", // 3 productos

@@ -6,23 +6,25 @@ import NavigatorCommons from '../navigation/NavigatorCommons';
 import ApiCaller from '../api/ApiCaller';
 import CONSTANTS from '../common/Constants';
 import styles from './styles';
+import analytics from '@react-native-firebase/analytics';
 
 var navigate;
 
 const labels =
 {
     'Edad promedio:': 'age',
-    'Entidad federativa con mayor peso:': 'state',
+    'Entidad federativa con mayor peso demográfico:': 'state',
     'Consumo promedio mensual en promociones:': 'averagePromotions',
-    'Distribución de género:': 'sex',
+    'Distribución de clientes por género:': 'sex',
     'Promoción mas recurrente:': 'preferredPromotion',
-    'Artículo:': 'preferredItem',
-    'Precio de venta del artículo:': 'salePriceItem',
-    'Precio de compra del artículo:': 'purchasePriceItem',
-    'Vigencia de la promoción:': 'lifePromotion',
-    'Clasificación del producto:': 'itemClassification',
-    'Departamento del producto:': 'department'
+    'Artículo de la promoción mas recurrente:': 'preferredItem',
+    'Precio de venta del artículo: de la promoción mas recurrente': 'salePriceItem',
+    'Precio de compra del artículo de la promoción mas recurrente:': 'purchasePriceItem',
+    'Vigencia de la promoción mas recurrente:': 'lifePromotion',
+    'Clasificación del producto de la promoción mas recurrente:': 'itemClassification',
+    'Departamento del producto de la promoción mas recurrente:': 'department'
 };
+var isFirstRender = false;
 
 buildTabDetail = (profileObject) => {
     var result = [];
@@ -74,13 +76,17 @@ buildContent = (_backgroundColor, _header, _detail) => {
 }
 
 showPromotions = async (_idProfile) => {
-    console.log(':: Show Promotions ', _idProfile);
+    console.log(':: Show Promotions ', _idProfile); 
     const response = await ApiCaller.callApi(
         '/calpullix/promotions/image/retrieve', this.getImagesPromotionRequest(_idProfile), 
         CONSTANTS.PORT_PROMOTIONS, CONSTANTS.POST_METHOD)
         .catch((error) => {
           console.log(error);
         });
+    analytics().logEvent(
+        'view_item_list', {
+        items: response.promotions
+    });
     NavigatorCommons.navigateTo(navigate, 'DetailPromotions',
     { 'responseApi': response });
 }
@@ -95,7 +101,17 @@ getImagesPromotionRequest = (_idProfile) => {
 }
 
 const TabPromotionsFunc = (props) => {
-    const [index, setIndex] = React.useState(0);
+    const [index, setIndex] = React.useState(0)
+
+    if (isFirstRender && index > 0) {
+        const setCount = (i) => {
+            setIndex(index -  i);
+            props.time = false;
+        };
+        setCount(index);
+    }
+    isFirstRender = false;
+
     const renderTabBar = tabBarProps => (
         <TabBar
             {...tabBarProps}
@@ -108,15 +124,13 @@ const TabPromotionsFunc = (props) => {
             { key: 'profile1', title: props.data[0].label },
             { key: 'profile2', title: props.data[1].label },
             { key: 'profile3', title: props.data[2].label },
-            { key: 'profile4', title: props.data[3].label },
-            { key: 'profile5', title: props.data[4].label },
+            { key: 'profile4', title: props.data[3].label }
         ]);
         renderScene = SceneMap({
             profile1: () => buildTabDetail(props.data[0]),
             profile2: () => buildTabDetail(props.data[1]),
             profile3: () => buildTabDetail(props.data[2]),
             profile4: () => buildTabDetail(props.data[3]),
-            profile5: () => buildTabDetail(props.data[4]),
         });
     }
     return (
@@ -140,6 +154,7 @@ export default class TabPromotions extends PureComponent {
         console.log(':: Profile detail ', profiles);
         var result;
         navigate = navigation;
+        isFirstRender = true;
         if (profiles.length > 0) {
             result = (
                 <TabPromotionsFunc data={profiles} />

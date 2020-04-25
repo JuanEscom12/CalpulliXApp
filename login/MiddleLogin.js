@@ -6,6 +6,7 @@ import ButtonCalpulliX from '../common/ButtonCalpulliX';
 import NavigatorCommons from '../navigation/NavigatorCommons';
 import stylesCommon from '../common/style';
 import { NavigationEvents } from 'react-navigation';
+import analytics from '@react-native-firebase/analytics';
 
 export default class MiddleLogin extends PureComponent {
 
@@ -51,6 +52,13 @@ export default class MiddleLogin extends PureComponent {
     }
 
     handleForgotPasswordOrUser = () => {
+        analytics().logEvent(
+            'screen_view', {
+                screen_name: 'ForgotUserPassword',
+                screen_view: 'ForgotUserPassword',
+                app_name: 'CalpulliXApp'
+              });
+
         this.setState({
             colorLink: '#9E9E9E'
         })
@@ -59,6 +67,12 @@ export default class MiddleLogin extends PureComponent {
     }
     
     handleRegisterAccount = () => {
+        analytics().logEvent(
+            'screen_view', {
+                screen_name: 'RegisterAccount',
+                screen_view: 'RegisterAccount',
+                app_name: 'CalpulliXApp'
+        });
         this.setState({
             colorLink: '#9E9E9E'
         })

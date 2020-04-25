@@ -10,7 +10,7 @@ import DatePicker from 'react-native-datepicker'
 import ApiCaller from '../api/ApiCaller';
 import CommonAPI from '../api/CommonAPI';
 import CONSTANTS from '../common/Constants';
-
+import analytics from '@react-native-firebase/analytics';
 
 
 var functionClearPicker;
@@ -82,6 +82,12 @@ export default class PurchaseOrderModule extends PureComponent {
 
     getPurchaseOrderFilters = () => {
         if (this.isValidInput()) {
+            analytics().logEvent(
+                'view_search_results', {
+                    search_term: '' + this.state.branchId.id + ',' + this.state.idStatus == null || 
+                                            this.state.idStatus == undefined ? '' : this.state.idStatus.id,
+                    description: 'Purchase order status selection'
+            });
             this.getPurchaseOrderList(CONSTANTS.ONE);
         } else {
             this.setState({
@@ -226,12 +232,24 @@ export default class PurchaseOrderModule extends PureComponent {
     }
 
     updateState = (_value) => {
+        analytics().logEvent(
+            'select_content', {
+                content_type: 'branch',
+                content_id: _value.toString(),
+                description: 'Branch selection'
+        });
         this.setState({
             branchId: _value
         })
     }
 
     updateStateStatus = (_value) => {
+        analytics().logEvent(
+            'select_content', {
+                content_type: 'Purchase_order_status',
+                content_id: _value.toString(),
+                description: 'Purchase order status selection'
+        });
         this.setState({
             idStatus: _value
         })

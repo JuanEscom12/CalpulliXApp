@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Video from 'react-native-video';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
- 
+import analytics from '@react-native-firebase/analytics';
+
 export default class BottomLogin extends PureComponent {
   videoPlayer;
  
@@ -26,6 +27,11 @@ export default class BottomLogin extends PureComponent {
  
   onPaused = playerState => {
     //Handler for Video Pause
+    analytics().logEvent(
+      'on_paused_video', {
+          description: 'Pause video' + (!this.state.paused).toString()
+    });
+  
     this.setState({
       paused: !this.state.paused,
       playerState,
@@ -36,6 +42,10 @@ export default class BottomLogin extends PureComponent {
     //Handler for Replay
     this.setState({ playerState: PLAYER_STATES.PLAYING });
     this.videoPlayer.seek(0);
+    analytics().logEvent(
+      'on_replay_video', {
+          description: 'Replay video ' + PLAYER_STATES.PLAYING
+    });
   };
  
   onProgress = data => {
@@ -55,9 +65,18 @@ export default class BottomLogin extends PureComponent {
   
   exitFullScreen = () => {
     alert('Exit full screen');
+    analytics().logEvent(
+      'exit_fullscreen_video', {
+          description: 'Exit full screeen video'
+    });
   };
   
-  enterFullScreen = () => {};
+  enterFullScreen = () => {
+    analytics().logEvent(
+      'on_fullscreen_video', {
+          description: 'Full screeen video'
+    });
+  };
   
   onFullScreen = () => {
     if (this.state.screenType == 'content')

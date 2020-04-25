@@ -28,6 +28,7 @@ export default class LeftHeaderBack extends PureComponent {
     var button;
     if (backButton) {
       button =
+      <View style={{  }}>
         <BackButtonCalpulliX
           id={'buttonBackCommonHeader'}
           height={22}
@@ -36,14 +37,19 @@ export default class LeftHeaderBack extends PureComponent {
           marginLeft='10%'
           marginRight='auto'
           screen={ screen }
-          navigation={navigation} />
+          navigation={navigation}
+           />
+        </View>
     } else {
       button = <View />
     }
     return (
-      <View style={{ flex: 1, flexDirection: 'column', backgroundColor: '#F6A338' }} >
+      
+      <View style={{ backgroundColor: '#F6A338', marginBottom: 27}} >
         {button}
+       
       </View>
+      
     );
   }
 

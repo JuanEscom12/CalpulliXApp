@@ -65,6 +65,9 @@ export default class Statistics extends PureComponent {
     }
 
     getBloxPlotCategiricalVariables = (_responseApi) => {
+        if (_responseApi.boxPlot == null) {
+            return <View></View>;
+        }
         var result = [];
         var base64Image;
         for (var index = 0; index < _responseApi.boxPlot.length; index++) {
@@ -84,6 +87,7 @@ export default class Statistics extends PureComponent {
                         marginRight: 'auto',
                         marginTop: 5,
                         borderRadius: 3,
+                        resizeMode: 'contain',
                     }}
                     source={{ uri: base64Image }} />
             );
@@ -141,8 +145,9 @@ export default class Statistics extends PureComponent {
         result.push(
             <Image
                 style={{
-                    height: 200,
-                    width: '90%',
+                    height: 230,
+                    width: '95%',
+                    resizeMode: 'contain',
                     borderWidth: 1,
                     borderColor: '#746F6F',
                     marginLeft: 'auto',
@@ -176,6 +181,9 @@ export default class Statistics extends PureComponent {
     }
 
     getAnovaDetail = (_responseApi) => {
+        if (_responseApi.anovaDetail == null) {
+            return <View></View>;
+        }
         var result = [];
         var detail = [];
         detail.push(
@@ -220,7 +228,7 @@ export default class Statistics extends PureComponent {
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={1250}>
+            <BackgroundScrollCalpulliX addHeight={1850}>
                 <NavigationEvents
                     onWillFocus={() => {
                         this.cleanInput();

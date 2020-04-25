@@ -15,7 +15,7 @@ export default class ClassificationUsersDetail extends PureComponent {
         const apiResponse = this.props.navigation.state.params.responseApi;
         console.log(':: API RESPONSE ', apiResponse);
         return (
-            <BackgroundScrollCalpulliX addHeight={100}>
+            <BackgroundScrollCalpulliX addHeight={170}>
                 <HeaderCalpulliXBack
                     title={'Detalle clasificación de usuarios'}
                     navigation={this.props.navigation}
@@ -30,7 +30,7 @@ export default class ClassificationUsersDetail extends PureComponent {
                             Ocurrio un error favor de intentar mas tarde
                     </Text>}
 
-                    <Text style={{ fontSize: 14, marginLeft: '5%', marginTop: 15, color: '#F49315' }}>
+                    <Text style={{ fontSize: 14, marginLeft: '5%', marginTop: 15, marginBottom: 10, color: '#F49315' }}>
                         Detalle del análisis de clientes
                     </Text>
 

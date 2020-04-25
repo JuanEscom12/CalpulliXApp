@@ -124,7 +124,7 @@ const AppNavigator = createDrawerNavigator({
   }
 },
   {
-    initialRouteName: 'Sales',
+    initialRouteName: 'ClassifyUsers',
     contentComponent: SideMenu,
     drawerWidth: 300
   }

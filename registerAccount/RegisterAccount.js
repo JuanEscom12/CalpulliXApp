@@ -8,6 +8,7 @@ import ApiCaller from '../api/ApiCaller';
 import Validator from '../validation/Validator';
 import { NavigationEvents } from 'react-navigation';
 import CONSTANTS from '../common/Constants';
+import analytics from '@react-native-firebase/analytics';
 
 const emailRegExp = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 const cellPhoneRegExp = /^\d{10}$/;
@@ -140,6 +141,10 @@ export default class RegisterAccount extends PureComponent {
 
     registerUser = async (e) => {
         if (this.isValidInput()) {
+            analytics().logEvent(
+                'register_user', {
+                    description: 'Register a new user'
+              });
             const response = await ApiCaller.callApi('/calpullix/register/user',
                 this.getRegisterUserRequest(), 
                 CONSTANTS.PORT_REGISTER_USER, CONSTANTS.POST_METHOD)

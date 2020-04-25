@@ -12,6 +12,7 @@ import openMap from 'react-native-open-maps';
 import NavigatorCommons from '../navigation/NavigatorCommons';
 import RNFS from 'react-native-fs';
 import FileViewer from 'react-native-file-viewer';
+import analytics from '@react-native-firebase/analytics';
 
 const labels =
 {
@@ -56,11 +57,20 @@ export default class PurchaseOrderDetail extends PureComponent {
     }
 
     goToMaps = (_ubication) => {
+        console.log(':: Opening google maps ', _ubication);
+        analytics().logEvent(
+            'goto_maps', {
+               description: 'Opening gmaps vendor location ' + _ubication
+        });
         openMap({ query: _ubication });
     }
 
     openPdf = (_pdfUrl) => {
         console.log(':: URL Pdf ', _pdfUrl);
+        analytics().logEvent(
+            'open_pdf_purchaseorder_report', {
+               description: 'Opening pdf report ' + _pdfUrl
+        });
         const localFile = `${RNFS.DocumentDirectoryPath}/temporaryfile.pdf`;
         const options = {
           fromUrl: _pdfUrl,
@@ -242,6 +252,11 @@ export default class PurchaseOrderDetail extends PureComponent {
             });
             return;
         }
+        analytics().logEvent(
+            'generate_lead', {
+               value: this.state.idPurchaseOrder,
+               description: 'Create purchase order'
+        });
         const response = await ApiCaller.callApi(
             '/calpullix/update/purchaseorder', this.getUpdatePurchaseOrderRequest(),
             CONSTANTS.PORT_PURCHASE_ORDER, 'POST')

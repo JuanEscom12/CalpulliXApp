@@ -157,13 +157,13 @@ export default class TwitterAnalysis extends PureComponent {
     getCloudWords = (_perfilInfo) => {
         var base64WordCloud = CONSTANTS.PREFIX_BASE64 + _perfilInfo.wordCloud;
         return (
-            <View style={{ marginTop: 20, }} >
-                <View style={{ marginLeft: '5%', flexDirection: 'row', marginBottom: 10 }}>
+            <View style={{ marginTop: 20, width: '100%' }} >
+                <View style={{ marginLeft: 'auto', marginBottom: 10, marginRight: 'auto', width: '90%' }}>
                     <Text style={{ fontSize: 11 }}>Palabras clave:</Text>
-                    <Text style={{ fontSize: 11, fontWeight: 'bold' }} >{' ['}</Text>
+
                     {_perfilInfo.keyWords.map((item, index) =>
                         this.getWord(item, index))}
-                    <Text style={{ fontSize: 11, fontWeight: 'bold' }} >{' ]'}</Text>
+
                 </View>
                 <Image
                     style={{
@@ -197,11 +197,9 @@ export default class TwitterAnalysis extends PureComponent {
 
     getWord = (_word, _index) => {
         var result;
-        if (_index == 0) {
-            result = (<Text style={{ fontSize: 11, fontWeight: 'bold' }} key={_index}>{' ' + _word}</Text>);
-        } else {
-            result = (<Text style={{ fontSize: 11, fontWeight: 'bold' }} key={_index}>{', ' + _word}</Text>);
-        }
+
+        result = (<Text style={{ fontSize: 11, fontWeight: 'bold' }} key={_index}>{_word}</Text>);
+
         return result;
     }
 
@@ -215,7 +213,7 @@ export default class TwitterAnalysis extends PureComponent {
     }
 
     cleanInput = () => {
-        if (this.props.navigation.state.params && 
+        if (this.props.navigation.state.params &&
             this.props.navigation.state.params.navigateFromMenu) {
             this.setState({
                 errorMessage: '',

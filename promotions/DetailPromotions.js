@@ -12,6 +12,7 @@ import Modal from "react-native-modal";
 import ApiCaller from '../api/ApiCaller';
 import Paginator from 'react-native-paginator';
 import styles from './styles';
+import analytics from '@react-native-firebase/analytics';
 
 
 const labels =
@@ -201,6 +202,10 @@ export default class DetailPromotions extends PureComponent {
     }
 
     handleDetailPromotion = async (_idPromotion) => {
+        analytics().logEvent(
+            'view_promotion', {
+                description: 'Show promotion detail ' + _idPromotion
+        });
         const result = await ApiCaller.callApi('/calpullix/detail/promotion/retrieve',
             this.getDetailRequest(_idPromotion),
             CONSTANTS.PORT_PROMOTIONS, CONSTANTS.POST_METHOD)
@@ -293,6 +298,10 @@ export default class DetailPromotions extends PureComponent {
     }
 
     updatePromotions = async () => {
+        analytics().logEvent(
+            'update_promotions_operation', {
+                description: 'Profile update promotions' + this.props.navigation.state.params.responseApi.idProfile
+        });
         const result = await ApiCaller.callApi('/calpullix/promotions/profile/update',
             this.getUpdatePromotionsRequest(),
             CONSTANTS.PORT_PROMOTIONS, CONSTANTS.POST_METHOD)

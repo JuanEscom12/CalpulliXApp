@@ -4,10 +4,18 @@ import styles from './SideMenu.style';
 import {Image, Text, View} from 'react-native';
 import BackgroundScrollCalpulliX from '../common/BackgroundScrollCalpulliX';
 import NavigatorCommons from '../navigation/NavigatorCommons';
+import analytics from '@react-native-firebase/analytics';
+
 
 class SideMenu extends Component {
 
   navigateToScreen = (_route) => () => {
+    analytics().logEvent(
+      'screen_view', {
+          screen_name: _route,
+          screen_view: _route,
+          app_name: 'CalpulliXApp'
+    });
     NavigatorCommons.navigateTo(this.props.navigation, _route, { 'navigateFromMenu': true });
   }
 

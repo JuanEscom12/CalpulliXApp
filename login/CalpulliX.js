@@ -13,6 +13,7 @@ import styles from './style'
 import stylesCommon from '../common/style'
 import CONSTANTS from '../common/Constants';
 import Validator from '../validation/Validator';
+import analytics from '@react-native-firebase/analytics';
 
 var user = '';
 var pass = '';
@@ -29,6 +30,10 @@ export default class CalpulliX extends PureComponent {
 
   doLogin = async (e) => {
     if (this.isValidInput()) {
+      analytics().logEvent(
+        'login', {
+            description: 'Login of user ' + user
+      });
       const response = await ApiCaller.callApi('/calpullix/login', 
         this.getLoginRequest(), CONSTANTS.PORT_LOGIN, CONSTANTS.POST_METHOD)
         .catch((error) => {

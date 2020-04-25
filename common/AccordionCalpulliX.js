@@ -12,6 +12,7 @@ import NavigatorCommons from '../navigation/NavigatorCommons';
 import ApiCaller from '../api/ApiCaller';
 import styles from './style';
 import { NavigationEvents } from 'react-navigation';
+import analytics from '@react-native-firebase/analytics';
 idValue = 0;
 
 
@@ -26,6 +27,12 @@ export default class AccordionCalpulliX extends PureComponent {
   } 
 
   openDetail = async () => {
+    analytics().logEvent(
+      'screen_view', {
+          screen_name: this.props.screen,
+          screen_view: this.props.screen,
+          app_name: 'CalpulliXApp'
+    });
     const response = await ApiCaller.callApi(
       this.props.path, this.getDetailRequest(), this.props.port, 'POST')
       .catch((error) => {
