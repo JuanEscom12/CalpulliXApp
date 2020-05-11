@@ -13,10 +13,11 @@ import CommonAPI from '../api/CommonAPI';
 import CONSTANTS from '../common/Constants';
 import stylesAutoComplete from '../sales/styles';
 import Autocomplete from 'react-native-autocomplete-input';
+import CalpullixSpinner from '../common/CalpullixSpinner';
 
 var functionClearPicker;
 const labels = ['Descripción', 'Nombre', 'Marca', 'Status', 'Sucursal', 'Precio venta',
-                'Promedio ventas mensuales', 'Promedio ventas diario', 'Gramaje'];
+  'Promedio ventas mensuales', 'Promedio ventas diario', 'Gramaje'];
 
 export default class ProductList extends PureComponent {
 
@@ -34,6 +35,7 @@ export default class ProductList extends PureComponent {
       dataProducts: [],
       product: '',
       hideResults: true,
+      spinner: false,
     };
     this.getBranchList();
   }
@@ -59,7 +61,18 @@ export default class ProductList extends PureComponent {
 
   getItems = () => {
     if (this.isValidInput()) {
+
+      this.setState({
+        spinner: true,
+      });
+
       this.getProductList(CONSTANTS.ONE);
+
+      this.setState({
+        page: CONSTANTS.ONE,
+        spinner: false,
+      });
+
     } else {
       this.setState({
         errorMessage: 'El campo sucursal es requerido.',
@@ -111,7 +124,7 @@ export default class ProductList extends PureComponent {
       item.push(this.state.productListApi[i].monthlyAverageSales);
       item.push(this.state.productListApi[i].dailyAverageSales);
       item.push(this.state.productListApi[i].weight);
-      item.push();
+      
       fields.push(item);
     }
     this.setState({
@@ -121,9 +134,9 @@ export default class ProductList extends PureComponent {
   }
 
   cleanInput = () => {
-    if (this.props.navigation.state.params && 
-        (this.props.navigation.state.params.navigateFromMenu || 
-         this.props.navigation.state.params.navigateFromLogin)) {
+    if (this.props.navigation.state.params &&
+      (this.props.navigation.state.params.navigateFromMenu ||
+        this.props.navigation.state.params.navigateFromLogin)) {
       functionClearPicker();
       this.setState({
         errorMessage: '',
@@ -137,7 +150,7 @@ export default class ProductList extends PureComponent {
       this.getBranchList();
       this.props.navigation.state.params.navigateFromMenu = false;
       this.props.navigation.state.params.navigateFromLogin = false;
-    } 
+    }
   }
 
   updateState = (_value) => {
@@ -189,110 +202,121 @@ export default class ProductList extends PureComponent {
 
   render() {
     return (
-      <BackgroundScrollCalpulliX addHeight={900}>
-        <NavigationEvents
-          onWillFocus={() => {
-            this.cleanInput();
-          }} />
+      <View>
         <HeaderCalpulliXBack
           navigation={this.props.navigation}
           backButton={false}
           title={'Lista de productos'} />
-        <View style={{ marginTop: 5 }}>
-          <Text
-            id='errorMessageListItems'
-            style={[stylesCommon.errorMessage, { marginTop: 5 }]}>{this.state.errorMessage}
-          </Text>
-          <Text style={[stylesCommon.labelText, { marginTop: 5, marginRight: '70%', fontSize: 13 }]}>
-            Sucursales
-          </Text>
-          <PickerCalpulliX
-            data={this.state.branches}
-            updateState={this.updateState}
-            placeholder={'Seleccione la sucursal'}
-            functionClearPicker={this.setFunctionClearPicker} />
-
-          <Text style={[stylesCommon.labelText, { marginTop: 5, marginRight: '73%', fontSize: 13 }]}>
-            Producto
-          </Text>
-          <View style={{ marginTop: 5 }}>
-            <View style={[stylesAutoComplete.autocompleteContainer]} >
-              <Autocomplete
-                placeholder={'   Introduzca el producto'}
-                data={this.state.dataProducts}
-                defaultValue={this.state.product}
-                onChangeText={(text) => this.handleAutoComplete(text)}
-                hideResults={this.state.hideResults}
-                onBlur={() => this.setState({ hideResults: true })}
-                style={{
-                  borderWidth: 0,
-                  borderColor: '#F49315',
-                }}
-                inputContainerStyle={{
-                  borderColor: '#F49315', borderRadius: 5, 
-                  borderWidth: 0.5, backgroundColor: '#FDFDFD',
-                }}
-                renderItem={({ item, i }) => (
-
-                  <TouchableOpacity
-                    onPress={() => {
-                      console.log(':: ON PRESS ', item)
-                      this.setState({ product: item, hideResults: true })
-                    }}>
-
-                    <Text style={{
-                      backgroundColor: '#FDFDFD',
-                      fontSize: 12,
-                      borderColor: '#F49315',
-                      borderWidth: 0.2,
-                    }}>{'\n  ' + item + '\n'}</Text>
-
-                  </TouchableOpacity>
-                )} />
-            </View>
-          </View>
-
-          <ButtonCalpulliX
-            title={'Buscar'}
-            id={'buttonSearchItems'}
-            arrayColors={['#05AAAB', '#048585', '#048585']}
-            onPress={this.getItems}
-            width={'35%'}
-            height={45}
-            marginTop={70} />
-          <AccordionCalpulliX
-            content={this.state.productList}
-            requestParameter={this.state.branchId ? this.state.branchId.id : this.state.branchId}
-            path={'/calpullix/product/detail/retrieve'}
-            port={CONSTANTS.PORT_PRODUCT_LIST}
-            screen={'ProductDetail'}
-            navigation={this.props.navigation}
-            renderDetailButton={true}
-            titleButton={'Ver Detalle'}
-            margintTop={25}
-            labels={labels}
-            labelHeader={'Id del producto  '}
-            marginLeftRowHeader={'55%'} />
-          <Paginator
-            totalItems={this.state.itemCount}
-            onChange={numberPage => this.handlerPagination(numberPage)}
-            activePage={this.state.page}
-            disabled={false}
-            itemsPerPage={this.state.itemsPerPage}
-            buttonStyles={
-              {
-                backgroundColor: '#F3F9FA',
-                color: '#156869',
-                borderColor: '#156869',
-              }
-            }
-            buttonActiveStyles={{
-              backgroundColor: '#05AAAB',
-              color: '#F3F9FA',
-              borderColor: '#05AAAB'
+        <BackgroundScrollCalpulliX addHeight={900}>
+          <NavigationEvents
+            onWillFocus={() => {
+              this.cleanInput();
             }} />
-        </View>
-      </BackgroundScrollCalpulliX>
+          <View style={{ marginTop: 5 }}>
+
+            <CalpullixSpinner 
+                spinner={this.state.spinner} />
+                
+            <Text
+              id='errorMessageListItems'
+              style={[stylesCommon.errorMessage, { marginTop: 5 }]}>{this.state.errorMessage}
+            </Text>
+            <Text style={[stylesCommon.labelText, { marginTop: 5, marginRight: '70%', fontSize: 13 }]}>
+              Sucursales
+          </Text>
+            <PickerCalpulliX
+              data={this.state.branches}
+              updateState={this.updateState}
+              placeholder={'Seleccione la sucursal'}
+              functionClearPicker={this.setFunctionClearPicker} />
+
+            <Text style={[stylesCommon.labelText, { marginTop: 5, marginRight: '73%', fontSize: 13 }]}>
+              Producto
+          </Text>
+
+
+            <View style={{ marginTop: 5 }}>
+              <View style={[stylesAutoComplete.autocompleteContainer]} >
+                <Autocomplete
+                  placeholder={'   Introduzca el producto'}
+                  data={this.state.dataProducts}
+                  defaultValue={this.state.product}
+                  onChangeText={(text) => this.handleAutoComplete(text)}
+                  hideResults={this.state.hideResults}
+                  onBlur={() => this.setState({ hideResults: true })}
+                  style={{
+                    borderWidth: 0,
+                    borderColor: '#F49315',
+                  }}
+                  inputContainerStyle={{
+                    borderColor: '#F49315', borderRadius: 5,
+                    borderWidth: 0.5, backgroundColor: '#FDFDFD',
+                  }}
+                  renderItem={({ item, i }) => (
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        console.log(':: ON PRESS ', item)
+                        this.setState({ product: item, hideResults: true })
+                      }}>
+
+                      <Text style={{
+                        backgroundColor: '#FDFDFD',
+                        fontSize: 12,
+                        borderColor: '#F49315',
+                        borderWidth: 0.2,
+                      }}>{'\n  ' + item + '\n'}</Text>
+
+                    </TouchableOpacity>
+                  )} />
+              </View>
+            </View>
+
+            <ButtonCalpulliX
+              title={'Buscar'}
+              id={'buttonSearchItems'}
+              arrayColors={['#05AAAB', '#048585', '#048585']}
+              onPress={this.getItems}
+              width={'35%'}
+              height={45}
+              marginTop={70} />
+
+            <AccordionCalpulliX
+              content={this.state.productList}
+              requestParameter={this.state.branchId ? this.state.branchId.id : this.state.branchId}
+              path={'/calpullix/product/detail/retrieve'}
+              port={CONSTANTS.PORT_PRODUCT_LIST}
+              screen={'ProductDetail'}
+              navigation={this.props.navigation}
+              renderDetailButton={true}
+              titleButton={'Ver Detalle'}
+              margintTop={25}
+              labels={labels}
+              labelHeader={'Id del producto  '}
+              marginLeftRowHeader={'55%'} />
+
+            <Paginator
+              totalItems={this.state.itemCount}
+              onChange={numberPage => this.handlerPagination(numberPage)}
+              activePage={this.state.page}
+              disabled={false}
+              itemsPerPage={this.state.itemsPerPage}
+              buttonStyles={
+                {
+                  backgroundColor: '#F3F9FA',
+                  color: '#156869',
+                  borderColor: '#156869',
+                }
+              }
+              buttonActiveStyles={{
+                backgroundColor: '#05AAAB',
+                color: '#F3F9FA',
+                borderColor: '#05AAAB'
+              }} />
+
+          </View>
+        </BackgroundScrollCalpulliX>
+      </View>
     );
   }
 }

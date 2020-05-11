@@ -170,25 +170,27 @@ export default class ProductDetail extends PureComponent {
         const apiResponse = this.props.navigation.state.params.responseApi;
         var content = this.getContent(apiResponse);
         return (
-            <BackgroundScrollCalpulliX addHeight={200}>
+            <View>
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     backButton={true}
                     screen={'ProductList'}
                     title={'Detalle del producto'} />
-                <View style={{
-                    borderColor: '#F49315', borderWidth: 0.5, width: '90%',
-                    marginLeft: 'auto', marginRight: 'auto', marginTop: 30, borderRadius: 5,
-                }}>
-                    <View style={{ flex: 1, height: '100%' }}>
-                        <Modal isVisible={this.state.showDetailPromotion} >
-                            {this.state.contentDetailPromotion}
-                        </Modal>
-                    </View>
+                <BackgroundScrollCalpulliX addHeight={200}>
+                    <View style={{
+                        borderColor: '#F49315', borderWidth: 0.5, width: '90%',
+                        marginLeft: 'auto', marginRight: 'auto', marginTop: 30, borderRadius: 5,
+                    }}>
+                        <View style={{ flex: 1, height: '100%' }}>
+                            <Modal isVisible={this.state.showDetailPromotion} >
+                                {this.state.contentDetailPromotion}
+                            </Modal>
+                        </View>
 
-                    {content}
-                </View>
-            </BackgroundScrollCalpulliX>
+                        {content}
+                    </View>
+                </BackgroundScrollCalpulliX>
+            </View>
         );
     }
 }

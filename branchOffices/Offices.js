@@ -17,6 +17,7 @@ import { NavigationEvents } from 'react-navigation';
 import Carousel from 'react-native-snap-carousel';
 import Paginator from 'react-native-paginator';
 
+
 const branchesInformation = {
     "name": "Nombre",
     "manager": "Gerente",
@@ -50,14 +51,11 @@ export default class Offices extends PureComponent {
             officesList: [],
             region: null,
             markers: null,
-
             imagesReferenceCarousel: [],
             imagesCarousel: [],
-
             year: null,
             month: null,
             branchId: null,
-
             itemCount: 0,
             page: 1,
             itemsPerPage: 5,
@@ -214,103 +212,107 @@ export default class Offices extends PureComponent {
 
     handlerPagination = (numberPage) => {
         this.setState({
-          page: numberPage,
+            page: numberPage,
         });
         this.getOffices(this.getPaginatorRequest(numberPage));
     }
 
-      getPaginatorRequest = (_page) => {
-        var result =  {
+    getPaginatorRequest = (_page) => {
+        var result = {
             "id": this.state.branchId,
             "year": this.state.year,
             "month": this.state.month,
             "page": _page,
-          };
-          return result;
-      }
+        };
+        return result;
+    }
 
 
     render() {
         const { officesList, markers } = this.state;
 
         return (
-            <BackgroundScrollCalpulliX addHeight={2100}>
-                <View >
-                    <HeaderCalpulliXBack
-                        title={'Sucursales'} />
-                    <NavigationEvents onWillFocus={() => {
-                        this.cleanInput();
-                    }} />
-                    <Text
-                        id='errorMessage'
-                        style={[stylesCommon.errorMessage, { marginTop: 5 }]}>
-                        {this.state.errorMessage}
-                    </Text>
-                    <SearchingOffice
-                        doSearch={this.getOffices}
-                        marginTop={5}
-                        navigationParent={this.props.navigation}
-                        setYear={this.setYear}
-                        setMonth={this.setMonth}
-                        setBranchId={this.setBranchId}
-                        page={this.state.page} />
-
-                    <View style={{
-                        borderWidth: 0.2,
-                        borderColor: 'grey',
-                        marginRight: 10,
-                        marginLeft: 10,
-                        marginBottom: 20,
-                    }} />
-                    <Text style={[stylesCommon.headerText]} style={{ fontSize: 16, marginLeft: '5%', color: '#F49315' }}>
-                        Sucursales
-                    </Text>
-                    <ResultOffices
-                        labelNames={branchesInformation}
-                        officesList={officesList} />
-
-                    <Paginator
-                        totalItems={this.state.itemCount}
-                        onChange={numberPage => this.handlerPagination(numberPage)}
-                        activePage={this.state.page}
-                        disabled={false}
-                        itemsPerPage={this.state.itemsPerPage}
-                        buttonStyles={
-                            {
-                                backgroundColor: '#F3F9FA',
-                                color: '#156869',
-                                borderColor: '#156869',
-                            }
-                        }
-                        buttonActiveStyles={{
-                            backgroundColor: '#05AAAB',
-                            color: '#F3F9FA',
-                            borderColor: '#05AAAB'
+            <View>
+                <HeaderCalpulliXBack
+                    title={'Sucursales'} />
+                <BackgroundScrollCalpulliX addHeight={2100}>
+                    <View >
+                        <NavigationEvents onWillFocus={() => {
+                            this.cleanInput();
                         }} />
+                        <Text
+                            id='errorMessage'
+                            style={[stylesCommon.errorMessage, { marginTop: 5 }]}>
+                            {this.state.errorMessage}
+                        </Text>
+                        <SearchingOffice
+                            doSearch={this.getOffices}
+                            marginTop={5}
+                            navigationParent={this.props.navigation}
+                            setYear={this.setYear}
+                            setMonth={this.setMonth}
+                            setBranchId={this.setBranchId}
+                            page={this.state.page} />
 
-                    <Carousel
-                        ref={(c) => { this._carousel = c; }}
-                        data={this.state.imagesReferenceCarousel}
-                        renderItem={this._renderItem.bind(this)}
-                        onSnapToItem={this.handleSnapToItem.bind(this)}
-                        sliderWidth={350}
-                        itemWidth={320}
-                        firstItem={0}
-                        layout={'tinder'} />
+                        <View style={{
+                            borderWidth: 0.2,
+                            borderColor: 'grey',
+                            marginRight: 10,
+                            marginLeft: 10,
+                            marginBottom: 20,
+                        }} />
+                        <Text style={[stylesCommon.headerText]} style={{ fontSize: 16, marginLeft: '5%', color: '#F49315' }}>
+                            Sucursales
+                    </Text>
+
+                        <ResultOffices
+                            labelNames={branchesInformation}
+                            officesList={officesList} />
+
+                        <Paginator
+                            totalItems={this.state.itemCount}
+                            onChange={numberPage => this.handlerPagination(numberPage)}
+                            activePage={this.state.page}
+                            disabled={false}
+                            itemsPerPage={this.state.itemsPerPage}
+                            buttonStyles={
+                                {
+                                    backgroundColor: '#F3F9FA',
+                                    color: '#156869',
+                                    borderColor: '#156869',
+                                }
+                            }
+                            buttonActiveStyles={{
+                                backgroundColor: '#05AAAB',
+                                color: '#F3F9FA',
+                                borderColor: '#05AAAB'
+                            }} />
+
+                        <Carousel
+                            ref={(c) => { this._carousel = c; }}
+                            data={this.state.imagesReferenceCarousel}
+                            renderItem={this._renderItem.bind(this)}
+                            onSnapToItem={this.handleSnapToItem.bind(this)}
+                            sliderWidth={350}
+                            itemWidth={320}
+                            firstItem={0}
+                            layout={'tinder'} />
 
 
-                    <View style={styles.container}>
-                        <MapView
-                            provider={PROVIDER_GOOGLE}
-                            style={styles.map}
-                            region={this.state.region}
-                            zoomEnabled={true}
-                            minZoomLevel={10} >
-                            {markers}
-                        </MapView>
+                        <View style={styles.container}>
+                            <MapView
+                                provider={PROVIDER_GOOGLE}
+                                style={styles.map}
+                                region={this.state.region}
+                                zoomEnabled={true}
+                                minZoomLevel={12} >
+                                {markers}
+                            </MapView>
+                        </View>
+
                     </View>
-                </View>
-            </BackgroundScrollCalpulliX>
+                </BackgroundScrollCalpulliX>
+            </View>
         );
     }
 }
@@ -320,12 +322,13 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'flex-end',
         alignItems: 'center',
-        width: '90%',
+        width: '100%',
         marginLeft: 'auto',
         marginRight: 'auto',
-        height: 400,
+        height: 550,
         borderColor: '#F49315',
         borderWidth: 0.5,
+        marginTop: 20,
 
     },
     map: {

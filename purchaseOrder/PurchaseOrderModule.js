@@ -84,7 +84,7 @@ export default class PurchaseOrderModule extends PureComponent {
         if (this.isValidInput()) {
             analytics().logEvent(
                 'view_search_results', {
-                    search_term: '' + this.state.branchId.id + ',' + this.state.idStatus == null || 
+                    search_term: '' + this.state.branchId  + ',' + this.state.idStatus == null || 
                                             this.state.idStatus == undefined ? '' : this.state.idStatus.id,
                     description: 'Purchase order status selection'
             });
@@ -102,11 +102,14 @@ export default class PurchaseOrderModule extends PureComponent {
             this.areInitialDates()) {
             return true;
         }
-        if ((this.state.branchId !== null && this.areValidDatesAndStatus()) ||
-            (this.state.branchId !== null && this.areInitialDates() || this.areValidDatesAndStatus()) ||
-            (this.state.branchId == null && this.areValidDatesAndStatus()) ||
-            (this.state.branchId !== null && this.areInitialDates()) ||
-            (this.state.idStatus !== null && this.areInitialDates())) {
+       
+        if ((this.state.branchId !== null && this.state.idStatus !== null && this.areValidDates()) ||
+            (this.state.branchId !== null && this.state.idStatus == null  && this.areValidDates()) ||
+            (this.state.branchId == null  && this.state.idStatus !== null && this.areValidDates()) ||
+            (this.state.branchId !== null && this.state.idStatus !== null && this.areInitialDates()) ||
+            (this.state.branchId !== null && this.state.idStatus == null  && this.areInitialDates()) ||
+            (this.state.idStatus !== null && this.state.branchId == null  && this.areInitialDates())  ||
+            (this.areValidDates() && this.state.idStatus == null && this.state.branchId == null)) {
             result = true;
         } else {
             result = false;
@@ -115,11 +118,10 @@ export default class PurchaseOrderModule extends PureComponent {
     }
 
     areInitialDates  = () => {
-        
         return this.state.date == initDate && this.state.endDate == initDate;
     }
     
-    areValidDatesAndStatus = () => {
+    areValidDates = () => {
         var split = this.state.date.split("-");
         var month = parseInt(split[1], 10) - CONSTANTS.ONE;
         var firstDate = new Date(split[0], month, split[2]);
@@ -127,10 +129,11 @@ export default class PurchaseOrderModule extends PureComponent {
         month = parseInt(split[1], 10) - CONSTANTS.ONE;
         var endDate = new Date(split[0], month, split[2]);
         var today = new Date();
-        
         return firstDate.getTime() <= endDate.getTime() &&
-                endDate.getTime() <= today.getTime() && this.state.idStatus !== null;
+                endDate.getTime() <= today.getTime();
     }
+
+    
 
     getPurchaseOrderList = async (_numberPage) => {
         const result = await ApiCaller.callApi('/calpullix/retrieve/purchaseorder',
@@ -168,12 +171,15 @@ export default class PurchaseOrderModule extends PureComponent {
     }
 
     getPurchaseOrderRequest(_numberPage) {
-        var date = null;
-        var endDate = null;
+        var date;
+        var endDate;
         if (this.state.date !== initDate  || 
             this.state.endDate !== initDate) {
             date = this.state.date;
             endDate = this.state.endDate;
+        } else {
+            date = null;
+            endDate = null;
         }
         const request = {
             "branchId": this.state.branchId !== null ? this.state.branchId.id : null,
@@ -235,7 +241,7 @@ export default class PurchaseOrderModule extends PureComponent {
         analytics().logEvent(
             'select_content', {
                 content_type: 'branch',
-                content_id: _value.toString(),
+                content_id:  _value !== null ?_value.toString() : '',
                 description: 'Branch selection'
         });
         this.setState({
@@ -247,7 +253,7 @@ export default class PurchaseOrderModule extends PureComponent {
         analytics().logEvent(
             'select_content', {
                 content_type: 'Purchase_order_status',
-                content_id: _value.toString(),
+                content_id: _value !== null ? _value.toString() : '',
                 description: 'Purchase order status selection'
         });
         this.setState({
@@ -264,6 +270,26 @@ export default class PurchaseOrderModule extends PureComponent {
     }
 
 
+    handleChangeDate = (_date) => {
+        var split = _date.split("-");
+        var month = parseInt(split[1], 10) - CONSTANTS.ONE;
+        var firstDate = new Date(split[0], month, split[2]);
+       
+        split = this.state.endDate.split("-");
+        month = parseInt(split[1], 10) - CONSTANTS.ONE;
+        var secondDate = new Date(split[0], month, split[2]);
+
+        if (firstDate.getTime() > secondDate.getTime()) {
+            this.setState({
+                date: _date,
+                endDate: _date,
+            });
+        } else {
+            this.setState({
+                date: _date,
+            });
+        }
+    }
 
     render() {
         return (
@@ -324,7 +350,9 @@ export default class PurchaseOrderModule extends PureComponent {
                                 backgroundColor: '#FDFDFD',
                             }
                         }}
-                        onDateChange={(date) => { this.setState({ date: date }) }} />
+                        onDateChange={
+                            (date) => this.handleChangeDate(date)} />
+
                     <DatePicker
                         style={{ width: 160, marginTop: 20, }}
                         date={this.state.endDate}

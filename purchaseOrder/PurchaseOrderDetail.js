@@ -60,8 +60,8 @@ export default class PurchaseOrderDetail extends PureComponent {
         console.log(':: Opening google maps ', _ubication);
         analytics().logEvent(
             'goto_maps', {
-               description: 'Opening gmaps vendor location ' + _ubication
-        });
+                description: 'Opening gmaps vendor location ' + _ubication
+            });
         openMap({ query: _ubication });
     }
 
@@ -69,20 +69,20 @@ export default class PurchaseOrderDetail extends PureComponent {
         console.log(':: URL Pdf ', _pdfUrl);
         analytics().logEvent(
             'open_pdf_purchaseorder_report', {
-               description: 'Opening pdf report ' + _pdfUrl
-        });
+                description: 'Opening pdf report ' + _pdfUrl
+            });
         const localFile = `${RNFS.DocumentDirectoryPath}/temporaryfile.pdf`;
         const options = {
-          fromUrl: _pdfUrl,
-          toFile: localFile
+            fromUrl: _pdfUrl,
+            toFile: localFile
         };
         RNFS.downloadFile(options).promise
-        .then(() => FileViewer.open(localFile))
-        .then(() => {
-        })
-        .catch(error => {
-            console.log(error);
-        });
+            .then(() => FileViewer.open(localFile))
+            .then(() => {
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     getContent = (_apiResponse) => {
@@ -124,7 +124,7 @@ export default class PurchaseOrderDetail extends PureComponent {
 
             </View>
         );
-      
+
         content.push(
             <View style={
                 [styles.content, { width: '100%' }]} >
@@ -141,7 +141,7 @@ export default class PurchaseOrderDetail extends PureComponent {
                     borderRadius: 5,
                     marginBottom: 20,
                 }} activeOpacity={0.5}
-                onPress={() => this.openPdf(_apiResponse['pdfUrl'])}>
+                    onPress={() => this.openPdf(_apiResponse['pdfUrl'])}>
                     <Image
                         source={require('./pdf_icon.png')}
                         style={{
@@ -254,9 +254,9 @@ export default class PurchaseOrderDetail extends PureComponent {
         }
         analytics().logEvent(
             'generate_lead', {
-               value: this.state.idPurchaseOrder,
-               description: 'Create purchase order'
-        });
+                value: this.state.idPurchaseOrder,
+                description: 'Create purchase order'
+            });
         const response = await ApiCaller.callApi(
             '/calpullix/update/purchaseorder', this.getUpdatePurchaseOrderRequest(),
             CONSTANTS.PORT_PURCHASE_ORDER, 'POST')
@@ -275,7 +275,7 @@ export default class PurchaseOrderDetail extends PureComponent {
         } else {
             this.setState({
                 errorMessage: 'Ocurrio un error, favor de intentar mas tarde',
-            });  
+            });
         }
     }
 
@@ -318,33 +318,35 @@ export default class PurchaseOrderDetail extends PureComponent {
         const apiResponse = this.props.navigation.state.params.responseApi;
         var content = this.getContent(apiResponse);
         return (
-            <BackgroundScrollCalpulliX addHeight={370}>
+            <View>
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     backButton={true}
                     screen={'PurchaseOrder'}
                     title={"Detalle orden de compra"} />
-                <NavigationEvents
-                    onWillFocus={() => {
-                        this.restartInput();
-                    }} />
-                <Text
-                    id='errorMessagePurchaseOrderDetail'
-                    style={[stylesCommon.errorMessage, { marginTop: 5 }]}>{this.state.errorMessage}
-                </Text>
-                <Text
-                    id='titlePurchaseOrderDetail'
-                    style={{ marginTop: 5, textAlign: 'center', color: '#F49315' }}>
-                    Orden de compra No. {this.state.idPurchaseOrder}
-                </Text>
-                <View style={{
-                    borderColor: '#F49315', borderWidth: 0.5, width: '90%',
-                    marginLeft: 'auto', marginRight: 'auto', marginTop: 10,
-                    borderRadius: 10
-                }}>
-                    {content}
-                </View>
-            </BackgroundScrollCalpulliX>
+                <BackgroundScrollCalpulliX addHeight={370}>
+                    <NavigationEvents
+                        onWillFocus={() => {
+                            this.restartInput();
+                        }} />
+                    <Text
+                        id='errorMessagePurchaseOrderDetail'
+                        style={[stylesCommon.errorMessage, { marginTop: 5 }]}>{this.state.errorMessage}
+                    </Text>
+                    <Text
+                        id='titlePurchaseOrderDetail'
+                        style={{ marginTop: 5, textAlign: 'center', color: '#F49315' }}>
+                        Orden de compra No. {this.state.idPurchaseOrder}
+                    </Text>
+                    <View style={{
+                        borderColor: '#F49315', borderWidth: 0.5, width: '90%',
+                        marginLeft: 'auto', marginRight: 'auto', marginTop: 10,
+                        borderRadius: 10
+                    }}>
+                        {content}
+                    </View>
+                </BackgroundScrollCalpulliX>
+            </View>
         );
     }
 }

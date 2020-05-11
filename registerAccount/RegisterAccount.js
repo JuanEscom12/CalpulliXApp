@@ -144,9 +144,9 @@ export default class RegisterAccount extends PureComponent {
             analytics().logEvent(
                 'register_user', {
                     description: 'Register a new user'
-              });
+                });
             const response = await ApiCaller.callApi('/calpullix/register/user',
-                this.getRegisterUserRequest(), 
+                this.getRegisterUserRequest(),
                 CONSTANTS.PORT_REGISTER_USER, CONSTANTS.POST_METHOD)
                 .catch((error) => {
                     console.log(error);
@@ -267,121 +267,123 @@ export default class RegisterAccount extends PureComponent {
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={0}>
-                <NavigationEvents
-                    onWillFocus={() => {
-                        this.cleanInput();
-                    }} />
+            <View>
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     backButton={true}
                     screen={'Login'}
                     title={'Registro de usuarios'} />
-                <View style={{ marginTop: 5 }}>
-                    <Text
-                        id='errorMessageUserRegister'
-                        style={stylesCommon.errorMessage}>{this.state.errorMessage}</Text>
-                    <Text style={[stylesCommon.labelText, { marginTop: 5, fontSize: 15, color: '#F6A338' }]}>
-                        {this.state.headText}
-                    </Text>
-                    <TextInput
-                        id='inputUserRegisterUser'
-                        style=
-                        {[
-                            stylesCommon.textInputCalpulliX,
-                            {
-                                borderColor: this.state.borderColorUserTextInput,
-                                backgroundColor: this.state.backgroundColorUserInput,
-                                marginTop: 20
-                            }
-                        ]}
-                        value={this.state.userText}
-                        onChangeText={(text) => this.handleChangeUserText(text)}
-                        onFocus={() => this.handleUserOnFocus()}
-                        onBlur={() => this.handleUserOnBlur()}
-                        placeholder='        Ingresa tu Id de usuario'
-                        placeholderTextColor='#9E9E9E' />
-                    <TextInput
-                        id='inputNameRegisterUser'
-                        style=
-                        {[
-                            stylesCommon.textInputCalpulliX,
-                            {
-                                borderColor: this.state.borderColorNameTextInput,
-                                backgroundColor: this.state.backgroundColorNameInput,
-                                marginTop: 20
-                            }
-                        ]}
-                        value={this.state.nameText}
-                        onChangeText={(text) => this.handleChangeNameText(text)}
-                        onFocus={() => this.handleNameOnFocus()}
-                        onBlur={() => this.handleNameOnBlur()}
-                        placeholder='        Ingresa tu nombre'
-                        placeholderTextColor='#9E9E9E' />
-                    <TextInput
-                        id='inputLastNameRegisterUser'
-                        style=
-                        {[
-                            stylesCommon.textInputCalpulliX,
-                            {
-                                borderColor: this.state.borderColorLastNameTextInput,
-                                backgroundColor: this.state.backgroundColorLastNameInput,
-                                marginTop: 20
-                            }
-                        ]}
-                        value={this.state.lastNameText}
-                        onChangeText={(text) => this.handleChangeLastNameText(text)}
-                        onFocus={() => this.handleLastNameOnFocus()}
-                        onBlur={() => this.handleLastNameOnBlur()}
-                        placeholder='        Ingresa tu apellido'
-                        placeholderTextColor='#9E9E9E' />
+                <BackgroundScrollCalpulliX addHeight={0}>
+                    <NavigationEvents
+                        onWillFocus={() => {
+                            this.cleanInput();
+                        }} />
+                    <View style={{ marginTop: 5 }}>
+                        <Text
+                            id='errorMessageUserRegister'
+                            style={stylesCommon.errorMessage}>{this.state.errorMessage}</Text>
+                        <Text style={[stylesCommon.labelText, { marginTop: 5, fontSize: 15, color: '#F6A338' }]}>
+                            {this.state.headText}
+                        </Text>
+                        <TextInput
+                            id='inputUserRegisterUser'
+                            style=
+                            {[
+                                stylesCommon.textInputCalpulliX,
+                                {
+                                    borderColor: this.state.borderColorUserTextInput,
+                                    backgroundColor: this.state.backgroundColorUserInput,
+                                    marginTop: 20
+                                }
+                            ]}
+                            value={this.state.userText}
+                            onChangeText={(text) => this.handleChangeUserText(text)}
+                            onFocus={() => this.handleUserOnFocus()}
+                            onBlur={() => this.handleUserOnBlur()}
+                            placeholder='        Ingresa tu Id de usuario'
+                            placeholderTextColor='#9E9E9E' />
+                        <TextInput
+                            id='inputNameRegisterUser'
+                            style=
+                            {[
+                                stylesCommon.textInputCalpulliX,
+                                {
+                                    borderColor: this.state.borderColorNameTextInput,
+                                    backgroundColor: this.state.backgroundColorNameInput,
+                                    marginTop: 20
+                                }
+                            ]}
+                            value={this.state.nameText}
+                            onChangeText={(text) => this.handleChangeNameText(text)}
+                            onFocus={() => this.handleNameOnFocus()}
+                            onBlur={() => this.handleNameOnBlur()}
+                            placeholder='        Ingresa tu nombre'
+                            placeholderTextColor='#9E9E9E' />
+                        <TextInput
+                            id='inputLastNameRegisterUser'
+                            style=
+                            {[
+                                stylesCommon.textInputCalpulliX,
+                                {
+                                    borderColor: this.state.borderColorLastNameTextInput,
+                                    backgroundColor: this.state.backgroundColorLastNameInput,
+                                    marginTop: 20
+                                }
+                            ]}
+                            value={this.state.lastNameText}
+                            onChangeText={(text) => this.handleChangeLastNameText(text)}
+                            onFocus={() => this.handleLastNameOnFocus()}
+                            onBlur={() => this.handleLastNameOnBlur()}
+                            placeholder='        Ingresa tu apellido'
+                            placeholderTextColor='#9E9E9E' />
 
-                    <TextInput
-                        id='inputEmailRegisterUser'
-                        style=
-                        {[
-                            stylesCommon.textInputCalpulliX,
-                            {
-                                borderColor: this.state.borderColorEmailTextInput,
-                                backgroundColor: this.state.backgroundColorEmailInput,
-                                marginTop: 20
-                            }
-                        ]}
-                        value={this.state.emailText}
-                        onChangeText={(text) => this.handleChangeEmailText(text)}
-                        onFocus={() => this.handleEmailOnFocus()}
-                        onBlur={() => this.handleEmailOnBlur()}
-                        placeholder='        Ingresa tu email'
-                        placeholderTextColor='#9E9E9E' />
+                        <TextInput
+                            id='inputEmailRegisterUser'
+                            style=
+                            {[
+                                stylesCommon.textInputCalpulliX,
+                                {
+                                    borderColor: this.state.borderColorEmailTextInput,
+                                    backgroundColor: this.state.backgroundColorEmailInput,
+                                    marginTop: 20
+                                }
+                            ]}
+                            value={this.state.emailText}
+                            onChangeText={(text) => this.handleChangeEmailText(text)}
+                            onFocus={() => this.handleEmailOnFocus()}
+                            onBlur={() => this.handleEmailOnBlur()}
+                            placeholder='        Ingresa tu email'
+                            placeholderTextColor='#9E9E9E' />
 
-                    <TextInput
-                        id='inputPhoneRegisterUser'
-                        style=
-                        {[
-                            stylesCommon.textInputCalpulliX,
-                            {
-                                borderColor: this.state.borderColorPhoneTextInput,
-                                backgroundColor: this.state.backgroundColorPhoneInput,
-                                marginTop: 20
-                            }
-                        ]}
-                        value={this.state.phoneText}
-                        onChangeText={(text) => this.handleChangePhoneText(text)}
-                        onFocus={() => this.handlePhoneOnFocus()}
-                        onBlur={() => this.handlePhoneOnBlur()}
-                        placeholder='        Ingresa tu telefono'
-                        placeholderTextColor='#9E9E9E' />
+                        <TextInput
+                            id='inputPhoneRegisterUser'
+                            style=
+                            {[
+                                stylesCommon.textInputCalpulliX,
+                                {
+                                    borderColor: this.state.borderColorPhoneTextInput,
+                                    backgroundColor: this.state.backgroundColorPhoneInput,
+                                    marginTop: 20
+                                }
+                            ]}
+                            value={this.state.phoneText}
+                            onChangeText={(text) => this.handleChangePhoneText(text)}
+                            onFocus={() => this.handlePhoneOnFocus()}
+                            onBlur={() => this.handlePhoneOnBlur()}
+                            placeholder='        Ingresa tu telefono'
+                            placeholderTextColor='#9E9E9E' />
 
-                    <ButtonCalpulliX
-                        title={'Registrar Usuario'}
-                        id={'buttonRegisterUser'}
-                        arrayColors={['#05AAAB', '#048585', '#048585']}
-                        onPress={this.registerUser}
-                        width={'45%'}
-                        height={45}
-                        marginTop={40} />
-                </View>
-            </BackgroundScrollCalpulliX>
+                        <ButtonCalpulliX
+                            title={'Registrar Usuario'}
+                            id={'buttonRegisterUser'}
+                            arrayColors={['#05AAAB', '#048585', '#048585']}
+                            onPress={this.registerUser}
+                            width={'45%'}
+                            height={45}
+                            marginTop={40} />
+                    </View>
+                </BackgroundScrollCalpulliX>
+            </View>
         );
     }
 }

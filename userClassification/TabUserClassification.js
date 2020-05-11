@@ -180,7 +180,7 @@ buildRegression = (_confusion, _date, _quantityLeftLast, _quantityLoyalLast, _qu
     );
 
     detail.push(
-        <View style={{ flexDirection: 'row',  marginTop: 15, }}>
+        <View style={{ flexDirection: 'row',  marginTop: 25, }}>
             <Text style={{ fontSize: 10, color: '#4C4C4C', marginLeft: '10%' }}>
                 Última clasificación
             </Text>
@@ -198,7 +198,7 @@ buildRegression = (_confusion, _date, _quantityLeftLast, _quantityLoyalLast, _qu
                 apiPath={'/calpullix/client/users/regression/retrieve'}
                 id={_id}
                 headers={headersUsersRegression}
-
+                marginLeft={30}
                 itemCount={_itemCountLast}
             />
             <UsersRegression
@@ -206,7 +206,7 @@ buildRegression = (_confusion, _date, _quantityLeftLast, _quantityLoyalLast, _qu
                 apiPath={'/calpullix/client/users/regression/retrieve'}
                 id={_id}
                 headers={headersUsersRegression}
-
+                marginLeft={25}
                 itemCount={_itemCountCurrent}
             />
         </View>
@@ -215,7 +215,7 @@ buildRegression = (_confusion, _date, _quantityLeftLast, _quantityLoyalLast, _qu
 
 
     detail.push(
-        <View style={{ marginTop: 15, marginLeft: '3%', flexDirection: 'row', }}>
+        <View style={{ marginTop: 10, marginLeft: '4%', flexDirection: 'row', }}>
             <View>
                 <Text style={{ fontSize: 10, color: '#4C4C4C',  }}>
                     {_quantityLeftLast}

@@ -51,7 +51,7 @@ export default class Users extends PureComponent {
                 usersList: [],
                 errorMessage: '',
                 lastClassificationDate: '',
-            });   
+            });
         }
     }
 
@@ -91,7 +91,7 @@ export default class Users extends PureComponent {
     }
 
     cleanInput = () => {
-        if (this.props.navigation.state.params && 
+        if (this.props.navigation.state.params &&
             this.props.navigation.state.params.navigateFromMenu) {
             this.setState({
                 page: 1,
@@ -107,83 +107,85 @@ export default class Users extends PureComponent {
     render() {
         const { page, errorMessage, itemCount, itemsPerPage, usersList, lastClassificationDate } = this.state;
         return (
-            <BackgroundScrollCalpulliX addHeight={650}>
-                <NavigationEvents onWillFocus={() => {
-                    this.cleanInput();
-                }} />
-                <View >
-                    <HeaderCalpulliXBack
-                        title={'Clasificación de clientes'} />
-                    <Text
-                        id='errorMessage'
-                        style={[stylesCommon.errorMessage, {marginTop: 5}]}>
-                        {errorMessage}
-                    </Text>
-                    <ClassifyButton
-                        doProductClassification={() => {
-                            this.startUserClassification()
-                        }}
-                        marginTop={10}
-                        width={'40%'}
-                        style={{ marginBottom: '5%' }}
-                    />
-                    <View style={{
-                        borderWidth: 0.2,
-                        borderColor: 'grey',
-                        marginRight: 10,
-                        marginLeft: 10,
-                        marginTop: 20,
+            <View>
+                <HeaderCalpulliXBack
+                    title={'Clasificación de clientes'} />
+                <BackgroundScrollCalpulliX addHeight={650}>
+                    <NavigationEvents onWillFocus={() => {
+                        this.cleanInput();
                     }} />
-                    
-                    {usersList.length !== 0 &&
-                        <View style={{ marginLeft: '5%', }}>
-                            <Text style={[stylesCommon.headerText]} style={{ fontSize: 12, marginTop: 15, color: '#F49315' }}>
-                                {'Fecha del último análisis: ' + lastClassificationDate}
-                            </Text>
-
-                            <Text style={[stylesCommon.headerText]} style={{ fontSize: 17, marginTop: 10, color: '#F49315' }}>
-                                Perfiles del cliente
-                            </Text>
-                            
-                        </View>
-                    }
-
-                    <UnclasifiedUsers
-                        navigation={this.props.navigation}
-                        labelNames={{
-                            "classification": "Clasificación:", // Distribucion de la clasificación
-                            "branch": "Sucursales de mayor jerarquia de compras:", // (3) sucursales
-                            "schoolingLevel": "Nivel de escolaridad mas frecuente:", 
-                            "employment": "Ocupación mas frecuente:",
-                            "bestProducts": "Productos de mayor consumo:", // 3 productos
-                            "state": "Estados mas frecuentes:", // --> Estados (3)
-                            "municipality": "Municipios mas frecuentes:", // Municipios (5)
-                            "monthlyPurchases": "Promedio mensual de compras:" // --> Compras en general
-                        }}
-                        usersList={usersList}
-                        page={page}
-                        handlerNextPage={this.handlerNextPage} />
-
-                    <Paginator
-                        totalItems={itemCount}
-                        onChange={pageNumber => this.handlerPageChange(pageNumber)}
-                        activePage={page}
-                        disabled={false}
-                        itemsPerPage={itemsPerPage}
-                        buttonStyles={
-                            {
-                                backgroundColor: '#F3F9FA',
-                                color: '#156869',
-                                borderColor: '#156869',
-                            }
-                        }
-                        buttonActiveStyles={{
-                            backgroundColor: '#05AAAB',
-                            color: '#F3F9FA',
-                            borderColor: '#05AAAB'
+                    <View >
+                        <Text
+                            id='errorMessage'
+                            style={[stylesCommon.errorMessage, { marginTop: 5 }]}>
+                            {errorMessage}
+                        </Text>
+                        <ClassifyButton
+                            doProductClassification={() => {
+                                this.startUserClassification()
+                            }}
+                            marginTop={10}
+                            width={'40%'}
+                            style={{ marginBottom: '5%' }}
+                        />
+                        <View style={{
+                            borderWidth: 0.2,
+                            borderColor: 'grey',
+                            marginRight: 10,
+                            marginLeft: 10,
+                            marginTop: 20,
                         }} />
-                </View>
-            </BackgroundScrollCalpulliX>
+
+                        {usersList.length !== 0 &&
+                            <View style={{ marginLeft: '5%', }}>
+                                <Text style={[stylesCommon.headerText]} style={{ fontSize: 12, marginTop: 15, color: '#F49315' }}>
+                                    {'Fecha del último análisis: ' + lastClassificationDate}
+                                </Text>
+
+                                <Text style={[stylesCommon.headerText]} style={{ fontSize: 17, marginTop: 10, color: '#F49315' }}>
+                                    Perfiles del cliente
+                            </Text>
+
+                            </View>
+                        }
+
+                        <UnclasifiedUsers
+                            navigation={this.props.navigation}
+                            labelNames={{
+                                "classification": "Clasificación:",
+                                "branch": "Sucursales de mayor jerarquia de compras:",
+                                "schoolingLevel": "Nivel de escolaridad mas frecuente:",
+                                "employment": "Ocupación mas frecuente:",
+                                "bestProducts": "Productos de mayor consumo:",
+                                "state": "Estados mas frecuentes:",
+                                "municipality": "Municipios mas frecuentes:",
+                                "monthlyPurchases": "Promedio mensual de compras:"
+                            }}
+                            usersList={usersList}
+                            page={page}
+                            handlerNextPage={this.handlerNextPage} />
+
+                        <Paginator
+                            totalItems={itemCount}
+                            onChange={pageNumber => this.handlerPageChange(pageNumber)}
+                            activePage={page}
+                            disabled={false}
+                            itemsPerPage={itemsPerPage}
+                            buttonStyles={
+                                {
+                                    backgroundColor: '#F3F9FA',
+                                    color: '#156869',
+                                    borderColor: '#156869',
+                                }
+                            }
+                            buttonActiveStyles={{
+                                backgroundColor: '#05AAAB',
+                                color: '#F3F9FA',
+                                borderColor: '#05AAAB'
+                            }} />
+                    </View>
+                </BackgroundScrollCalpulliX>
+            </View>
         );
     }
 

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import stylesCommon from '../common/style';
 import { NavigationEvents } from 'react-navigation';
 import ApiCaller from '../api/ApiCaller';
@@ -108,7 +108,7 @@ export default class ProfilePromotions extends PureComponent {
     }
 
     cleanInput = () => {
-        if (this.props.navigation.state.params && 
+        if (this.props.navigation.state.params &&
             this.props.navigation.state.params.navigateFromMenu) {
             console.log(':: Clean Input ');
             this.getAnalysisPromotion(CONSTANTS.ONE);
@@ -122,63 +122,65 @@ export default class ProfilePromotions extends PureComponent {
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={720}>
+            <View>
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     title={'Promociones por perfil de clientes'} />
-                <NavigationEvents
-                    onWillFocus={() => {
-                        this.cleanInput();
-                    }} />
-                <Text
-                    id='errorMessagePromotions'
-                    style={[stylesCommon.errorMessage, { marginTop: 5 }]}>
-                    {this.state.errorMessage}
+                <BackgroundScrollCalpulliX addHeight={805}>
+                    <NavigationEvents
+                        onWillFocus={() => {
+                            this.cleanInput();
+                        }} />
+                    <Text
+                        id='errorMessagePromotions'
+                        style={[stylesCommon.errorMessage, { marginTop: 5 }]}>
+                        {this.state.errorMessage}
+                    </Text>
+                    <Text style={[stylesCommon.titleSectionStrong, {
+                        marginTop: 5, marginLeft: '5%'
+                    }]}>
+                        Promociones para el perfil {this.state.profileName}.
                 </Text>
-                <Text style={[stylesCommon.titleSectionStrong, { 
-                    marginTop: 5, marginLeft: '5%' }]}>
-                    Promociones para el perfil {this.state.profileName}.
-                </Text>
-                <Text style={[stylesCommon.titleSectionGreen, { 
-                    marginTop: 5, marginLeft: '5%', color: '#037777' }]}>
-                    Total de clientes del perfil {this.state.profileName}
-                    {': ' + this.state.numberCustomers}
-                </Text>
+                    <Text style={[stylesCommon.titleSectionGreen, {
+                        marginTop: 5, marginLeft: '5%', color: '#037777'
+                    }]}>
+                        Total de clientes del perfil {this.state.profileName}
+                        {': ' + this.state.numberCustomers}
+                    </Text>
 
-                <CalpulliXTable
-                    headers={headers}
-                    data={this.state.data}
-                    marginTop={15} />
+                    <CalpulliXTable
+                        headers={headers}
+                        data={this.state.data}
+                        marginTop={15} />
 
-                <Paginator
-                    totalItems={this.state.itemCount}
-                    onChange={numberPage => this.handlerPagination(numberPage)}
-                    activePage={this.state.page}
-                    disabled={false}
-                    itemsPerPage={this.state.itemsPerPage}
-                    buttonStyles={
-                        {
-                            marginTop: 15,
-                            backgroundColor: '#F3F9FA',
-                            color: '#156869',
-                            borderColor: '#156869',
+                    <Paginator
+                        totalItems={this.state.itemCount}
+                        onChange={numberPage => this.handlerPagination(numberPage)}
+                        activePage={this.state.page}
+                        disabled={false}
+                        itemsPerPage={this.state.itemsPerPage}
+                        buttonStyles={
+                            {
+                                marginTop: 15,
+                                backgroundColor: '#F3F9FA',
+                                color: '#156869',
+                                borderColor: '#156869',
+                            }
                         }
-                    }
-                    buttonActiveStyles={{
-                        marginTop: 15,
-                        backgroundColor: '#05AAAB',
-                        color: '#F3F9FA',
-                        borderColor: '#05AAAB'
-                    }} />
-                <Text style={[stylesCommon.titleSectionStrong, { marginTop: 10, marginLeft: '5%' }]}>
-                    Detalle de los perfiles del cliente.
+                        buttonActiveStyles={{
+                            marginTop: 15,
+                            backgroundColor: '#05AAAB',
+                            color: '#F3F9FA',
+                            borderColor: '#05AAAB'
+                        }} />
+                    <Text style={[stylesCommon.titleSectionStrong, { marginTop: 10, marginLeft: '5%' }]}>
+                        Detalle de los perfiles del cliente.
                 </Text>
-
-                <TabPromotions
-                    profiles={this.state.dataProfiles}
-                    navigation={this.props.navigation} />
-                    
-            </BackgroundScrollCalpulliX>
+                    <TabPromotions
+                        profiles={this.state.dataProfiles}
+                        navigation={this.props.navigation} />
+                </BackgroundScrollCalpulliX>
+            </View>
         );
     }
 }

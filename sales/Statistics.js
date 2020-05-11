@@ -73,9 +73,9 @@ export default class Statistics extends PureComponent {
         for (var index = 0; index < _responseApi.boxPlot.length; index++) {
             base64Image = CONSTANTS.PREFIX_BASE64 + _responseApi.boxPlot[index].boxPlot;
             result.push(
-            <Text style={{ fontSize: 10, marginTop: 10, marginLeft: '5%', fontWeight: 'bold' }} >
-                {_responseApi.boxPlot[index].headerDetail}
-            </Text>);
+                <Text style={{ fontSize: 10, marginTop: 10, marginLeft: '5%', fontWeight: 'bold' }} >
+                    {_responseApi.boxPlot[index].headerDetail}
+                </Text>);
             result.push(
                 <Image
                     style={{
@@ -104,13 +104,13 @@ export default class Statistics extends PureComponent {
         );
         result.push(
             <CalpulliXTable
-                    headers={_responseApi.headersStatistics}
-                    data={_responseApi.rowsStatistics}
-                    marginTop={5}
-                    textStyle={{
-                        margin: 5,
-                        fontSize: 10,
-                     }} />
+                headers={_responseApi.headersStatistics}
+                data={_responseApi.rowsStatistics}
+                marginTop={5}
+                textStyle={{
+                    margin: 5,
+                    fontSize: 10,
+                }} />
         );
         return result;
     }
@@ -124,13 +124,13 @@ export default class Statistics extends PureComponent {
         );
         result.push(
             <CalpulliXTable
-                    headers={_responseApi.headersGroupBy}
-                    data={_responseApi.rowsGroupBy}
-                    marginTop={5}
-                    textStyle={{
-                        margin: 5,
-                        fontSize: 10,
-                     }} />
+                headers={_responseApi.headersGroupBy}
+                data={_responseApi.rowsGroupBy}
+                marginTop={5}
+                textStyle={{
+                    margin: 5,
+                    fontSize: 10,
+                }} />
         );
         return result;
     }
@@ -139,9 +139,9 @@ export default class Statistics extends PureComponent {
         var result = [];
         const base64Image = CONSTANTS.PREFIX_BASE64 + _responseApi.heatMap;
         result.push(
-        <Text style={{ fontSize: 10, marginTop: 10, marginLeft: '5%', fontWeight: 'bold' }} >
-            {_responseApi.labelHeatMap}
-        </Text>);
+            <Text style={{ fontSize: 10, marginTop: 10, marginLeft: '5%', fontWeight: 'bold' }} >
+                {_responseApi.labelHeatMap}
+            </Text>);
         result.push(
             <Image
                 style={{
@@ -169,13 +169,13 @@ export default class Statistics extends PureComponent {
         );
         result.push(
             <CalpulliXTable
-                    headers={_responseApi.headersCorrelationCausation}
-                    data={_responseApi.rowsCorrelationCausation}
-                    marginTop={5}
-                    textStyle={{
-                        margin: 5,
-                        fontSize: 10,
-                     }} />
+                headers={_responseApi.headersCorrelationCausation}
+                data={_responseApi.rowsCorrelationCausation}
+                marginTop={5}
+                textStyle={{
+                    margin: 5,
+                    fontSize: 10,
+                }} />
         );
         return result;
     }
@@ -211,9 +211,11 @@ export default class Statistics extends PureComponent {
             );
         }
         result.push(
-            <View style={{ marginLeft: 'auto', marginRight: 'auto', width: '90%', borderRadius: 5,
-                           borderWidth: 1, borderColor: '#9ADDDF', backgroundColor: '#FDFDFD', marginTop: 15,
-                           paddingLeft: 10, paddingBottom: 10, }}>
+            <View style={{
+                marginLeft: 'auto', marginRight: 'auto', width: '90%', borderRadius: 5,
+                borderWidth: 1, borderColor: '#9ADDDF', backgroundColor: '#FDFDFD', marginTop: 15,
+                paddingLeft: 10, paddingBottom: 10,
+            }}>
                 {detail}
             </View>
         );
@@ -228,20 +230,22 @@ export default class Statistics extends PureComponent {
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={1850}>
-                <NavigationEvents
-                    onWillFocus={() => {
-                        this.cleanInput();
-                    }} />
+            <View>
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     backButton={true}
                     screen={'Sales'}
                     title={'Estadísticas Descriptivas'} />
-                <View style={{ marginTop: 10 }}>
-                    {this.state.statistics}
-                </View>
-            </BackgroundScrollCalpulliX>
+                <BackgroundScrollCalpulliX addHeight={1950}>
+                    <NavigationEvents
+                        onWillFocus={() => {
+                            this.cleanInput();
+                        }} />
+                    <View style={{ marginTop: 10 }}>
+                        {this.state.statistics}
+                    </View>
+                </BackgroundScrollCalpulliX>
+            </View>
         );
     }
 

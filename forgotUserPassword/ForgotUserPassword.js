@@ -118,11 +118,11 @@ export default class ForgotUserPassword extends PureComponent {
       return false;
     } else if (!Validator.isValidRegExp(this.state.userText, idRegexp, false)) {
       this.setState({
-          borderColorTextInput: '#F03000',
-          errorMessage: 'Introduce un Id de usuario valido',
+        borderColorTextInput: '#F03000',
+        errorMessage: 'Introduce un Id de usuario valido',
       });
-  }
-     else {
+    }
+    else {
       return true;
     }
   }
@@ -259,219 +259,221 @@ export default class ForgotUserPassword extends PureComponent {
   }
 
 
-isValidChangePasswordInput = () => {
-  var result = true;
-  if (Validator.isEmpty(this.state.userChangePassword)) {
-    this.setState({
-      borderColorUserChangePasswordInput: '#F03000',
-    });
-    result = false;
-  }
-  
-  if (Validator.isEmpty(this.state.oldPassword)) {
-    this.setState({
-      borderColorOldPasswordTextInput: '#F03000',
-    });
-    result = false;
-  }
-  if (Validator.isEmpty(this.state.newPassword)) {
-    this.setState({
-      borderColorNewPasswordInput: '#F03000',
-    });
-    result = false;
-  }
-  if (Validator.isEmpty(this.state.newPasswordRepeated)) {
-    this.setState({
-      borderColorNewPasswordRepInput: '#F03000',
-    });
-    result = false;
-  }
-  if (!result) {
-    this.setState({
-      errorMessageChangePasword: 'Todos los campos son requeridos',
-    });
-  }
-  if (result && this.state.newPassword !== this.state.newPasswordRepeated) {
-    this.setState({
-      errorMessageChangePasword: 'La nueva contraseña no coincide',
-      borderColorNewPasswordInput: '#F03000',
-      borderColorNewPasswordRepInput: '#F03000',
-    });
-    result = false;
-  }
-  if (result && !Validator.isValidRegExp(this.state.userChangePassword, idRegexp, false) ) {
-    this.setState({
-      errorMessageChangePasword: 'Ingresa un usuario valido',
-      borderColorUserChangePasswordInput: '#F03000',
-    });
-    result = false;
-  }
-  if (result && this.state.newPassword.length < 8 ) {
-    this.setState({
-      errorMessageChangePasword: 'La nueva contraseña debe contener al menos 8 caracteres',
-      borderColorNewPasswordInput: '#F03000',
-      borderColorNewPasswordRepInput: '#F03000',
-    });
-    result = false;
-  }
-  return result;
-}
+  isValidChangePasswordInput = () => {
+    var result = true;
+    if (Validator.isEmpty(this.state.userChangePassword)) {
+      this.setState({
+        borderColorUserChangePasswordInput: '#F03000',
+      });
+      result = false;
+    }
 
-showChangePassword = () => {
-  this.setState({
-    showChangePassword: true,
-  });
-}
+    if (Validator.isEmpty(this.state.oldPassword)) {
+      this.setState({
+        borderColorOldPasswordTextInput: '#F03000',
+      });
+      result = false;
+    }
+    if (Validator.isEmpty(this.state.newPassword)) {
+      this.setState({
+        borderColorNewPasswordInput: '#F03000',
+      });
+      result = false;
+    }
+    if (Validator.isEmpty(this.state.newPasswordRepeated)) {
+      this.setState({
+        borderColorNewPasswordRepInput: '#F03000',
+      });
+      result = false;
+    }
+    if (!result) {
+      this.setState({
+        errorMessageChangePasword: 'Todos los campos son requeridos',
+      });
+    }
+    if (result && this.state.newPassword !== this.state.newPasswordRepeated) {
+      this.setState({
+        errorMessageChangePasword: 'La nueva contraseña no coincide',
+        borderColorNewPasswordInput: '#F03000',
+        borderColorNewPasswordRepInput: '#F03000',
+      });
+      result = false;
+    }
+    if (result && !Validator.isValidRegExp(this.state.userChangePassword, idRegexp, false)) {
+      this.setState({
+        errorMessageChangePasword: 'Ingresa un usuario valido',
+        borderColorUserChangePasswordInput: '#F03000',
+      });
+      result = false;
+    }
+    if (result && this.state.newPassword.length < 8) {
+      this.setState({
+        errorMessageChangePasword: 'La nueva contraseña debe contener al menos 8 caracteres',
+        borderColorNewPasswordInput: '#F03000',
+        borderColorNewPasswordRepInput: '#F03000',
+      });
+      result = false;
+    }
+    return result;
+  }
 
-render() {
-  return (
-    <BackgroundScrollCalpulliX addHeight={0}>
-      <NavigationEvents
-        onWillFocus={() => {
-          this.cleanInput();
-        }} />
-      <HeaderCalpulliXBack
-        navigation={this.props.navigation}
-        backButton={true}
-        screen={'Login'}
-        title={"Cambiar contraseña"} />
-      <View style={{ marginTop: 10, marginBottom: 15 }}>
-        <Text
-          id='errorMessageForgotPassword'
-          style={stylesCommon.errorMessage}>{this.state.errorMessage}</Text>
-        <Text style={{ fontSize: 13, textAlign: 'center', marginTop: 5, color: '#F6A338' }}>
-          {this.state.headText}
-        </Text>
-        <TextInput
-          id='inputUserForgotPassword'
-          style=
-          {[
-            stylesCommon.textInputCalpulliX,
-            {
-              borderColor: this.state.borderColorTextInput,
-              backgroundColor: this.state.backgroundColorUserInput,
-              marginTop: 15
-            }
-          ]}
-          value={this.state.userText}
-          onChangeText={(text) => this.handleChangeUserText(text)}
-          onFocus={() => this.handleOnFocus()}
-          onBlur={() => this.handleOnBlur()}
-          placeholder='        Ingresa el id de tu usuario'
-          placeholderTextColor='#9E9E9E' />
-        <ButtonCalpulliX
-          title={'Recuperar Contraseña'}
-          id={'buttonRetrievePassword'}
-          arrayColors={['#05AAAB', '#048585', '#048585']}
-          onPress={this.restartPassword}
-          width={'45%'}
-          height={45}
-          marginTop={20} />
+  showChangePassword = () => {
+    this.setState({
+      showChangePassword: true,
+    });
+  }
 
-        <Text
-          id='errorMessageChangePassword'
-          style={stylesCommon.errorMessage}>
-          {this.state.errorMessageChangePasword}
-        </Text>
-        <Text style={{ fontSize: 13, textAlign: 'center', marginTop: 5, color: '#F6A338' }}>
-          {this.state.headTextChangePass}
-        </Text>
-        <Text style={{
-          textAlign: 'center', fontSize: 14, marginTop: 3,
-          color: '#F6A338', textDecorationLine: 'underline',
-        }}
-          onPress={() => this.showChangePassword()}>
-          Cambia tu contraseña
+  render() {
+    return (
+      <View>
+        <HeaderCalpulliXBack
+          navigation={this.props.navigation}
+          backButton={true}
+          screen={'Login'}
+          title={"Cambiar contraseña"} />
+        <BackgroundScrollCalpulliX addHeight={0}>
+          <NavigationEvents
+            onWillFocus={() => {
+              this.cleanInput();
+            }} />
+          <View style={{ marginTop: 10, marginBottom: 15 }}>
+            <Text
+              id='errorMessageForgotPassword'
+              style={stylesCommon.errorMessage}>{this.state.errorMessage}</Text>
+            <Text style={{ fontSize: 13, textAlign: 'center', marginTop: 5, color: '#F6A338' }}>
+              {this.state.headText}
             </Text>
-        {this.state.showChangePassword &&
-          <View style={{ marginTop: 10 }} >
             <TextInput
-              id='inputUserChangePassword'
+              id='inputUserForgotPassword'
               style=
               {[
                 stylesCommon.textInputCalpulliX,
                 {
-                  borderColor: this.state.borderColorUserChangePasswordInput,
-                  backgroundColor: this.state.backgroundColorUserChangePasswordInput,
-                  marginTop: 5
+                  borderColor: this.state.borderColorTextInput,
+                  backgroundColor: this.state.backgroundColorUserInput,
+                  marginTop: 15
                 }
               ]}
-              value={this.state.userChangePassword}
-              onChangeText={(text) => this.handleUserChangePasswordText(text)}
-              onFocus={() => this.handleOnFocusUser()}
-              onBlur={() => this.handleOnBlurUser()}
-              placeholder='        Ingresa tu usuario'
+              value={this.state.userText}
+              onChangeText={(text) => this.handleChangeUserText(text)}
+              onFocus={() => this.handleOnFocus()}
+              onBlur={() => this.handleOnBlur()}
+              placeholder='        Ingresa el id de tu usuario'
               placeholderTextColor='#9E9E9E' />
-
-            <TextInput
-              id='inputOldPassword'
-              style=
-              {[
-                stylesCommon.textInputCalpulliX,
-                {
-                  borderColor: this.state.borderColorOldPasswordTextInput,
-                  backgroundColor: this.state.backgroundColorOldPasswordInput,
-                  marginTop: 10
-                }
-              ]}
-              value={this.state.oldPassword}
-              onChangeText={(text) => this.handleChangeOldPasswordText(text)}
-              onFocus={() => this.handleOnFocusOldPass()}
-              onBlur={() => this.handleOnBlurOldPass()}
-              placeholder='        Ingresa tu contraseña anterior'
-              placeholderTextColor='#9E9E9E' />
-            <TextInput
-              id='inputNewPassword'
-              style=
-              {[
-                stylesCommon.textInputCalpulliX,
-                {
-                  borderColor: this.state.borderColorNewPasswordInput,
-                  backgroundColor: this.state.backgroundColorNewPasswordInput,
-                  marginTop: 10
-                }
-              ]}
-              value={this.state.newPassword}
-              onChangeText={(text) => this.handleChangeNewPasswordText(text)}
-              onFocus={() => this.handleOnFocusPass()}
-              onBlur={() => this.handleOnBlurPass()}
-              placeholder='        Ingresa tu nueva contraseña'
-              placeholderTextColor='#9E9E9E'
-              secureTextEntry={true} />
-            <TextInput
-              id='inputNewPasswordRepeated'
-              style=
-              {[
-                stylesCommon.textInputCalpulliX,
-                {
-                  borderColor: this.state.borderColorNewPasswordRepInput,
-                  backgroundColor: this.state.backgroundColorNewPasswordRepInput,
-                  marginTop: 10
-                }
-              ]}
-              value={this.state.newPasswordRepeated}
-              onChangeText={(text) => this.handleChangeNewPasswordRepeatedText(text)}
-              onFocus={() => this.handleOnFocusPassRep()}
-              onBlur={() => this.handleOnBlurPassRep()}
-              placeholder='        Repite tu nueva contraseña'
-              placeholderTextColor='#9E9E9E'
-              secureTextEntry={true} />
-
             <ButtonCalpulliX
-              title={'Cambiar Contraseña'}
-              id={'buttonChangePassword'}
+              title={'Recuperar Contraseña'}
+              id={'buttonRetrievePassword'}
               arrayColors={['#05AAAB', '#048585', '#048585']}
-              onPress={this.changePassword}
+              onPress={this.restartPassword}
               width={'45%'}
-              height={40}
-              marginTop={15} />
+              height={45}
+              marginTop={20} />
 
+            <Text
+              id='errorMessageChangePassword'
+              style={stylesCommon.errorMessage}>
+              {this.state.errorMessageChangePasword}
+            </Text>
+            <Text style={{ fontSize: 13, textAlign: 'center', marginTop: 5, color: '#F6A338' }}>
+              {this.state.headTextChangePass}
+            </Text>
+            <Text style={{
+              textAlign: 'center', fontSize: 14, marginTop: 3,
+              color: '#F6A338', textDecorationLine: 'underline',
+            }}
+              onPress={() => this.showChangePassword()}>
+              Cambia tu contraseña
+            </Text>
+            {this.state.showChangePassword &&
+              <View style={{ marginTop: 10 }} >
+                <TextInput
+                  id='inputUserChangePassword'
+                  style=
+                  {[
+                    stylesCommon.textInputCalpulliX,
+                    {
+                      borderColor: this.state.borderColorUserChangePasswordInput,
+                      backgroundColor: this.state.backgroundColorUserChangePasswordInput,
+                      marginTop: 5
+                    }
+                  ]}
+                  value={this.state.userChangePassword}
+                  onChangeText={(text) => this.handleUserChangePasswordText(text)}
+                  onFocus={() => this.handleOnFocusUser()}
+                  onBlur={() => this.handleOnBlurUser()}
+                  placeholder='        Ingresa tu usuario'
+                  placeholderTextColor='#9E9E9E' />
+
+                <TextInput
+                  id='inputOldPassword'
+                  style=
+                  {[
+                    stylesCommon.textInputCalpulliX,
+                    {
+                      borderColor: this.state.borderColorOldPasswordTextInput,
+                      backgroundColor: this.state.backgroundColorOldPasswordInput,
+                      marginTop: 10
+                    }
+                  ]}
+                  value={this.state.oldPassword}
+                  onChangeText={(text) => this.handleChangeOldPasswordText(text)}
+                  onFocus={() => this.handleOnFocusOldPass()}
+                  onBlur={() => this.handleOnBlurOldPass()}
+                  placeholder='        Ingresa tu contraseña anterior'
+                  placeholderTextColor='#9E9E9E' />
+                <TextInput
+                  id='inputNewPassword'
+                  style=
+                  {[
+                    stylesCommon.textInputCalpulliX,
+                    {
+                      borderColor: this.state.borderColorNewPasswordInput,
+                      backgroundColor: this.state.backgroundColorNewPasswordInput,
+                      marginTop: 10
+                    }
+                  ]}
+                  value={this.state.newPassword}
+                  onChangeText={(text) => this.handleChangeNewPasswordText(text)}
+                  onFocus={() => this.handleOnFocusPass()}
+                  onBlur={() => this.handleOnBlurPass()}
+                  placeholder='        Ingresa tu nueva contraseña'
+                  placeholderTextColor='#9E9E9E'
+                  secureTextEntry={true} />
+                <TextInput
+                  id='inputNewPasswordRepeated'
+                  style=
+                  {[
+                    stylesCommon.textInputCalpulliX,
+                    {
+                      borderColor: this.state.borderColorNewPasswordRepInput,
+                      backgroundColor: this.state.backgroundColorNewPasswordRepInput,
+                      marginTop: 10
+                    }
+                  ]}
+                  value={this.state.newPasswordRepeated}
+                  onChangeText={(text) => this.handleChangeNewPasswordRepeatedText(text)}
+                  onFocus={() => this.handleOnFocusPassRep()}
+                  onBlur={() => this.handleOnBlurPassRep()}
+                  placeholder='        Repite tu nueva contraseña'
+                  placeholderTextColor='#9E9E9E'
+                  secureTextEntry={true} />
+
+                <ButtonCalpulliX
+                  title={'Cambiar Contraseña'}
+                  id={'buttonChangePassword'}
+                  arrayColors={['#05AAAB', '#048585', '#048585']}
+                  onPress={this.changePassword}
+                  width={'45%'}
+                  height={40}
+                  marginTop={15} />
+
+              </View>
+            }
           </View>
-        }
+        </BackgroundScrollCalpulliX>
       </View>
-    </BackgroundScrollCalpulliX>
-  );
-}
+    );
+  }
 }
 
 

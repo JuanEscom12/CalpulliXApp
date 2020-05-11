@@ -160,10 +160,8 @@ export default class TwitterAnalysis extends PureComponent {
             <View style={{ marginTop: 20, width: '100%' }} >
                 <View style={{ marginLeft: 'auto', marginBottom: 10, marginRight: 'auto', width: '90%' }}>
                     <Text style={{ fontSize: 11 }}>Palabras clave:</Text>
-
                     {_perfilInfo.keyWords.map((item, index) =>
                         this.getWord(item, index))}
-
                 </View>
                 <Image
                     style={{
@@ -240,25 +238,26 @@ export default class TwitterAnalysis extends PureComponent {
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={1000}>
-                <NavigationEvents
-                    onWillFocus={() => {
-                        this.cleanInput();
-                    }} />
+            <View>
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     backButton={false}
                     title={'Análisis de twitter'} />
-                <Text
-                    id='errorMessageTwitter'
-                    style={[stylesCommon.errorMessage, { marginTop: 5 }]}>
-                    {this.state.errorMessage}
-                </Text>
-                <View style={{ marginTop: 10 }}>
-                    {this.state.twitterDetail}
-                </View>
-            </BackgroundScrollCalpulliX>
-
+                <BackgroundScrollCalpulliX addHeight={1000}>
+                    <NavigationEvents
+                        onWillFocus={() => {
+                            this.cleanInput();
+                        }} />
+                    <Text
+                        id='errorMessageTwitter'
+                        style={[stylesCommon.errorMessage, { marginTop: 5 }]}>
+                        {this.state.errorMessage}
+                    </Text>
+                    <View style={{ marginTop: 10 }}>
+                        {this.state.twitterDetail}
+                    </View>
+                </BackgroundScrollCalpulliX>
+            </View>
         );
 
     }

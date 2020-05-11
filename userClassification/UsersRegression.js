@@ -4,7 +4,7 @@ import CalpulliXTable from '../common/CalpulliXTable';
 import Paginator from 'react-native-paginator';
 import { NavigationEvents } from 'react-navigation';
 import CONSTANTS from '../common/Constants';
-
+import ApiCaller from '../api/ApiCaller';
 
 
 export default class UsersRegression extends PureComponent {
@@ -66,8 +66,9 @@ export default class UsersRegression extends PureComponent {
                 <NavigationEvents onWillFocus={() => {
                     this.cleanInput();
                 }} />
+                
                 <CalpulliXTable
-                    width={'85%'}
+                    width={140}
                     headers={headers}
                     data={this.state.rows}
                     marginTop={10}
@@ -78,25 +79,35 @@ export default class UsersRegression extends PureComponent {
                     }}
                     backgroundColorView={'#F3F9FA'}
                     backgroundColorRows={'white'} />
-
+                
+                <View style={{ width: 140,  }}>
                 <Paginator
                     totalItems={itemCount}
                     onChange={numberPage => this.handlerPagination(numberPage)}
                     activePage={this.state.page}
                     itemsPerPage={this.state.itemsPerPage}
                     disabled={false}
+                    buttonControlStyles = {{
+                        width: 140,
+                    }}
                     buttonStyles={
                         {
                             backgroundColor: '#F3F9FA',
                             color: '#156869',
                             borderColor: '#156869',
+                            height: 25,
+                            width: 25, 
                         }
                     }
                     buttonActiveStyles={{
                         backgroundColor: '#05AAAB',
                         color: '#F3F9FA',
-                        borderColor: '#05AAAB'
+                        borderColor: '#05AAAB',
+                        height: 25,
+                        width: 25, 
                     }} />
+               </View>
+
             </View>
         );
     }

@@ -8,8 +8,6 @@ import {
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 import CONSTANTS from '../common/Constants';
-import NavigatorCommons from '../navigation/NavigatorCommons';
-import ApiCaller from '../api/ApiCaller';
 import commonStyles from '../common/style';
 idValue = 0;
 
@@ -75,7 +73,7 @@ export default class AccordionTwitterCalpulliX extends PureComponent {
 
 
             <View style={{ flexDirection: "row" }}>
-              <Text style={{ fontSize: 8, color: '#9E9E9E', marginLeft: 10, width: '87%' }}>{_section[index].atName}</Text>
+              <Text style={{ fontSize: 8, color: '#9E9E9E', marginLeft: 10, width: '80%' }}>{_section[index].atName}</Text>
               <Image
                 style={{
                   height: 25, width: 25, 

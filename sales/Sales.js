@@ -585,7 +585,6 @@ export default class Sales extends PureComponent {
         return request;
     }
 
-
     showStatistics = async () => {
         const response = await ApiCaller.callApi(
             "/calpullix/statistics/retrieve", this.getRequestSales(), CONSTANTS.STATISTICS_PORT,
@@ -593,103 +592,107 @@ export default class Sales extends PureComponent {
             .catch((error) => {
                 console.log(error);
             });
-        NavigatorCommons.navigateTo(this.props.navigation, "Statistics",
+        if (response.rowsStatistics !== null) {
+            NavigatorCommons.navigateTo(this.props.navigation, "Statistics",
             { 'responseApi': response });
+        } else {
+            Alert.alert("No existe análisis estadístico para estos datos");
+        }
     }
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={1600}>
-                <NavigationEvents
-                    onWillFocus={() => {
-                        this.cleanInput();
-                    }} />
+            <View>
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     backButton={false}
                     title={'Detalle de Ventas'} />
-                <View style={{ marginTop: 0 }}>
-                    <Text
-                        id='errorMessageSales'
-                        style={[stylesCommon.errorMessage, { marginTop: 0 }]}>
-                        {this.state.errorMessage}
-                    </Text>
-                    <PickerCalpulliX
-                        data={this.state.branches}
-                        updateState={this.updateState}
-                        placeholder={'Seleccione la sucursal'}
-                        functionClearPicker={this.setFunctionClearPickerBranches} />
+                <BackgroundScrollCalpulliX addHeight={1750}>
+                    <NavigationEvents
+                        onWillFocus={() => {
+                            this.cleanInput();
+                        }} />
+                    <View style={{ marginTop: 0 }}>
+                        <Text
+                            id='errorMessageSales'
+                            style={[stylesCommon.errorMessage, { marginTop: 0 }]}>
+                            {this.state.errorMessage}
+                        </Text>
+                        <PickerCalpulliX
+                            data={this.state.branches}
+                            updateState={this.updateState}
+                            placeholder={'Seleccione la sucursal'}
+                            functionClearPicker={this.setFunctionClearPickerBranches} />
 
 
-                    <View style={{ marginTop: 5 }}>
-                        <View style={[styles.autocompleteContainer]} >
-                            <Autocomplete
-                                placeholder={'   Introduzca el producto'}
-                                data={this.state.dataProducts}
-                                defaultValue={this.state.product}
-                                onChangeText={(text) => this.handleAutoComplete(text)}
-                                hideResults={this.state.hideResults}
-                                onBlur={() => this.setState({ hideResults: true })}
-                                style={{
-                                    borderWidth: 0,
-                                    borderColor: '#F49315',
-                                }}
-                                inputContainerStyle={{
-                                    borderColor: '#F49315', borderRadius: 5, borderWidth: 0.5, backgroundColor: '#FDFDFD',
-                                }}
-                                renderItem={({ item, i }) => (
+                        <View style={{ marginTop: 5 }}>
+                            <View style={[styles.autocompleteContainer]} >
+                                <Autocomplete
+                                    placeholder={'   Introduzca el producto'}
+                                    data={this.state.dataProducts}
+                                    defaultValue={this.state.product}
+                                    onChangeText={(text) => this.handleAutoComplete(text)}
+                                    hideResults={this.state.hideResults}
+                                    onBlur={() => this.setState({ hideResults: true })}
+                                    style={{
+                                        borderWidth: 0,
+                                        borderColor: '#F49315',
+                                    }}
+                                    inputContainerStyle={{
+                                        borderColor: '#F49315', borderRadius: 5, borderWidth: 0.5, backgroundColor: '#FDFDFD',
+                                    }}
+                                    renderItem={({ item, i }) => (
 
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            console.log(':: ON PRESS ', item)
-                                            this.setState({ product: item, hideResults: true })
-                                        }}>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                console.log(':: ON PRESS ', item)
+                                                this.setState({ product: item, hideResults: true })
+                                            }}>
 
-                                        <Text style={{
-                                            backgroundColor: '#FDFDFD',
-                                            fontSize: 12,
-                                            borderColor: '#F49315',
-                                            borderWidth: 0.2,
-                                        }}>{'\n  ' + item + '\n'}</Text>
+                                            <Text style={{
+                                                backgroundColor: '#FDFDFD',
+                                                fontSize: 12,
+                                                borderColor: '#F49315',
+                                                borderWidth: 0.2,
+                                            }}>{'\n  ' + item + '\n'}</Text>
 
-                                    </TouchableOpacity>
-                                )} />
+                                        </TouchableOpacity>
+                                    )} />
+                            </View>
                         </View>
+
+
+                        <View style={{ marginTop: 60 }}>
+                            <PickerCalpulliX
+                                data={this.state.years}
+                                updateState={this.updateYear}
+                                placeholder={'Seleccione el año'}
+                                functionClearPicker={this.setFunctionClearPickerYears} />
+                        </View>
+
+                        <View style={{ marginTop: 5 }}>
+                            <PickerCalpulliX
+                                data={this.state.months}
+                                updateState={this.updateMonth}
+                                placeholder={'Seleccione el mes'}
+                                functionClearPicker={this.setFunctionClearPickerMonths} />
+                        </View>
+
+                        <ButtonCalpulliX
+                            title={'Buscar'}
+                            id={'buttonSales'}
+                            arrayColors={['#05AAAB', '#048585', '#048585']}
+                            onPress={() => this.findSales()}
+                            width={'30%'}
+                            height={38}
+                            marginTop={10}
+                            marginBottom={10} />
+                        {this.state.salesInformation}
+                        {this.state.barChart}
+                        {this.state.lineChart}
                     </View>
-
-
-                    <View style={{ marginTop: 60 }}>
-                        <PickerCalpulliX
-                            data={this.state.years}
-                            updateState={this.updateYear}
-                            placeholder={'Seleccione el año'}
-                            functionClearPicker={this.setFunctionClearPickerYears} />
-                    </View>
-
-                    <View style={{ marginTop: 5 }}>
-                        <PickerCalpulliX
-                            data={this.state.months}
-                            updateState={this.updateMonth}
-                            placeholder={'Seleccione el mes'}
-                            functionClearPicker={this.setFunctionClearPickerMonths} />
-                    </View>
-
-                    <ButtonCalpulliX
-                        title={'Buscar'}
-                        id={'buttonSales'}
-                        arrayColors={['#05AAAB', '#048585', '#048585']}
-                        onPress={() => this.findSales()}
-                        width={'30%'}
-                        height={38}
-                        marginTop={10}
-                        marginBottom={10} />
-
-                    {this.state.salesInformation}
-                    {this.state.barChart}
-                    {this.state.lineChart}
-
-                </View>
-            </BackgroundScrollCalpulliX >
+                </BackgroundScrollCalpulliX >
+            </View>
         );
     }
 }

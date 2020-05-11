@@ -3,6 +3,7 @@ import { Header } from 'react-native-elements';
 import LeftHeaderBack from './LeftHeaderBack';
 import CenterHeader from './CenterHeader';
 import RightHeader from './RightHeader';
+import LinearGradient from 'react-native-linear-gradient';
 
 
 export default class HeaderCalpulliXBack extends PureComponent {
@@ -16,9 +17,14 @@ export default class HeaderCalpulliXBack extends PureComponent {
     } = this.props
     return (
           <Header
+          ViewComponent={LinearGradient} 
+          linearGradientProps={{
+              colors: ['#F6A338', '#ffb858'],
+              start: { x: 0, y: 1 },
+              end: {  x: 1, y: 1 },
+            }}
             containerStyle={{
-              backgroundColor: '#F6A338',
-              height: 100
+              height: 100,
             }}>
             <LeftHeaderBack 
                 navigation={navigation}

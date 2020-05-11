@@ -17,7 +17,7 @@ var functionClearPickerBranches;
 var functionClearPickerYears;
 var functionClearPickerMonths;
 
-const headers = ['Var Ind.', 'Var Dep.', 'Coeficiente'];
+const headers = ['Mes', 'Predicción'];
 
 export default class Regression extends PureComponent {
 
@@ -28,8 +28,6 @@ export default class Regression extends PureComponent {
             branchId: null,
             years: this.getYears(),
             year: null,
-            months: this.getMonths(),
-            month: null,
             errorMessage: '',
             product: '',
             dataProducts: [],
@@ -42,26 +40,9 @@ export default class Regression extends PureComponent {
     getYears = () => {
         var result = [];
         var date = new Date();
-        for (var year = date.getFullYear(); year <= date.getFullYear() + 40; year++) {
+        for (var year = date.getFullYear(); year <= date.getFullYear() + 5; year++) {
             result.push({ id: year, name: year });
         }
-        return result;
-    }
-
-    getMonths = () => {
-        var result = [];
-        result.push({ id: 1, name: 'Enero' });
-        result.push({ id: 2, name: 'Febrero' });
-        result.push({ id: 3, name: 'Marzo' });
-        result.push({ id: 4, name: 'Abril' });
-        result.push({ id: 5, name: 'Mayo' });
-        result.push({ id: 6, name: 'Junio' });
-        result.push({ id: 7, name: 'Julio' });
-        result.push({ id: 8, name: 'Agosto' });
-        result.push({ id: 9, name: 'Septiembre' });
-        result.push({ id: 10, name: 'Octubre' });
-        result.push({ id: 11, name: 'Noviembre' });
-        result.push({ id: 12, name: 'Diciembre' });
         return result;
     }
 
@@ -142,21 +123,9 @@ export default class Regression extends PureComponent {
         }
     }
 
-    updateMonth = (_value) => {
-        if (_value) {
-            this.setState({
-                month: _value.id
-            });
-        } else {
-            this.setState({
-                month: null,
-            });
-        }
-    }
-
     handleAutoComplete = async (_nameIdProduct) => {
         const response = await ApiCaller.callApi(
-            '/calpullix/product-name/retrieve', this.getProductNameRequest(),
+            '/calpullix/product-name/retrieve', this.getProductNameRequest(_nameIdProduct),
             CONSTANTS.PORT_PRODUCT_LIST, CONSTANTS.POST_METHOD)
             .catch((error) => {
                 console.log(error);
@@ -186,11 +155,7 @@ export default class Regression extends PureComponent {
 
     getForecast = async () => {
         if (!this.isValidInput()) {
-            Alert.alert('Se debe capturar el año y la sucursal.');
-            return;
-        } 
-        if (!this.isValidaDate()) {
-            Alert.alert('La fecha debe de ser futura.');
+            Alert.alert('Se debe capturar el año, el producto y la sucursal');
             return;
         }
         const response = await ApiCaller.callApi(
@@ -203,7 +168,7 @@ export default class Regression extends PureComponent {
                 });
             });
         console.log(':: Regression  ', response);
-        if (response.graphics !== null && 
+        if (response.graphics !== null &&
             response.graphics.length > CONSTANTS.ZERO) {
             this.setState({
                 images: this.getImages(response),
@@ -217,22 +182,13 @@ export default class Regression extends PureComponent {
     }
 
     isValidInput = () => {
-        return this.state.branchId !== null && this.state.year !== null;
-    }
-
-    isValidaDate =  () => {
-        var current = new Date();
-        return (this.state.year == current.getFullYear() && this.state.month !== null && 
-                this.state.month > current.getMonth() + CONSTANTS.ONE) || 
-                (this.state.year == current.getFullYear() && this.state.month == null) ||
-                (this.state.year > current.getFullYear());
+        return this.state.branchId !== null && this.state.year !== null && this.state.product !== '';
     }
 
     getForecastRequest = () => {
         var request = {
             branchId: this.state.branchId,
             year: this.state.year,
-            month: this.state.month,
             product: this.state.product,
         };
         console.log(':: Request ', request);
@@ -243,17 +199,32 @@ export default class Regression extends PureComponent {
         var result = [];
         var base64Image;
         result.push(
-            <Text style={{ marginTop: 25, fontSize: 12, marginLeft: '5%' }}>
-                {'La proyección de ventas para el periodo seleccionado es: '}
-                <Text style={{ fontWeight: 'bold' }}>{'$' + _apiResponse.forecast}</Text>
+            <Text style={{ marginTop: 20, fontSize: 12, marginLeft: '5%' }}>
+                {'RMSE predicción: '}
+                <Text style={{ fontWeight: 'bold' }}>{_apiResponse.rmsePrediction}</Text>
+            </Text>
+        );
+
+        result.push(
+            <Text style={{ marginTop: 10, fontSize: 12, marginLeft: '5%' }}>
+                {'RMSE entrenamiento: '}
+                <Text style={{ fontWeight: 'bold' }}>{_apiResponse.rmseTraining}</Text>
+            </Text>
+        );
+
+        result.push(
+            <Text style={{ marginTop: 10, fontSize: 12, marginLeft: '5%' }}>
+                {'Configuración óptima ARIMA: '}
+                <Text style={{ fontWeight: 'bold' }}>{_apiResponse.bestArima}</Text>
             </Text>
         );
 
         result.push(
             <CalpulliXTable
                 headers={headers}
-                data={_apiResponse.coefficientCorrelation}
+                data={_apiResponse.rowsPredictions}
                 marginTop={15}
+                marginBottom={20}
                 textStyle={{
                     margin: 6,
                     fontSize: 10
@@ -262,8 +233,8 @@ export default class Regression extends PureComponent {
 
         for (var index = 0; index < _apiResponse.graphics.length; index++) {
             result.push(
-                <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#F6A338', marginTop: 10, marginLeft: '5%' }} >
-                    {_apiResponse.labelRelation[index]}
+                <Text style={{ fontSize: 13, color: 'black', marginTop: 30, marginLeft: '5%' }} >
+                    {_apiResponse.labelGraphics[index]}
                 </Text>
             );
             base64Image = CONSTANTS.PREFIX_BASE64 + _apiResponse.graphics[index];
@@ -287,60 +258,90 @@ export default class Regression extends PureComponent {
 
     render() {
         return (
-            <BackgroundScrollCalpulliX addHeight={1400}>
-                <NavigationEvents
-                    onWillFocus={() => {
-                        this.cleanInput();
-                    }} />
+            <View>
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     backButton={false}
                     title={'Proyección de Ventas'} />
+                <BackgroundScrollCalpulliX addHeight={1700}>
+                    <NavigationEvents
+                        onWillFocus={() => {
+                            this.cleanInput();
+                        }} />
+                    <View style={{ marginTop: 0 }}>
 
-                <View style={{ marginTop: 0 }}>
+                        <Text
+                            id='errorMessageRegression'
+                            style={[stylesCommon.errorMessage, { marginTop: 0 }]}>
+                            {this.state.errorMessage}
+                        </Text>
 
-                    <Text
-                        id='errorMessageRegression'
-                        style={[stylesCommon.errorMessage, { marginTop: 0 }]}>
-                        {this.state.errorMessage}
-                    </Text>
-
-                    <PickerCalpulliX
-                        data={this.state.branches}
-                        updateState={this.updateState}
-                        placeholder={'Seleccione la sucursal'}
-                        functionClearPicker={this.setFunctionClearPickerBranches} />
-
-
-                    <View style={{ marginTop: 10 }}>
                         <PickerCalpulliX
-                            data={this.state.years}
-                            updateState={this.updateYear}
-                            placeholder={'Seleccione el año'}
-                            functionClearPicker={this.setFunctionClearPickerYears} />
+                            data={this.state.branches}
+                            updateState={this.updateState}
+                            placeholder={'Seleccione la sucursal'}
+                            functionClearPicker={this.setFunctionClearPickerBranches} />
+
+
+                        <View style={{ marginTop: 10 }}>
+                            <PickerCalpulliX
+                                data={this.state.years}
+                                updateState={this.updateYear}
+                                placeholder={'Seleccione el año'}
+                                functionClearPicker={this.setFunctionClearPickerYears} />
+                        </View>
+
+                        <View style={{ marginTop: 5 }}>
+                            <View style={[stylesAutoComplete.autocompleteContainer]} >
+                                <Autocomplete
+                                    placeholder={'   Introduzca el producto'}
+                                    data={this.state.dataProducts}
+                                    defaultValue={this.state.product}
+                                    onChangeText={(text) => this.handleAutoComplete(text)}
+                                    hideResults={this.state.hideResults}
+                                    onBlur={() => this.setState({ hideResults: true })}
+                                    style={{
+                                        borderWidth: 0,
+                                        borderColor: '#F49315',
+                                    }}
+                                    inputContainerStyle={{
+                                        borderColor: '#F49315', borderRadius: 5,
+                                        borderWidth: 0.5, backgroundColor: '#FDFDFD',
+                                    }}
+                                    renderItem={({ item, i }) => (
+
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                console.log(':: ON PRESS ', item)
+                                                this.setState({ product: item, hideResults: true })
+                                            }}>
+
+                                            <Text style={{
+                                                backgroundColor: '#FDFDFD',
+                                                fontSize: 12,
+                                                borderColor: '#F49315',
+                                                borderWidth: 0.2,
+                                            }}>{'\n  ' + item + '\n'}</Text>
+
+                                        </TouchableOpacity>
+                                    )} />
+                            </View>
+                        </View>
+
+                        <ButtonCalpulliX
+                            title={'Obtener proyección'}
+                            id={'buttonRegression'}
+                            arrayColors={['#05AAAB', '#048585', '#048585']}
+                            onPress={() => this.getForecast()}
+                            width={'38%'}
+                            height={45}
+                            marginTop={65}
+                            marginBottom={0} />
+
+                        {this.state.images}
                     </View>
-
-                    <View style={{ marginTop: 5 }}>
-                        <PickerCalpulliX
-                            data={this.state.months}
-                            updateState={this.updateMonth}
-                            placeholder={'Seleccione el mes'}
-                            functionClearPicker={this.setFunctionClearPickerMonths} />
-                    </View>
-
-                    <ButtonCalpulliX
-                        title={'Obtener proyección'}
-                        id={'buttonRegression'}
-                        arrayColors={['#05AAAB', '#048585', '#048585']}
-                        onPress={() => this.getForecast()}
-                        width={'38%'}
-                        height={45}
-                        marginTop={10}
-                        marginBottom={0} />
-
-                    {this.state.images}
-                </View>
-            </BackgroundScrollCalpulliX>
+                </BackgroundScrollCalpulliX>
+            </View>
         );
 
     }

@@ -205,7 +205,7 @@ export default class DetailPromotions extends PureComponent {
         analytics().logEvent(
             'view_promotion', {
                 description: 'Show promotion detail ' + _idPromotion
-        });
+            });
         const result = await ApiCaller.callApi('/calpullix/detail/promotion/retrieve',
             this.getDetailRequest(_idPromotion),
             CONSTANTS.PORT_PROMOTIONS, CONSTANTS.POST_METHOD)
@@ -301,7 +301,7 @@ export default class DetailPromotions extends PureComponent {
         analytics().logEvent(
             'update_promotions_operation', {
                 description: 'Profile update promotions' + this.props.navigation.state.params.responseApi.idProfile
-        });
+            });
         const result = await ApiCaller.callApi('/calpullix/promotions/profile/update',
             this.getUpdatePromotionsRequest(),
             CONSTANTS.PORT_PROMOTIONS, CONSTANTS.POST_METHOD)
@@ -375,78 +375,79 @@ export default class DetailPromotions extends PureComponent {
         var selectImages = this.buildSelectPromotionSection();
 
         return (
-            <BackgroundScrollCalpulliX addHeight={100}>
+            <View>
                 <HeaderCalpulliXBack
                     navigation={this.props.navigation}
                     title={'Detalle de promociones del perfil'}
                     backButton={true}
                     screen={'ProfilePromotions'} />
-
-                <NavigationEvents
-                    onWillFocus={() => {
-                        this.cleanInput();
-                    }} />
-
-                <View style={{ flex: 1, height: '100%' }}>
-                    <Modal isVisible={this.state.showDetailPromotion} >
-                        {this.state.contentDetailPromotion}
-                    </Modal>
-                </View>
-
-                <View style={{ height: '100%', width: '100%' }}>
-                    <View style={{ marginTop: 20, }}>
-                        <Text style={[stylesCommon.titleSectionStronger, {
-                            fontSize: 14, textAlign: "center", marginLeft: 0
-                        }]}>
-                            Seleccionar promociones
-                        </Text>
-                    </View>
-                    <View style={{
-                        borderWidth: 0.3, borderColor: '#F49315', width: '100%',
-                        marginTop: 15
-                    }} />
-
-                    <View>
-                        <ButtonCalpulliX
-                            title={'Confirmar promociones'}
-                            id={'buttonUpdatePromotions'}
-                            arrayColors={['#05AAAB', '#048585', '#048585']}
-                            onPress={this.updatePromotions}
-                            width={'45%'}
-                            height={40}
-                            marginTop={20} />
-                    </View>
-
-                    <View style={{ width: '100%', flexDirection: 'row', marginBottom: 20, }}>
-                        <View style={{ width: '50%' }}>
-                            {imagesContent}
-                        </View>
-                        <View style={{ width: '50%' }}>
-                            {selectImages}
-                        </View>
-                    </View>
-
-                    <Paginator
-                        totalItems={this.state.itemCount}
-                        onChange={numberPage => this.handlerPagination(numberPage)}
-                        activePage={this.state.page}
-                        disabled={false}
-                        itemsPerPage={this.state.itemsPerPage}
-
-                        buttonStyles={
-                            {
-                                backgroundColor: '#F3F9FA',
-                                color: '#156869',
-                                borderColor: '#156869',
-                            }
-                        }
-                        buttonActiveStyles={{
-                            backgroundColor: '#05AAAB',
-                            color: '#F3F9FA',
-                            borderColor: '#05AAAB'
+                <BackgroundScrollCalpulliX addHeight={100}>
+                    <NavigationEvents
+                        onWillFocus={() => {
+                            this.cleanInput();
                         }} />
 
-                </View>
-            </BackgroundScrollCalpulliX>);
+                    <View style={{ flex: 1, height: '100%' }}>
+                        <Modal isVisible={this.state.showDetailPromotion} >
+                            {this.state.contentDetailPromotion}
+                        </Modal>
+                    </View>
+
+                    <View style={{ height: '100%', width: '100%' }}>
+                        <View style={{ marginTop: 20, }}>
+                            <Text style={[stylesCommon.titleSectionStronger, {
+                                fontSize: 14, textAlign: "center", marginLeft: 0
+                            }]}>
+                                Seleccionar promociones
+                        </Text>
+                        </View>
+                        <View style={{
+                            borderWidth: 0.3, borderColor: '#F49315', width: '100%',
+                            marginTop: 15
+                        }} />
+
+                        <View>
+                            <ButtonCalpulliX
+                                title={'Confirmar promociones'}
+                                id={'buttonUpdatePromotions'}
+                                arrayColors={['#05AAAB', '#048585', '#048585']}
+                                onPress={this.updatePromotions}
+                                width={'45%'}
+                                height={40}
+                                marginTop={20} />
+                        </View>
+
+                        <View style={{ width: '100%', flexDirection: 'row', marginBottom: 20, }}>
+                            <View style={{ width: '50%' }}>
+                                {imagesContent}
+                            </View>
+                            <View style={{ width: '50%' }}>
+                                {selectImages}
+                            </View>
+                        </View>
+
+                        <Paginator
+                            totalItems={this.state.itemCount}
+                            onChange={numberPage => this.handlerPagination(numberPage)}
+                            activePage={this.state.page}
+                            disabled={false}
+                            itemsPerPage={this.state.itemsPerPage}
+
+                            buttonStyles={
+                                {
+                                    backgroundColor: '#F3F9FA',
+                                    color: '#156869',
+                                    borderColor: '#156869',
+                                }
+                            }
+                            buttonActiveStyles={{
+                                backgroundColor: '#05AAAB',
+                                color: '#F3F9FA',
+                                borderColor: '#05AAAB'
+                            }} />
+                    </View>
+                </BackgroundScrollCalpulliX>
+            </View>
+        );
     }
 }
